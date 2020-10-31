@@ -30,6 +30,19 @@ __decorate([
     }),
     __metadata("design:type", Number)
 ], Flat.prototype, "floor", void 0);
+__decorate([
+    sequelize_typescript_1.Column({
+        comment: "Количество комнат"
+    }),
+    __metadata("design:type", Number)
+], Flat.prototype, "rooms", void 0);
+__decorate([
+    sequelize_typescript_1.Column({
+        type: sequelize_typescript_1.DataType.DOUBLE,
+        comment: "Площадь квартиры"
+    }),
+    __metadata("design:type", Number)
+], Flat.prototype, "square", void 0);
 Flat = __decorate([
     sequelize_typescript_1.Table({
         tableName: "flats",

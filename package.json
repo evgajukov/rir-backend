@@ -54,10 +54,7 @@
   "scripts": {
     "start": "babel-node server.js",
     "dev": "tsc && babel-node server.js",
-    "test": "tsc && clear && jest --coverage",
-    "sitemap": "tsc && babel-node ./src/lib/sitemap/sitemap.generate.js",
     "plogic": "tsc && babel-node ./src/logic/logic.runner.js",
-    "initdata": "tsc && babel-node ./src/test/medcrm.init.js",
-    "debug": "tsc && babel-node ./src/test/yapacar.debug.js"
+    "init": "tsc && babel-node ./src/init/dom24x7.init.js"
   }
 }

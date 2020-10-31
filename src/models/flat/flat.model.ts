@@ -1,4 +1,4 @@
-import { Column, Model, Table } from "sequelize-typescript";
+import { Column, DataType, Model, Table } from "sequelize-typescript";
 
 @Table({
   tableName: "flats",
@@ -20,4 +20,15 @@ export default class Flat extends Model<Flat> {
     comment: "Этаж"
   })
   floor: number;
+
+  @Column({
+    comment: "Количество комнат"
+  })
+  rooms: number;
+
+  @Column({
+    type: DataType.DOUBLE,
+    comment: "Площадь квартиры"
+  })
+  square: number;
 }

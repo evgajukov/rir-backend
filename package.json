@@ -1,0 +1,63 @@
+{
+  "name": "dom24x7-backend",
+  "description": "Backend for Dom24x7 project",
+  "version": "1.0.0",
+  "contributors": [
+    {
+      "name": "Timur Kh. Evgazhukov",
+      "email": "evgajukov@gmail.com"
+    }
+  ],
+  "dependencies": {
+    "@types/bluebird": "^3.5.27",
+    "@types/node": "^12.7.1",
+    "@types/validator": "^10.11.2",
+    "body-parser": "^1.19.0",
+    "connect": "3.6.6",
+    "continuation-local-storage": "^3.2.1",
+    "express": "4.16.3",
+    "glob": "^7.1.4",
+    "mailgun-js": "^0.22.0",
+    "minimist": "^1.2.5",
+    "morgan": "^1.9.1",
+    "numeral": "^2.0.6",
+    "pg": "^7.12.1",
+    "reflect-metadata": "^0.1.13",
+    "request": "^2.88.0",
+    "sc-errors": "^1.4.1",
+    "sc-framework-health-check": "^2.0.0",
+    "sc-hot-reboot": "^1.0.0",
+    "scc-broker-client": "^6.1.0",
+    "selenium-webdriver": "^4.0.0-alpha.4",
+    "sequelize": "^5.21.1",
+    "sequelize-cli": "^5.5.0",
+    "sequelize-typescript": "^1.0.0-beta.3",
+    "serve-static": "1.13.2",
+    "socketcluster": "^14.3.5",
+    "socketcluster-client": "^14.3.1",
+    "xml2js": "^0.4.19",
+    "xmlbuilder": "^13.0.2"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "jest": "^24.8.0"
+  },
+  "keywords": [
+    "websocket",
+    "server",
+    "realtime",
+    "cluster",
+    "scalable"
+  ],
+  "readmeFilename": "README.md",
+  "scripts": {
+    "start": "babel-node server.js",
+    "dev": "tsc && babel-node server.js",
+    "test": "tsc && clear && jest --coverage",
+    "sitemap": "tsc && babel-node ./src/lib/sitemap/sitemap.generate.js",
+    "plogic": "tsc && babel-node ./src/logic/logic.runner.js",
+    "initdata": "tsc && babel-node ./src/test/medcrm.init.js",
+    "debug": "tsc && babel-node ./src/test/yapacar.debug.js"
+  }
+}

@@ -12,7 +12,7 @@ const channels = {
     action: "PING", // ping
     response: PingResponse
   },
-  flat: {
+  flats: {
     action: "LIST", // flats
     response: FlatResponse
   },

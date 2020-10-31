@@ -18,7 +18,7 @@ const channels = {
         action: "PING",
         response: ping_response_1.default
     },
-    flat: {
+    flats: {
         action: "LIST",
         response: flat_response_1.default
     },

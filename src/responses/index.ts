@@ -1,16 +1,20 @@
-import Event from "./event/event.response";
-import Ping from "./ping/ping.response";
-
+import EventResponse from "./event/event.response";
+import PingResponse from "./ping/ping.response";
+import FlatResponse from "./flat/flat.response";
 import UserResponse from "./user/user.response";
 
 const channels = {
   events: {
     action: "LIST", // events.userId
-    response: Event
+    response: EventResponse
   },
   ping: {
     action: "PING", // ping
-    response: Ping
+    response: PingResponse
+  },
+  flat: {
+    action: "LIST", // flats
+    response: FlatResponse
   },
   user: {
     action: "INFO", // user.userId
@@ -18,7 +22,4 @@ const channels = {
   },
 }
 
-export {
-  channels, Event, Ping,
-  UserResponse
-};
+export { channels, EventResponse, PingResponse, FlatResponse, UserResponse };

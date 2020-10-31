@@ -4,7 +4,7 @@ import Response from "../response";
 import * as _ from "lodash";
 import { Op } from "sequelize";
 
-export default class Event extends Response {
+export default class EventResponse extends Response {
 
   private static MAX_LIMIT = 4;
   private static FIELDS = ["id", "createdAt", "type", "status", "data", "priority", "shown"];
@@ -27,7 +27,7 @@ export default class Event extends Response {
   }
 
   static async create(model: EventModel, userId?: number) {
-    let event = new Event(model);
+    let event = new EventResponse(model);
     if (userId) {
       let item = await EventLog.findOne({ where: { userId, eventId: event.id } });
       event.shown = item != null;
@@ -41,18 +41,18 @@ export default class Event extends Response {
       return null;
     }
 
-    return _.pick(await Event.create(model, userId), Event.FIELDS);
+    return _.pick(await EventResponse.create(model, userId), EventResponse.FIELDS);
   }
 
   static async list(userId: number) {
     let where: any = { [Op.or]: [{ userId }, { userId: { [Op.eq]: null } }] };
-    let models = await EventModel.findAll({ where, order: [ [ "id", "DESC" ] ], limit: Event.MAX_LIMIT });
+    let models = await EventModel.findAll({ where, order: [ [ "id", "DESC" ] ], limit: EventResponse.MAX_LIMIT });
     if (models == null || models.length == 0) {
       return [];
     }
     let list = [];
     for (let model of models) {
-      list.push(_.pick(await Event.create(model, userId), Event.FIELDS));
+      list.push(_.pick(await EventResponse.create(model, userId), EventResponse.FIELDS));
     }
     list.reverse();
 
@@ -60,6 +60,6 @@ export default class Event extends Response {
   }
 
   static async seed(action, params) {
-    return await Event.list(params);
+    return await EventResponse.list(params);
   }
 }

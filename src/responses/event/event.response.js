@@ -13,7 +13,7 @@ const models_1 = require("../../models");
 const response_1 = require("../response");
 const _ = require("lodash");
 const sequelize_1 = require("sequelize");
-class Event extends response_1.default {
+class EventResponse extends response_1.default {
     constructor(event) {
         super(event.id, event);
         this.shown = false;
@@ -25,7 +25,7 @@ class Event extends response_1.default {
     }
     static create(model, userId) {
         return __awaiter(this, void 0, void 0, function* () {
-            let event = new Event(model);
+            let event = new EventResponse(model);
             if (userId) {
                 let item = yield models_1.EventLog.findOne({ where: { userId, eventId: event.id } });
                 event.shown = item != null;
@@ -39,19 +39,19 @@ class Event extends response_1.default {
             if (model == null) {
                 return null;
             }
-            return _.pick(yield Event.create(model, userId), Event.FIELDS);
+            return _.pick(yield EventResponse.create(model, userId), EventResponse.FIELDS);
         });
     }
     static list(userId) {
         return __awaiter(this, void 0, void 0, function* () {
             let where = { [sequelize_1.Op.or]: [{ userId }, { userId: { [sequelize_1.Op.eq]: null } }] };
-            let models = yield models_1.Event.findAll({ where, order: [["id", "DESC"]], limit: Event.MAX_LIMIT });
+            let models = yield models_1.Event.findAll({ where, order: [["id", "DESC"]], limit: EventResponse.MAX_LIMIT });
             if (models == null || models.length == 0) {
                 return [];
             }
             let list = [];
             for (let model of models) {
-                list.push(_.pick(yield Event.create(model, userId), Event.FIELDS));
+                list.push(_.pick(yield EventResponse.create(model, userId), EventResponse.FIELDS));
             }
             list.reverse();
             return list;
@@ -59,10 +59,10 @@ class Event extends response_1.default {
     }
     static seed(action, params) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield Event.list(params);
+            return yield EventResponse.list(params);
         });
     }
 }
-exports.default = Event;
-Event.MAX_LIMIT = 4;
-Event.FIELDS = ["id", "createdAt", "type", "status", "data", "priority", "shown"];
+exports.default = EventResponse;
+EventResponse.MAX_LIMIT = 4;
+EventResponse.FIELDS = ["id", "createdAt", "type", "status", "data", "priority", "shown"];

@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const response_1 = require("../response");
-class Ping extends response_1.default {
+class PingResponse extends response_1.default {
     static seed(action, params) {
         return __awaiter(this, void 0, void 0, function* () {
             const env = process.env.NODE_ENV;
@@ -18,4 +18,4 @@ class Ping extends response_1.default {
         });
     }
 }
-exports.default = Ping;
+exports.default = PingResponse;

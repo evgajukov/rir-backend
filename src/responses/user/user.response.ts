@@ -12,7 +12,7 @@ export default class UserResponse extends Response {
     this.banned = model.banned;
   }
 
-  static async create(model: User) {
+  static create(model: User) {
     return new UserResponse(model);
   }
 
@@ -20,7 +20,6 @@ export default class UserResponse extends Response {
     const user = await User.findByPk(userId);
     if (user == null) return null;
     const userInfo = await UserResponse.create(user);
-    console.log(`UserResponse.info result: ${JSON.stringify(userInfo)}`);
     return userInfo;
   }
 

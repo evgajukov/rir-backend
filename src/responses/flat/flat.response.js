@@ -9,32 +9,32 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const response_1 = require("../response");
 const models_1 = require("../../models");
-class UserResponse extends response_1.default {
+const response_1 = require("../response");
+class FlatResponse extends response_1.default {
     constructor(model) {
         super(model.id);
-        this.mobile = model.mobile;
-        this.banned = model.banned;
+        this.number = model.number;
+        this.floor = model.floor;
+        this.section = model.section;
+        this.rooms = model.rooms;
+        this.square = model.square;
     }
     static create(model) {
-        return new UserResponse(model);
+        return new FlatResponse(model);
     }
-    static info(userId) {
+    static list() {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = yield models_1.User.findByPk(userId);
-            if (user == null)
-                return null;
-            const userInfo = yield UserResponse.create(user);
-            return userInfo;
+            const list = yield models_1.Flat.findAll();
+            if (list == null || list.length == 0)
+                return [];
+            return list.map(flat => FlatResponse.create(flat));
         });
     }
     static seed(action, params, socket) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (socket.authToken == null)
-                return null;
-            return yield UserResponse.info(socket.authToken.id);
+            return yield FlatResponse.list();
         });
     }
 }
-exports.default = UserResponse;
+exports.default = FlatResponse;

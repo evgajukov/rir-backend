@@ -7,10 +7,12 @@ import Role from "./security/role/role.model";
 
 import Person from "./person/person.model";
 
+import Flat from "./flat/flat.model";
+
 import sequelize from "../db";
 
 export {
   sequelize, Event, EventLog,
   Session, User, Role,
-  Person,
+  Person, Flat,
 };

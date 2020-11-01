@@ -10,7 +10,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const models_1 = require("../models");
+const ROLE_USER = 2;
 ;
+;
+const users = [
+    { mobile: "79258779819", roleId: ROLE_USER, surname: "Евгажуков", name: "Тимур", midname: "Хасанбиевич", sex: "M", flat: 423 },
+];
 const flats = [
     { number: 1, floor: 1, section: 1, square: 36.6, rooms: 1 },
     { number: 2, floor: 1, section: 1, square: 20.3, rooms: 1 },
@@ -1055,6 +1060,15 @@ const flats = [
                 flatDb.square = flat.square != null ? flat.square : null;
                 yield flatDb.save();
                 console.log(`   >>> обновлена квартира №${flat.number} с ${flat.floor} этажа ${flat.section} подъезда`);
+            }
+        }
+        for (let user of users) {
+            let userDb = yield models_1.User.findOne({ where: { mobile: user.mobile } });
+            if (userDb == null) {
+                userDb = yield models_1.User.create({ mobile: user.mobile, roleId: user.roleId });
+                const personDb = yield models_1.Person.create({ userId: userDb.id, surname: user.surname, name: user.name, midname: user.midname, sex: user.sex });
+                const flatDb = yield models_1.Flat.findOne({ where: { number: user.flat } });
+                yield models_1.Resident.create({ personId: personDb.id, flatId: flatDb.id });
             }
         }
         console.log("Завершение процесса");

@@ -38,5 +38,5 @@ SMSC.options = {
     password: "Tck89mta7s3z",
     charset: "utf-8",
     translit: 0,
-    sender: "YAPACAR"
+    sender: "Dom24x7"
 };

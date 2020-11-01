@@ -1,4 +1,4 @@
-import { User, Person, Role } from "../models";
+import { User, Person, Role, Resident, Flat } from "../models";
 import * as numeral from "numeral";
 import SMSC from "../lib/smsc";
 import errors from "./errors";
@@ -53,12 +53,15 @@ function generateAuthCode() {
 async function newToken(user: User) {
   const person = await Person.findOne({ where: { userId: user.id } });
   const role = await Role.findByPk(user.roleId);
+  const resident = await Resident.findOne({ where: { personId: person.id }, include: [{ model: Flat }] });
+
   const token = {
     id: user.id,
     mobile: user.mobile,
     banned: user.banned,
-    role,
+    role: { id: role.id, name: role.name },
     person,
+    resident
   };
   console.log(`actions/user.newToken: ${JSON.stringify(token)}`);
   return token;

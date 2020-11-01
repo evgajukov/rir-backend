@@ -72,12 +72,14 @@ function newToken(user) {
     return __awaiter(this, void 0, void 0, function* () {
         const person = yield models_1.Person.findOne({ where: { userId: user.id } });
         const role = yield models_1.Role.findByPk(user.roleId);
+        const resident = yield models_1.Resident.findOne({ where: { personId: person.id }, include: [{ model: models_1.Flat }] });
         const token = {
             id: user.id,
             mobile: user.mobile,
             banned: user.banned,
-            role,
+            role: { id: role.id, name: role.name },
             person,
+            resident
         };
         console.log(`actions/user.newToken: ${JSON.stringify(token)}`);
         return token;

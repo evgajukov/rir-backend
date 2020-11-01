@@ -1,4 +1,16 @@
-import { Flat } from "../models";
+import { Flat, Person, Resident, User } from "../models";
+
+const ROLE_USER = 2;
+
+interface iPerson { 
+  mobile: string;
+  roleId: number;
+  surname: string;
+  name: string;
+  midname: string;
+  sex: "M" | "F" | "U";
+  flat: number;
+};
 
 interface iFlat {
   number: number;
@@ -7,6 +19,10 @@ interface iFlat {
   rooms?: number;
   square?: number;
 };
+
+const users: iPerson[] = [
+  { mobile: "79258779819", roleId: ROLE_USER, surname: "Евгажуков", name: "Тимур", midname: "Хасанбиевич", sex: "M", flat: 423 },
+];
 
 const flats: iFlat[] = [
   { number: 1, floor: 1, section: 1, square: 36.6, rooms: 1 },
@@ -1040,6 +1056,7 @@ const flats: iFlat[] = [
 (async () => {
   try {
     console.log("Запуск процесса загрузки начальных данных");
+    
     for (let flat of flats) {
       let flatDb = await Flat.findOne({ where: { number: flat.number } });
       if (flatDb == null) {
@@ -1054,6 +1071,17 @@ const flats: iFlat[] = [
         console.log(`   >>> обновлена квартира №${flat.number} с ${flat.floor} этажа ${flat.section} подъезда`);
       }
     }
+
+    for (let user of users) {
+      let userDb = await User.findOne({ where: { mobile: user.mobile } });
+      if (userDb == null) {
+        userDb = await User.create({ mobile: user.mobile, roleId: user.roleId });
+        const personDb = await Person.create({ userId: userDb.id, surname: user.surname, name: user.name, midname: user.midname, sex: user.sex });
+        const flatDb = await Flat.findOne({ where: { number: user.flat } });
+        await Resident.create({ personId: personDb.id, flatId: flatDb.id });
+      }
+    }
+    
     console.log("Завершение процесса");
   } catch (error) {
     console.error(error);

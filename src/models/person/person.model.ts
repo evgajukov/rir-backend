@@ -1,5 +1,5 @@
-import { Table, Model, ForeignKey, Column, BelongsTo, Default, DataType } from "sequelize-typescript";
-import { User } from "..";
+import { Table, Model, ForeignKey, Column, BelongsTo, Default, DataType, HasMany } from "sequelize-typescript";
+import { Resident, User } from "..";
 
 @Table({
   tableName: "persons",
@@ -34,4 +34,7 @@ export default class Person extends Model<Person> {
     type: DataType.TEXT
   })
   biography: string;
+
+  @HasMany(() => Resident)
+  residents: Resident[];
 }

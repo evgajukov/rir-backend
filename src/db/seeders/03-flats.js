@@ -13,8 +13,10 @@ const models_1 = require("../../models");
 module.exports = {
     up: (queryInterface, Sequelize) => __awaiter(void 0, void 0, void 0, function* () {
         yield models_1.Flat.sync({ force: true });
+        yield models_1.Resident.sync({ force: true });
     }),
     down: (queryInterface, Sequelize) => {
+        models_1.Resident.destroy({ where: {} });
         models_1.Flat.destroy({ where: {} });
     }
 };

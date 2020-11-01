@@ -1,4 +1,5 @@
-import { Column, DataType, Model, Table } from "sequelize-typescript";
+import { Column, DataType, HasMany, Model, Table } from "sequelize-typescript";
+import { Resident } from "..";
 
 @Table({
   tableName: "flats",
@@ -31,4 +32,7 @@ export default class Flat extends Model<Flat> {
     comment: "Площадь квартиры"
   })
   square: number;
+
+  @HasMany(() => Resident)
+  residents: Resident[];
 }

@@ -49,6 +49,10 @@ __decorate([
     }),
     __metadata("design:type", String)
 ], Person.prototype, "biography", void 0);
+__decorate([
+    sequelize_typescript_1.HasMany(() => __1.Resident),
+    __metadata("design:type", Array)
+], Person.prototype, "residents", void 0);
 Person = __decorate([
     sequelize_typescript_1.Table({
         tableName: "persons",

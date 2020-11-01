@@ -10,6 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_typescript_1 = require("sequelize-typescript");
+const __1 = require("..");
 let Flat = class Flat extends sequelize_typescript_1.Model {
 };
 __decorate([
@@ -43,6 +44,10 @@ __decorate([
     }),
     __metadata("design:type", Number)
 ], Flat.prototype, "square", void 0);
+__decorate([
+    sequelize_typescript_1.HasMany(() => __1.Resident),
+    __metadata("design:type", Array)
+], Flat.prototype, "residents", void 0);
 Flat = __decorate([
     sequelize_typescript_1.Table({
         tableName: "flats",

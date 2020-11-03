@@ -10,52 +10,40 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_typescript_1 = require("sequelize-typescript");
-const __1 = require("../..");
-let User = class User extends sequelize_typescript_1.Model {
+const __1 = require("..");
+let Invite = class Invite extends sequelize_typescript_1.Model {
 };
 __decorate([
-    sequelize_typescript_1.AllowNull(false),
-    sequelize_typescript_1.Unique,
+    sequelize_typescript_1.ForeignKey(() => __1.User),
     sequelize_typescript_1.Column,
-    __metadata("design:type", String)
-], User.prototype, "mobile", void 0);
+    __metadata("design:type", Number)
+], Invite.prototype, "userId", void 0);
+__decorate([
+    sequelize_typescript_1.BelongsTo(() => __1.User),
+    __metadata("design:type", __1.User)
+], Invite.prototype, "user", void 0);
 __decorate([
     sequelize_typescript_1.Column,
     __metadata("design:type", String)
-], User.prototype, "smsCode", void 0);
+], Invite.prototype, "code", void 0);
 __decorate([
     sequelize_typescript_1.Default(false),
     sequelize_typescript_1.Column,
     __metadata("design:type", Boolean)
-], User.prototype, "banned", void 0);
+], Invite.prototype, "userd", void 0);
 __decorate([
-    sequelize_typescript_1.ForeignKey(() => __1.Role),
+    sequelize_typescript_1.ForeignKey(() => __1.User),
     sequelize_typescript_1.Column,
     __metadata("design:type", Number)
-], User.prototype, "roleId", void 0);
+], Invite.prototype, "newUserId", void 0);
 __decorate([
-    sequelize_typescript_1.BelongsTo(() => __1.Role),
-    __metadata("design:type", __1.Role)
-], User.prototype, "role", void 0);
-__decorate([
-    sequelize_typescript_1.HasMany(() => __1.Session),
-    __metadata("design:type", Array)
-], User.prototype, "sessions", void 0);
-__decorate([
-    sequelize_typescript_1.HasOne(() => __1.Person),
-    __metadata("design:type", __1.Person)
-], User.prototype, "person", void 0);
-__decorate([
-    sequelize_typescript_1.HasMany(() => __1.Invite),
-    __metadata("design:type", Array)
-], User.prototype, "invites", void 0);
-__decorate([
-    sequelize_typescript_1.HasOne(() => __1.Invite),
-    __metadata("design:type", __1.Invite)
-], User.prototype, "invite", void 0);
-User = __decorate([
+    sequelize_typescript_1.BelongsTo(() => __1.User),
+    __metadata("design:type", __1.User)
+], Invite.prototype, "newUser", void 0);
+Invite = __decorate([
     sequelize_typescript_1.Table({
-        tableName: "users"
+        tableName: "invites",
+        comment: "Список приглашений"
     })
-], User);
-exports.default = User;
+], Invite);
+exports.default = Invite;

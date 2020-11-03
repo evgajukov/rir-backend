@@ -6,6 +6,7 @@ import User from "./security/user/user.model";
 import Role from "./security/role/role.model";
 
 import Person from "./person/person.model";
+import Invite from "./invite/invite.model";
 
 import Flat from "./flat/flat.model";
 import Resident from "./flat/resident.model";
@@ -15,5 +16,5 @@ import sequelize from "../db";
 export {
   sequelize, Event, EventLog,
   Session, User, Role,
-  Person, Flat, Resident,
+  Person, Flat, Resident, Invite,
 };

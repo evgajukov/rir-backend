@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Resident = exports.Flat = exports.Person = exports.Role = exports.User = exports.Session = exports.EventLog = exports.Event = exports.sequelize = void 0;
+exports.Invite = exports.Resident = exports.Flat = exports.Person = exports.Role = exports.User = exports.Session = exports.EventLog = exports.Event = exports.sequelize = void 0;
 const event_model_1 = require("./event/event.model");
 exports.Event = event_model_1.default;
 const logger_model_1 = require("./event/logger.model");
@@ -13,6 +13,8 @@ const role_model_1 = require("./security/role/role.model");
 exports.Role = role_model_1.default;
 const person_model_1 = require("./person/person.model");
 exports.Person = person_model_1.default;
+const invite_model_1 = require("./invite/invite.model");
+exports.Invite = invite_model_1.default;
 const flat_model_1 = require("./flat/flat.model");
 exports.Flat = flat_model_1.default;
 const resident_model_1 = require("./flat/resident.model");

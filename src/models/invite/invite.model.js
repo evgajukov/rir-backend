@@ -30,7 +30,7 @@ __decorate([
     sequelize_typescript_1.Default(false),
     sequelize_typescript_1.Column,
     __metadata("design:type", Boolean)
-], Invite.prototype, "userd", void 0);
+], Invite.prototype, "used", void 0);
 __decorate([
     sequelize_typescript_1.ForeignKey(() => __1.User),
     sequelize_typescript_1.Column,

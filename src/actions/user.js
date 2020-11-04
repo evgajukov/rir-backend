@@ -9,25 +9,36 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.logout = exports.auth = void 0;
+exports.invite = exports.logout = exports.auth = void 0;
 const models_1 = require("../models");
 const numeral = require("numeral");
 const smsc_1 = require("../lib/smsc");
 const errors_1 = require("./errors");
-function auth({ mobile, code }, respond) {
+function auth({ mobile, invite, code }, respond) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log(">>>>> actions/user.auth");
         try {
             let user = yield models_1.User.findOne({ where: { mobile } });
             if (user == null) {
-                // не нашли пользователя по номеру телефона, заводим нового пользователя
-                user = yield models_1.User.create({ mobile });
+                if (invite == null) {
+                    throw new Error(errors_1.default.user["003"].code);
+                }
+                else {
+                    // проверяем корректность кода приглашения и, если все хорошо, то регистрируем нового пользователя
+                    let inviteDb = yield models_1.Invite.findOne({ where: { code: invite, used: false } });
+                    if (inviteDb == null)
+                        throw new Error(errors_1.default.invite["001"].code);
+                    user = yield models_1.User.create({ mobile });
+                    inviteDb.used = true;
+                    inviteDb.newUserId = user.id;
+                    yield inviteDb.save();
+                }
             }
             if (user.banned)
                 throw new Error(errors_1.default.user["002"].code);
             if (code == null) {
                 // формируем и отправляем одноразовый код авторизации по смс
-                user.smsCode = generateAuthCode();
+                user.smsCode = generateCode(4);
                 yield user.save();
                 yield smsc_1.default.send([mobile], user.smsCode);
                 respond(null, { status: "OK" });
@@ -65,14 +76,38 @@ function logout(params, respond) {
     });
 }
 exports.logout = logout;
-function generateAuthCode() {
-    return numeral(9999 * Math.random()).format("0000");
+function invite(params, respond) {
+    return __awaiter(this, void 0, void 0, function* () {
+        console.log(">>>>> actions/user.invite");
+        try {
+            if (!this.authToken)
+                throw new Error(errors_1.default.user["004"].code);
+            let code = null;
+            let inviteDb = null;
+            do {
+                code = generateCode(6);
+                inviteDb = yield models_1.Invite.findOne({ where: { code } });
+            } while (inviteDb != null);
+            yield models_1.Invite.create({ userId: this.authToken.id, code });
+            respond(null, { invite: code });
+        }
+        catch (error) {
+            console.error(error);
+            respond(errors_1.default.methods.check(errors_1.default, error.message));
+        }
+    });
+}
+exports.invite = invite;
+function generateCode(len) {
+    return numeral(parseInt("9".repeat(len)) * Math.random()).format("0".repeat(len));
 }
 function newToken(user) {
     return __awaiter(this, void 0, void 0, function* () {
         const person = yield models_1.Person.findOne({ where: { userId: user.id } });
         const role = yield models_1.Role.findByPk(user.roleId);
-        const resident = yield models_1.Resident.findOne({ where: { personId: person.id }, include: [{ model: models_1.Flat }] });
+        let resident = null;
+        if (person != null)
+            resident = yield models_1.Resident.findOne({ where: { personId: person.id }, include: [{ model: models_1.Flat }] });
         const token = {
             id: user.id,
             mobile: user.mobile,

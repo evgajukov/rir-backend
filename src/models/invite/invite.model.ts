@@ -19,7 +19,7 @@ export default class Invite extends Model<Invite> {
 
   @Default(false)
   @Column
-  userd: boolean
+  used: boolean
 
   @ForeignKey(() => User)
   @Column

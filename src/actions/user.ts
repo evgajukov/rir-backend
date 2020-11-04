@@ -1,21 +1,30 @@
-import { User, Person, Role, Resident, Flat } from "../models";
+import { User, Person, Role, Resident, Flat, Invite } from "../models";
 import * as numeral from "numeral";
 import SMSC from "../lib/smsc";
 import errors from "./errors";
 
-export async function auth({ mobile, code }, respond) {
+export async function auth({ mobile, invite, code }, respond) {
   console.log(">>>>> actions/user.auth");
   try {
     let user = await User.findOne({ where: { mobile } });
     if (user == null) {
-      // не нашли пользователя по номеру телефона, заводим нового пользователя
-      user = await User.create({ mobile });
+      if (invite == null) {
+        throw new Error(errors.user["003"].code);
+      } else {
+        // проверяем корректность кода приглашения и, если все хорошо, то регистрируем нового пользователя
+        let inviteDb = await Invite.findOne({ where: { code: invite, used: false } });
+        if (inviteDb == null) throw new Error(errors.invite["001"].code);
+        user = await User.create({ mobile });
+        inviteDb.used = true;
+        inviteDb.newUserId = user.id;
+        await inviteDb.save();
+      }
     }
     if (user.banned) throw new Error(errors.user["002"].code);
 
     if (code == null) {
       // формируем и отправляем одноразовый код авторизации по смс
-      user.smsCode = generateAuthCode();
+      user.smsCode = generateCode(4);
       await user.save();
       await SMSC.send([mobile], user.smsCode);
 
@@ -46,14 +55,34 @@ export async function logout(params, respond) {
   }
 }
 
-function generateAuthCode() {
-  return numeral(9999 * Math.random()).format("0000");
+export async function invite(params, respond) {
+  console.log(">>>>> actions/user.invite");
+  try {
+    if (!this.authToken) throw new Error(errors.user["004"].code);
+    let code = null;
+    let inviteDb = null;
+    do {
+      code = generateCode(6);
+      inviteDb = await Invite.findOne({ where: { code } });
+    } while (inviteDb != null);
+    await Invite.create({ userId: this.authToken.id, code });
+    respond(null, { invite: code });
+  } catch (error) {
+    console.error(error);
+    respond(errors.methods.check(errors, error.message));
+  }
+}
+
+function generateCode(len: number) {
+  return numeral(parseInt("9".repeat(len)) * Math.random()).format("0".repeat(len));
 }
 
 async function newToken(user: User) {
   const person = await Person.findOne({ where: { userId: user.id } });
   const role = await Role.findByPk(user.roleId);
-  const resident = await Resident.findOne({ where: { personId: person.id }, include: [{ model: Flat }] });
+  
+  let resident = null;
+  if (person != null) resident = await Resident.findOne({ where: { personId: person.id }, include: [{ model: Flat }] });
 
   const token = {
     id: user.id,

@@ -25,6 +25,12 @@ exports.default = {
             message: "Отсутствует валидный токен авторизации"
         }
     },
+    invite: {
+        "001": {
+            code: "INVITE.001",
+            message: "Невалидный код приглашения",
+        },
+    },
     params: {
         "001": {
             code: "PARAMS.001",

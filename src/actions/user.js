@@ -107,7 +107,7 @@ function saveProfile({ surname, name, midname, flat }, respond) {
             let person = yield models_1.Person.findOne({ where: { userId: this.authToken.id } });
             if (person == null) {
                 // только что зарегистрировались и еще нет профиля
-                person = yield models_1.Person.create({ surname, name, midname });
+                person = yield models_1.Person.create({ userId: this.authToken.id, surname, name, midname });
                 yield models_1.Resident.create({ personId: person.id, flatId: flat });
             }
             else {

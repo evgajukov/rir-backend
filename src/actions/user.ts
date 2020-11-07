@@ -80,7 +80,7 @@ export async function saveProfile({ surname, name, midname, flat }, respond) {
     let person = await Person.findOne({ where: { userId: this.authToken.id } });
     if (person == null) {
       // только что зарегистрировались и еще нет профиля
-      person = await Person.create({ surname, name, midname });
+      person = await Person.create({ userId: this.authToken.id, surname, name, midname });
       await Resident.create({ personId: person.id, flatId: flat });
     } else {
       // обновляем только данные по персоне, изменения по квартире пока игнорируем

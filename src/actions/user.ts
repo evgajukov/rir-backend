@@ -14,7 +14,7 @@ export async function auth({ mobile, invite, code }, respond) {
         // проверяем корректность кода приглашения и, если все хорошо, то регистрируем нового пользователя
         let inviteDb = await Invite.findOne({ where: { code: invite, used: false } });
         if (inviteDb == null) throw new Error(errors.invite["001"].code);
-        user = await User.create({ mobile });
+        user = await User.create({ mobile, roleId: 2 }); // 2 - USER
         inviteDb.used = true;
         inviteDb.newUserId = user.id;
         await inviteDb.save();

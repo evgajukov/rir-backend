@@ -28,7 +28,7 @@ function auth({ mobile, invite, code }, respond) {
                     let inviteDb = yield models_1.Invite.findOne({ where: { code: invite, used: false } });
                     if (inviteDb == null)
                         throw new Error(errors_1.default.invite["001"].code);
-                    user = yield models_1.User.create({ mobile });
+                    user = yield models_1.User.create({ mobile, roleId: 2 }); // 2 - USER
                     inviteDb.used = true;
                     inviteDb.newUserId = user.id;
                     yield inviteDb.save();

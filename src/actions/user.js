@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.invite = exports.logout = exports.auth = void 0;
+exports.saveProfile = exports.invite = exports.logout = exports.auth = void 0;
 const models_1 = require("../models");
 const numeral = require("numeral");
 const smsc_1 = require("../lib/smsc");
@@ -98,6 +98,35 @@ function invite(params, respond) {
     });
 }
 exports.invite = invite;
+function saveProfile({ surname, name, midname, flat }, respond) {
+    return __awaiter(this, void 0, void 0, function* () {
+        console.log(">>>>> actions/user.saveProfile");
+        try {
+            if (!this.authToken)
+                throw new Error(errors_1.default.user["004"].code);
+            let person = yield models_1.Person.findOne({ where: { userId: this.authToken.id } });
+            if (person == null) {
+                // только что зарегистрировались и еще нет профиля
+                person = yield models_1.Person.create({ surname, name, midname });
+                yield models_1.Resident.create({ personId: person.id, flatId: flat });
+            }
+            else {
+                // обновляем только данные по персоне, изменения по квартире пока игнорируем
+                person.surname = surname;
+                person.name = name;
+                person.midname = midname;
+                yield person.save();
+            }
+            const resident = yield models_1.Resident.findOne({ where: { personId: person.id }, include: [{ model: models_1.Flat }] });
+            respond(null, { status: "OK", person, resident });
+        }
+        catch (error) {
+            console.error(error);
+            respond(errors_1.default.methods.check(errors_1.default, error.message));
+        }
+    });
+}
+exports.saveProfile = saveProfile;
 function generateCode(len) {
     return numeral(parseInt("9".repeat(len)) * Math.random()).format("0".repeat(len));
 }

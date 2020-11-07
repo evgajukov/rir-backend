@@ -73,6 +73,30 @@ export async function invite(params, respond) {
   }
 }
 
+export async function saveProfile({ surname, name, midname, flat }, respond) {
+  console.log(">>>>> actions/user.saveProfile");
+  try {
+    if (!this.authToken) throw new Error(errors.user["004"].code);
+    let person = await Person.findOne({ where: { userId: this.authToken.id } });
+    if (person == null) {
+      // только что зарегистрировались и еще нет профиля
+      person = await Person.create({ surname, name, midname });
+      await Resident.create({ personId: person.id, flatId: flat });
+    } else {
+      // обновляем только данные по персоне, изменения по квартире пока игнорируем
+      person.surname = surname;
+      person.name = name;
+      person.midname = midname;
+      await person.save();
+    }
+    const resident = await Resident.findOne({ where: { personId: person.id }, include: [{ model: Flat }] });
+    respond(null, { status: "OK", person, resident });
+  } catch (error) {
+    console.error(error);
+    respond(errors.methods.check(errors, error.message));
+  }
+}
+
 function generateCode(len: number) {
   return numeral(parseInt("9".repeat(len)) * Math.random()).format("0".repeat(len));
 }

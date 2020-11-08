@@ -14,6 +14,7 @@ const response_1 = require("../response");
 class PostResponse extends response_1.default {
     constructor(model) {
         super(model.id);
+        this.createdAt = model.createdAt.getTime();
         this.title = model.title;
         this.body = model.body;
     }

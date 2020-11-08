@@ -1,5 +1,12 @@
-import { Flat } from "../../models";
+import { Flat, Person, Resident } from "../../models";
 import Response from "../response";
+
+interface iResident {
+  personId: number;
+  surname: string;
+  name: string;
+  midname: string;
+}
 
 export default class FlatResponse extends Response {
 
@@ -8,6 +15,7 @@ export default class FlatResponse extends Response {
   section: number;
   rooms: number;
   square: number;
+  residents: iResident[];
 
   constructor(model: Flat) {
     super(model.id);
@@ -16,6 +24,16 @@ export default class FlatResponse extends Response {
     this.section = model.section;
     this.rooms = model.rooms;
     this.square = model.square;
+    this.residents = [];
+    model.residents.forEach(resident => {
+      const person = resident.person;
+      this.residents.push({
+        personId: person.id,
+        surname: person.surname,
+        name: person.name,
+        midname: person.midname,
+      });
+    });
   }
 
   static create(model: Flat) {
@@ -23,7 +41,12 @@ export default class FlatResponse extends Response {
   }
 
   static async list() {
-    const list = await Flat.findAll();
+    const list = await Flat.findAll({
+      include: [
+        { model: Resident, include: [{ model: Person }] }
+      ],
+      order: ["id"]
+    });
     if (list == null || list.length == 0) return [];
     return list.map(flat => FlatResponse.create(flat));
   }

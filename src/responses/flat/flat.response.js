@@ -19,13 +19,28 @@ class FlatResponse extends response_1.default {
         this.section = model.section;
         this.rooms = model.rooms;
         this.square = model.square;
+        this.residents = [];
+        model.residents.forEach(resident => {
+            const person = resident.person;
+            this.residents.push({
+                personId: person.id,
+                surname: person.surname,
+                name: person.name,
+                midname: person.midname,
+            });
+        });
     }
     static create(model) {
         return new FlatResponse(model);
     }
     static list() {
         return __awaiter(this, void 0, void 0, function* () {
-            const list = yield models_1.Flat.findAll();
+            const list = yield models_1.Flat.findAll({
+                include: [
+                    { model: models_1.Resident, include: [{ model: models_1.Person }] }
+                ],
+                order: ["id"]
+            });
             if (list == null || list.length == 0)
                 return [];
             return list.map(flat => FlatResponse.create(flat));

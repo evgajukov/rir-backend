@@ -1,4 +1,4 @@
-import { Flat, Person, Resident, User } from "../models";
+import { Flat, Person, Post, Resident, User } from "../models";
 
 const ROLE_USER = 2;
 
@@ -1056,6 +1056,8 @@ const flats: iFlat[] = [
 (async () => {
   try {
     console.log("Запуск процесса загрузки начальных данных");
+
+    await Post.create({ body: "Ожидаем получение ключей" });
     
     for (let flat of flats) {
       let flatDb = await Flat.findOne({ where: { number: flat.number } });
@@ -1079,6 +1081,7 @@ const flats: iFlat[] = [
         const personDb = await Person.create({ userId: userDb.id, surname: user.surname, name: user.name, midname: user.midname, sex: user.sex });
         const flatDb = await Flat.findOne({ where: { number: user.flat } });
         await Resident.create({ personId: personDb.id, flatId: flatDb.id });
+        await Post.create({ title: "Новый сосед", body: `К нам присоединился новый сосед с кв. №${flatDb.number}, этаж ${flatDb.floor}, подъезд ${flatDb.section}` });
       }
     }
     

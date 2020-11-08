@@ -9,6 +9,7 @@ const flat_response_1 = require("./flat/flat.response");
 exports.FlatResponse = flat_response_1.default;
 const user_response_1 = require("./user/user.response");
 exports.UserResponse = user_response_1.default;
+const post_response_1 = require("./post/post.response");
 const channels = {
     events: {
         action: "LIST",
@@ -25,6 +26,10 @@ const channels = {
     user: {
         action: "INFO",
         response: user_response_1.default
+    },
+    posts: {
+        action: "LIST",
+        response: post_response_1.default
     },
 };
 exports.channels = channels;

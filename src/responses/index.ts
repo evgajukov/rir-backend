@@ -2,6 +2,7 @@ import EventResponse from "./event/event.response";
 import PingResponse from "./ping/ping.response";
 import FlatResponse from "./flat/flat.response";
 import UserResponse from "./user/user.response";
+import PostResponse from "./post/post.response";
 
 const channels = {
   events: {
@@ -19,6 +20,10 @@ const channels = {
   user: {
     action: "INFO", // user.userId
     response: UserResponse
+  },
+  posts: {
+    action: "LIST", // posts
+    response: PostResponse
   },
 }
 

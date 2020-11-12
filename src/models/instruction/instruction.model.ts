@@ -3,6 +3,8 @@ import { Column, DataType, Model, Table } from "sequelize-typescript";
 export interface iInstructionItem {
   id: number;
   title: string;
+  subtitle: string;
+  body: string;
 }
 
 @Table({

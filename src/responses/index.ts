@@ -3,6 +3,7 @@ import PingResponse from "./ping/ping.response";
 import FlatResponse from "./flat/flat.response";
 import UserResponse from "./user/user.response";
 import PostResponse from "./post/post.response";
+import InstructionResponse from "./instruction/instruction.response";
 
 const channels = {
   events: {
@@ -24,6 +25,10 @@ const channels = {
   posts: {
     action: "LIST", // posts
     response: PostResponse
+  },
+  instructions: {
+    action: "LIST", // instructions
+    response: InstructionResponse
   },
 }
 

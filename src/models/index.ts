@@ -13,11 +13,13 @@ import Resident from "./flat/resident.model";
 
 import Post from "./post/post.model";
 
+import Instruction from "./instruction/instruction.model";
+
 import sequelize from "../db";
 
 export {
   sequelize, Event, EventLog,
   Session, User, Role,
   Person, Flat, Resident, Invite,
-  Post,
+  Post, Instruction,
 };

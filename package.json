@@ -55,6 +55,7 @@
     "start": "babel-node server.js",
     "dev": "tsc && babel-node server.js",
     "plogic": "tsc && babel-node ./src/logic/logic.runner.js",
-    "init": "tsc && babel-node ./src/init/dom24x7.init.js"
+    "init": "tsc && babel-node ./src/init/dom24x7.init.js",
+    "test": "tsc && babel-node ./src/test/channels.test.js"
   }
 }

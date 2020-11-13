@@ -4,6 +4,7 @@ import FlatResponse from "./flat/flat.response";
 import UserResponse from "./user/user.response";
 import PostResponse from "./post/post.response";
 import InstructionResponse from "./instruction/instruction.response";
+import InviteResponse from "./invite/invite.response";
 
 const channels = {
   events: {
@@ -29,6 +30,10 @@ const channels = {
   instructions: {
     action: "LIST", // instructions
     response: InstructionResponse
+  },
+  invites: {
+    action: "LIST", // invites
+    response: InviteResponse
   },
 }
 

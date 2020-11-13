@@ -11,6 +11,7 @@ const user_response_1 = require("./user/user.response");
 exports.UserResponse = user_response_1.default;
 const post_response_1 = require("./post/post.response");
 const instruction_response_1 = require("./instruction/instruction.response");
+const invite_response_1 = require("./invite/invite.response");
 const channels = {
     events: {
         action: "LIST",
@@ -35,6 +36,10 @@ const channels = {
     instructions: {
         action: "LIST",
         response: instruction_response_1.default
+    },
+    invites: {
+        action: "LIST",
+        response: invite_response_1.default
     },
 };
 exports.channels = channels;

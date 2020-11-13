@@ -65,8 +65,8 @@ export async function invite(params, respond) {
       code = generateCode(6);
       inviteDb = await Invite.findOne({ where: { code } });
     } while (inviteDb != null);
-    await Invite.create({ userId: this.authToken.id, code });
-    respond(null, { invite: code });
+    inviteDb = await Invite.create({ userId: this.authToken.id, code });
+    respond(null, { id: inviteDb.id, invite: code });
   } catch (error) {
     console.error(error);
     respond(errors.methods.check(errors, error.message));

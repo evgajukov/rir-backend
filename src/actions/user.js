@@ -88,8 +88,8 @@ function invite(params, respond) {
                 code = generateCode(6);
                 inviteDb = yield models_1.Invite.findOne({ where: { code } });
             } while (inviteDb != null);
-            yield models_1.Invite.create({ userId: this.authToken.id, code });
-            respond(null, { invite: code });
+            inviteDb = yield models_1.Invite.create({ userId: this.authToken.id, code });
+            respond(null, { id: inviteDb.id, invite: code });
         }
         catch (error) {
             console.error(error);

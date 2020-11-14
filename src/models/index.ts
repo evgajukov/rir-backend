@@ -14,6 +14,7 @@ import Resident from "./flat/resident.model";
 import Post from "./post/post.model";
 
 import Instruction from "./instruction/instruction.model";
+import Document from "./document/document.model";
 
 import sequelize from "../db";
 
@@ -21,5 +22,5 @@ export {
   sequelize, Event, EventLog,
   Session, User, Role,
   Person, Flat, Resident, Invite,
-  Post, Instruction,
+  Post, Instruction, Document,
 };

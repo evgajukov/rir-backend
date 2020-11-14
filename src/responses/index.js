@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserResponse = exports.FlatResponse = exports.PingResponse = exports.EventResponse = exports.channels = void 0;
+exports.DocumentResponse = exports.InviteResponse = exports.InstructionResponse = exports.PostResponse = exports.UserResponse = exports.FlatResponse = exports.PingResponse = exports.EventResponse = exports.channels = void 0;
 const event_response_1 = require("./event/event.response");
 exports.EventResponse = event_response_1.default;
 const ping_response_1 = require("./ping/ping.response");
@@ -10,8 +10,13 @@ exports.FlatResponse = flat_response_1.default;
 const user_response_1 = require("./user/user.response");
 exports.UserResponse = user_response_1.default;
 const post_response_1 = require("./post/post.response");
+exports.PostResponse = post_response_1.default;
 const instruction_response_1 = require("./instruction/instruction.response");
+exports.InstructionResponse = instruction_response_1.default;
 const invite_response_1 = require("./invite/invite.response");
+exports.InviteResponse = invite_response_1.default;
+const document_response_1 = require("./document/document.response");
+exports.DocumentResponse = document_response_1.default;
 const channels = {
     events: {
         action: "LIST",
@@ -40,6 +45,10 @@ const channels = {
     invites: {
         action: "LIST",
         response: invite_response_1.default
+    },
+    documents: {
+        action: "LIST",
+        response: document_response_1.default
     },
 };
 exports.channels = channels;

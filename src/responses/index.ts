@@ -5,6 +5,7 @@ import UserResponse from "./user/user.response";
 import PostResponse from "./post/post.response";
 import InstructionResponse from "./instruction/instruction.response";
 import InviteResponse from "./invite/invite.response";
+import DocumentResponse from "./document/document.response";
 
 const channels = {
   events: {
@@ -35,6 +36,10 @@ const channels = {
     action: "LIST", // invites
     response: InviteResponse
   },
+  documents: {
+    action: "LIST", // documents
+    response: DocumentResponse
+  },
 }
 
-export { channels, EventResponse, PingResponse, FlatResponse, UserResponse };
+export { channels, EventResponse, PingResponse, FlatResponse, UserResponse, PostResponse, InstructionResponse, InviteResponse, DocumentResponse };

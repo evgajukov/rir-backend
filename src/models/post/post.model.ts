@@ -6,6 +6,11 @@ import { Column, DataType, Model, Table } from "sequelize-typescript";
 })
 export default class Post extends Model<Post> {
 
+  @Column({
+    comment: "Тип новости"
+  })
+  type: string;
+  
   @Column
   title: string;
 

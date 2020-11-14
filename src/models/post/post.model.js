@@ -13,6 +13,12 @@ const sequelize_typescript_1 = require("sequelize-typescript");
 let Post = class Post extends sequelize_typescript_1.Model {
 };
 __decorate([
+    sequelize_typescript_1.Column({
+        comment: "Тип новости"
+    }),
+    __metadata("design:type", String)
+], Post.prototype, "type", void 0);
+__decorate([
     sequelize_typescript_1.Column,
     __metadata("design:type", String)
 ], Post.prototype, "title", void 0);

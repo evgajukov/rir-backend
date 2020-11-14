@@ -4,12 +4,14 @@ import Response from "../response";
 export default class PostResponse extends Response {
 
   createdAt: number;
+  type: string;
   title: string;
   body: string;
 
   constructor(model: Post) {
     super(model.id);
     this.createdAt = model.createdAt.getTime();
+    this.type = model.type;
     this.title = model.title;
     this.body = model.body;
   }

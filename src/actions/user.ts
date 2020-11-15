@@ -19,6 +19,8 @@ export async function auth({ mobile, invite, code }, respond) {
         inviteDb.newUserId = user.id;
         await inviteDb.save();
       }
+    } else {
+      if (invite != null) throw new Error(errors.invite["002"].code);
     }
     if (user.banned) throw new Error(errors.user["002"].code);
 

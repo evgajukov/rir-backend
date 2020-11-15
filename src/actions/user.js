@@ -34,6 +34,10 @@ function auth({ mobile, invite, code }, respond) {
                     yield inviteDb.save();
                 }
             }
+            else {
+                if (invite != null)
+                    throw new Error(errors_1.default.invite["002"].code);
+            }
             if (user.banned)
                 throw new Error(errors_1.default.user["002"].code);
             if (code == null) {

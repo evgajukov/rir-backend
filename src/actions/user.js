@@ -115,7 +115,7 @@ function saveProfile({ surname, name, midname, flat }, respond) {
                 yield models_1.Resident.create({ personId: person.id, flatId: flat });
                 // генерируем новость, что у нас новый сосед
                 const flatDb = yield models_1.Flat.findByPk(flat);
-                yield models_1.Post.create({ title: "Новый сосед", body: `К нам присоединился новый сосед с кв. №${flatDb.number}, этаж ${flatDb.floor}, подъезд ${flatDb.section}` });
+                yield models_1.Post.create({ title: "Новый сосед", type: "person", body: `К нам присоединился новый сосед с кв. №${flatDb.number}, этаж ${flatDb.floor}, подъезд ${flatDb.section}` });
             }
             else {
                 // обновляем только данные по персоне, изменения по квартире пока игнорируем

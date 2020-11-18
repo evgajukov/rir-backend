@@ -62,8 +62,12 @@ async function seedData(channel, socket) : Promise<void> {
  */
 function normalizeParams(params): number | Array<number> {
   if (params instanceof Array) {
-    return params.map(item => parseInt(item));
+    return params.map(item => {
+      const intValue = parseInt(item);
+      return intValue == item ? intValue : item;
+    });
   } else {
-    return parseInt(params);
+    const intValue = parseInt(params);
+    return intValue == params ? intValue : params;
   }
 }

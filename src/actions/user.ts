@@ -2,6 +2,7 @@ import { User, Person, Role, Resident, Flat, Invite, Post } from "../models";
 import * as numeral from "numeral";
 import SMSC from "../lib/smsc";
 import errors from "./errors";
+import ResponseUpdate from "../responses/response.update";
 
 export async function auth({ mobile, invite, code }, respond) {
   console.log(">>>>> actions/user.auth");
@@ -66,6 +67,16 @@ export async function invite(params, respond) {
     do {
       code = generateCode(6);
       inviteDb = await Invite.findOne({ where: { code } });
+
+      // обновляем канал "invites"
+      const responseUpdate = new ResponseUpdate(this.exchange);
+      await responseUpdate.update({
+        userId: this.authToken.id,
+        createAt: new Date(),
+        type: "INVITE.SAVE",
+        status: "SUCCESS",
+        data: JSON.stringify({ inviteId: inviteDb.id, event: "create" })
+      });
     } while (inviteDb != null);
     inviteDb = await Invite.create({ userId: this.authToken.id, code });
     respond(null, { id: inviteDb.id, code });
@@ -86,7 +97,27 @@ export async function saveProfile({ surname, name, midname, flat }, respond) {
       await Resident.create({ personId: person.id, flatId: flat });
       // генерируем новость, что у нас новый сосед
       const flatDb = await Flat.findByPk(flat);
-      await Post.create({ title: "Новый сосед", type: "person", body: `К нам присоединился новый сосед с кв. №${flatDb.number}, этаж ${flatDb.floor}, подъезд ${flatDb.section}` });
+      const post = await Post.create({ title: "Новый сосед", type: "person", body: `К нам присоединился новый сосед с кв. №${flatDb.number}, этаж ${flatDb.floor}, подъезд ${flatDb.section}` });
+
+      // обновляем канал "posts"
+      const responseUpdate = new ResponseUpdate(this.exchange);
+      await responseUpdate.update({
+        userId: this.authToken.id,
+        createAt: new Date(),
+        type: "POST.SAVE",
+        status: "SUCCESS",
+        data: JSON.stringify({ postId: post.id, event: "create" })
+      });
+
+      // обновляем канал "invites"
+      const inviteDb = await Invite.findOne({ where: { newUserId: this.authToken.id } });
+      await responseUpdate.update({
+        userId: this.authToken.id,
+        createAt: new Date(),
+        type: "INVITE.SAVE",
+        status: "SUCCESS",
+        data: JSON.stringify({ inviteId: inviteDb.id, event: "update" })
+      });
     } else {
       // обновляем только данные по персоне, изменения по квартире пока игнорируем
       person.surname = surname;

@@ -37,10 +37,18 @@ export default class InviteResponse extends Response {
     return item;
   }
 
-  static async list(userId: number) {
+  static async get(inviteId: number) {
+    const invite = await Invite.findByPk(inviteId);
+    if (invite == null) return null;
+
+    return await InviteResponse.create(invite);
+  }
+  
+  static async list(userId: number, limit: number = 10) {
     const list = await Invite.findAll({
       where: { userId },
       order: [["id", "desc"]],
+      limit,
     });
     if (list == null || list.length == 0) return [];
 

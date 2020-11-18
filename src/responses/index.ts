@@ -1,4 +1,5 @@
 import EventResponse from "./event/event.response";
+import AllResponse from "./all/all.response";
 import PingResponse from "./ping/ping.response";
 import FlatResponse from "./flat/flat.response";
 import UserResponse from "./user/user.response";
@@ -15,6 +16,10 @@ const channels = {
   ping: {
     action: "PING", // ping
     response: PingResponse
+  },
+  all: {
+    action: "INIT", // all.channelName
+    response: AllResponse
   },
   flats: {
     action: "LIST", // flats

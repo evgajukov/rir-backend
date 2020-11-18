@@ -22,6 +22,14 @@ class PostResponse extends response_1.default {
     static create(model) {
         return new PostResponse(model);
     }
+    static get(postId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const post = yield models_1.Post.findByPk(postId);
+            if (post == null)
+                return null;
+            return PostResponse.create(post);
+        });
+    }
     static list() {
         return __awaiter(this, void 0, void 0, function* () {
             const posts = yield models_1.Post.findAll({ order: [["id", "desc"]] });

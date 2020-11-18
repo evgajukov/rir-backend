@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.DocumentResponse = exports.InviteResponse = exports.InstructionResponse = exports.PostResponse = exports.UserResponse = exports.FlatResponse = exports.PingResponse = exports.EventResponse = exports.channels = void 0;
 const event_response_1 = require("./event/event.response");
 exports.EventResponse = event_response_1.default;
+const all_response_1 = require("./all/all.response");
 const ping_response_1 = require("./ping/ping.response");
 exports.PingResponse = ping_response_1.default;
 const flat_response_1 = require("./flat/flat.response");
@@ -25,6 +26,10 @@ const channels = {
     ping: {
         action: "PING",
         response: ping_response_1.default
+    },
+    all: {
+        action: "INIT",
+        response: all_response_1.default
     },
     flats: {
         action: "LIST",

@@ -32,11 +32,20 @@ class InviteResponse extends response_1.default {
             return item;
         });
     }
-    static list(userId) {
+    static get(inviteId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const invite = yield models_1.Invite.findByPk(inviteId);
+            if (invite == null)
+                return null;
+            return yield InviteResponse.create(invite);
+        });
+    }
+    static list(userId, limit = 10) {
         return __awaiter(this, void 0, void 0, function* () {
             const list = yield models_1.Invite.findAll({
                 where: { userId },
                 order: [["id", "desc"]],
+                limit,
             });
             if (list == null || list.length == 0)
                 return [];

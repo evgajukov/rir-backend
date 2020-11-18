@@ -14,6 +14,7 @@ const models_1 = require("../models");
 const numeral = require("numeral");
 const smsc_1 = require("../lib/smsc");
 const errors_1 = require("./errors");
+const response_update_1 = require("../responses/response.update");
 function auth({ mobile, invite, code }, respond) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log(">>>>> actions/user.auth");
@@ -91,6 +92,15 @@ function invite(params, respond) {
             do {
                 code = generateCode(6);
                 inviteDb = yield models_1.Invite.findOne({ where: { code } });
+                // обновляем канал "invites"
+                const responseUpdate = new response_update_1.default(this.exchange);
+                yield responseUpdate.update({
+                    userId: this.authToken.id,
+                    createAt: new Date(),
+                    type: "INVITE.SAVE",
+                    status: "SUCCESS",
+                    data: JSON.stringify({ inviteId: inviteDb.id, event: "create" })
+                });
             } while (inviteDb != null);
             inviteDb = yield models_1.Invite.create({ userId: this.authToken.id, code });
             respond(null, { id: inviteDb.id, code });
@@ -115,7 +125,25 @@ function saveProfile({ surname, name, midname, flat }, respond) {
                 yield models_1.Resident.create({ personId: person.id, flatId: flat });
                 // генерируем новость, что у нас новый сосед
                 const flatDb = yield models_1.Flat.findByPk(flat);
-                yield models_1.Post.create({ title: "Новый сосед", type: "person", body: `К нам присоединился новый сосед с кв. №${flatDb.number}, этаж ${flatDb.floor}, подъезд ${flatDb.section}` });
+                const post = yield models_1.Post.create({ title: "Новый сосед", type: "person", body: `К нам присоединился новый сосед с кв. №${flatDb.number}, этаж ${flatDb.floor}, подъезд ${flatDb.section}` });
+                // обновляем канал "posts"
+                const responseUpdate = new response_update_1.default(this.exchange);
+                yield responseUpdate.update({
+                    userId: this.authToken.id,
+                    createAt: new Date(),
+                    type: "POST.SAVE",
+                    status: "SUCCESS",
+                    data: JSON.stringify({ postId: post.id, event: "create" })
+                });
+                // обновляем канал "invites"
+                const inviteDb = yield models_1.Invite.findOne({ where: { newUserId: this.authToken.id } });
+                yield responseUpdate.update({
+                    userId: this.authToken.id,
+                    createAt: new Date(),
+                    type: "INVITE.SAVE",
+                    status: "SUCCESS",
+                    data: JSON.stringify({ inviteId: inviteDb.id, event: "update" })
+                });
             }
             else {
                 // обновляем только данные по персоне, изменения по квартире пока игнорируем

@@ -20,6 +20,12 @@ export default class PostResponse extends Response {
     return new PostResponse(model);
   }
 
+  static async get(postId: number) {
+    const post = await Post.findByPk(postId);
+    if (post == null) return null;
+    return PostResponse.create(post);
+  }
+
   static async list() {
     const posts = await Post.findAll({ order: [["id", "desc"]] });
     if (posts == null || posts.length == 0) return [];

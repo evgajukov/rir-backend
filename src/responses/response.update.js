@@ -23,6 +23,12 @@ class ResponseUpdate {
                     case "USER.UPDATE":
                         yield this.updateUser(eventData);
                         break;
+                    case "POST.SAVE":
+                        yield this.updatePostSave(eventData);
+                        break;
+                    case "INVITE.SAVE":
+                        yield this.updateInviteSave(eventData);
+                        break;
                 }
             }
             catch (error) {
@@ -34,6 +40,18 @@ class ResponseUpdate {
         return __awaiter(this, void 0, void 0, function* () {
             const data = yield _1.UserResponse.info(eventData.userId);
             yield this.publish(`user.${eventData.userId}`, data, "update");
+        });
+    }
+    updatePostSave(eventData) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const post = yield _1.PostResponse.get(eventData.data.postId);
+            yield this.publish("posts", post, eventData.data.event);
+        });
+    }
+    updateInviteSave(eventData) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const invite = yield _1.InviteResponse.get(eventData.data.inviteId);
+            yield this.publish("invites", invite, eventData.data.event);
         });
     }
     /**

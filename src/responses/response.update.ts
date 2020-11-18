@@ -1,4 +1,4 @@
-import { UserResponse } from ".";
+import { InviteResponse, PostResponse, UserResponse } from ".";
 import * as _ from "lodash";
 
 export type tPublishEvent = "create" | "update" | "destroy" | "ready";
@@ -20,6 +20,12 @@ export default class ResponseUpdate {
         case "USER.UPDATE":
           await this.updateUser(eventData);
           break;
+        case "POST.SAVE":
+          await this.updatePostSave(eventData);
+          break;
+        case "INVITE.SAVE":
+          await this.updateInviteSave(eventData);
+          break;
       }
     } catch (error) {
       console.error(error);
@@ -29,6 +35,16 @@ export default class ResponseUpdate {
   private async updateUser(eventData) {
     const data = await UserResponse.info(eventData.userId);
     await this.publish(`user.${eventData.userId}`, data, "update");
+  }
+
+  private async updatePostSave(eventData) {
+    const post = await PostResponse.get(eventData.data.postId);
+    await this.publish("posts", post, eventData.data.event);
+  }
+
+  private async updateInviteSave(eventData) {
+    const invite = await InviteResponse.get(eventData.data.inviteId);
+    await this.publish("invites", invite, eventData.data.event);
   }
 
   /**

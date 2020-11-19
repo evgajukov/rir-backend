@@ -1,10 +1,10 @@
 import { Table, Model, ForeignKey, Column, BelongsTo, Default, DataType, HasMany } from "sequelize-typescript";
 import { Resident, User } from "..";
 
-type tAccessLevel = "all" | "friends" | "nothing";
-type tAccessNameFormat = "all" | "name";
+export type tAccessLevel = "all" | "friends" | "nothing";
+export type tAccessNameFormat = "all" | "name";
 
-interface iAccess {
+export interface iAccess {
   name: { level: tAccessLevel, format: tAccessNameFormat };
   mobile: { level: tAccessLevel };
   telegram: { level: tAccessLevel };

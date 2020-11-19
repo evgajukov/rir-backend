@@ -3,6 +3,13 @@ import * as numeral from "numeral";
 import SMSC from "../lib/smsc";
 import errors from "./errors";
 import ResponseUpdate from "../responses/response.update";
+import { iAccess } from "../models/person/person.model";
+
+const DEFAULT_ACCESS: iAccess = {
+  name: { level: "all", format: "name" },
+  mobile: { level: "friends" },
+  telegram: { level: "all" },
+};
 
 export async function auth({ mobile, invite, code }, respond) {
   console.log(">>>>> actions/user.auth");
@@ -93,7 +100,7 @@ export async function saveProfile({ surname, name, midname, flat }, respond) {
     let person = await Person.findOne({ where: { userId: this.authToken.id } });
     if (person == null) {
       // только что зарегистрировались и еще нет профиля
-      person = await Person.create({ userId: this.authToken.id, surname, name, midname });
+      person = await Person.create({ userId: this.authToken.id, surname, name, midname, access: DEFAULT_ACCESS });
       await Resident.create({ personId: person.id, flatId: flat });
       // генерируем новость, что у нас новый сосед
       const flatDb = await Flat.findByPk(flat);
@@ -143,6 +150,12 @@ async function newToken(user: User) {
   
   let resident = null;
   if (person != null) resident = await Resident.findOne({ where: { personId: person.id }, include: [{ model: Flat }] });
+
+  if (person.access == null) {
+    // устанавливаем права по-умолчанию
+    person.access = DEFAULT_ACCESS;
+    await person.save();
+  }
 
   const token = {
     id: user.id,

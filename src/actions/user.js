@@ -15,6 +15,11 @@ const numeral = require("numeral");
 const smsc_1 = require("../lib/smsc");
 const errors_1 = require("./errors");
 const response_update_1 = require("../responses/response.update");
+const DEFAULT_ACCESS = {
+    name: { level: "all", format: "name" },
+    mobile: { level: "friends" },
+    telegram: { level: "all" },
+};
 function auth({ mobile, invite, code }, respond) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log(">>>>> actions/user.auth");
@@ -121,7 +126,7 @@ function saveProfile({ surname, name, midname, flat }, respond) {
             let person = yield models_1.Person.findOne({ where: { userId: this.authToken.id } });
             if (person == null) {
                 // только что зарегистрировались и еще нет профиля
-                person = yield models_1.Person.create({ userId: this.authToken.id, surname, name, midname });
+                person = yield models_1.Person.create({ userId: this.authToken.id, surname, name, midname, access: DEFAULT_ACCESS });
                 yield models_1.Resident.create({ personId: person.id, flatId: flat });
                 // генерируем новость, что у нас новый сосед
                 const flatDb = yield models_1.Flat.findByPk(flat);
@@ -172,6 +177,11 @@ function newToken(user) {
         let resident = null;
         if (person != null)
             resident = yield models_1.Resident.findOne({ where: { personId: person.id }, include: [{ model: models_1.Flat }] });
+        if (person.access == null) {
+            // устанавливаем права по-умолчанию
+            person.access = DEFAULT_ACCESS;
+            yield person.save();
+        }
         const token = {
             id: user.id,
             mobile: user.mobile,

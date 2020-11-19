@@ -117,7 +117,7 @@ function invite(params, respond) {
     });
 }
 exports.invite = invite;
-function saveProfile({ surname, name, midname, flat }, respond) {
+function saveProfile({ surname, name, midname, telegram, flat, access }, respond) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log(">>>>> actions/user.saveProfile");
         try {
@@ -126,7 +126,7 @@ function saveProfile({ surname, name, midname, flat }, respond) {
             let person = yield models_1.Person.findOne({ where: { userId: this.authToken.id } });
             if (person == null) {
                 // только что зарегистрировались и еще нет профиля
-                person = yield models_1.Person.create({ userId: this.authToken.id, surname, name, midname, access: DEFAULT_ACCESS });
+                person = yield models_1.Person.create({ userId: this.authToken.id, surname, name, midname, telegram, access });
                 yield models_1.Resident.create({ personId: person.id, flatId: flat });
                 // генерируем новость, что у нас новый сосед
                 const flatDb = yield models_1.Flat.findByPk(flat);
@@ -155,6 +155,8 @@ function saveProfile({ surname, name, midname, flat }, respond) {
                 person.surname = surname;
                 person.name = name;
                 person.midname = midname;
+                person.telegram = telegram;
+                person.access = access;
                 yield person.save();
             }
             const resident = yield models_1.Resident.findOne({ where: { personId: person.id }, include: [{ model: models_1.Flat }] });

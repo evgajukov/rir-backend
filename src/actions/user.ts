@@ -93,14 +93,14 @@ export async function invite(params, respond) {
   }
 }
 
-export async function saveProfile({ surname, name, midname, flat }, respond) {
+export async function saveProfile({ surname, name, midname, telegram, flat, access }, respond) {
   console.log(">>>>> actions/user.saveProfile");
   try {
     if (!this.authToken) throw new Error(errors.user["004"].code);
     let person = await Person.findOne({ where: { userId: this.authToken.id } });
     if (person == null) {
       // только что зарегистрировались и еще нет профиля
-      person = await Person.create({ userId: this.authToken.id, surname, name, midname, access: DEFAULT_ACCESS });
+      person = await Person.create({ userId: this.authToken.id, surname, name, midname, telegram, access });
       await Resident.create({ personId: person.id, flatId: flat });
       // генерируем новость, что у нас новый сосед
       const flatDb = await Flat.findByPk(flat);
@@ -130,6 +130,8 @@ export async function saveProfile({ surname, name, midname, flat }, respond) {
       person.surname = surname;
       person.name = name;
       person.midname = midname;
+      person.telegram = telegram;
+      person.access = access;
       await person.save();
     }
     const resident = await Resident.findOne({ where: { personId: person.id }, include: [{ model: Flat }] });

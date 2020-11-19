@@ -15,11 +15,7 @@ const numeral = require("numeral");
 const smsc_1 = require("../lib/smsc");
 const errors_1 = require("./errors");
 const response_update_1 = require("../responses/response.update");
-const DEFAULT_ACCESS = {
-    name: { level: "all", format: "name" },
-    mobile: { level: "friends" },
-    telegram: { level: "all" },
-};
+const responses_1 = require("../responses");
 function auth({ mobile, invite, code }, respond) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log(">>>>> actions/user.auth");
@@ -174,24 +170,7 @@ function generateCode(len) {
 }
 function newToken(user) {
     return __awaiter(this, void 0, void 0, function* () {
-        const person = yield models_1.Person.findOne({ where: { userId: user.id } });
-        const role = yield models_1.Role.findByPk(user.roleId);
-        let resident = null;
-        if (person != null)
-            resident = yield models_1.Resident.findOne({ where: { personId: person.id }, include: [{ model: models_1.Flat }] });
-        if (person.access == null) {
-            // устанавливаем права по-умолчанию
-            person.access = DEFAULT_ACCESS;
-            yield person.save();
-        }
-        const token = {
-            id: user.id,
-            mobile: user.mobile,
-            banned: user.banned,
-            role: { id: role.id, name: role.name },
-            person,
-            resident
-        };
+        const token = yield responses_1.UserResponse.info(user.id);
         console.log(`actions/user.newToken: ${JSON.stringify(token)}`);
         return token;
     });

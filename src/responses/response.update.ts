@@ -44,7 +44,7 @@ export default class ResponseUpdate {
 
   private async updateInviteSave(eventData) {
     const invite = await InviteResponse.get(eventData.data.inviteId);
-    await this.publish("invites", invite, eventData.data.event);
+    await this.publish(`invites.${eventData.userId}`, invite, eventData.data.event);
   }
 
   /**

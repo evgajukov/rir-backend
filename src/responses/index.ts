@@ -38,7 +38,7 @@ const channels = {
     response: InstructionResponse
   },
   invites: {
-    action: "LIST", // invites
+    action: "LIST", // invites.userId
     response: InviteResponse
   },
   documents: {

@@ -51,7 +51,7 @@ class ResponseUpdate {
     updateInviteSave(eventData) {
         return __awaiter(this, void 0, void 0, function* () {
             const invite = yield _1.InviteResponse.get(eventData.data.inviteId);
-            yield this.publish("invites", invite, eventData.data.event);
+            yield this.publish(`invites.${eventData.userId}`, invite, eventData.data.event);
         });
     }
     /**

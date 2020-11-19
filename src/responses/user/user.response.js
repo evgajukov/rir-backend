@@ -9,8 +9,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.DEFAULT_ACCESS = void 0;
 const response_1 = require("../response");
 const models_1 = require("../../models");
+exports.DEFAULT_ACCESS = {
+    name: { level: "all", format: "name" },
+    mobile: { level: "friends" },
+    telegram: { level: "all" },
+};
 class UserResponse extends response_1.default {
     constructor(model) {
         super(model.id);
@@ -18,15 +24,31 @@ class UserResponse extends response_1.default {
         this.banned = model.banned;
     }
     static create(model) {
-        return new UserResponse(model);
+        return __awaiter(this, void 0, void 0, function* () {
+            let token = new UserResponse(model);
+            const person = yield models_1.Person.findOne({ where: { userId: model.id } });
+            const role = yield models_1.Role.findByPk(model.roleId);
+            let resident = null;
+            if (person != null)
+                resident = yield models_1.Resident.findOne({ where: { personId: person.id }, include: [{ model: models_1.Flat }] });
+            if (person.access == null) {
+                // устанавливаем права по-умолчанию
+                person.access = exports.DEFAULT_ACCESS;
+                yield person.save();
+            }
+            token.role = role;
+            token.person = person;
+            token.resident = resident;
+            return token;
+        });
     }
     static info(userId) {
         return __awaiter(this, void 0, void 0, function* () {
             const user = yield models_1.User.findByPk(userId);
             if (user == null)
                 return null;
-            const userInfo = yield UserResponse.create(user);
-            return userInfo;
+            const token = yield UserResponse.create(user);
+            return token;
         });
     }
     static seed(action, params, socket) {

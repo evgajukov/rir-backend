@@ -1,15 +1,9 @@
-import { User, Person, Role, Resident, Flat, Invite, Post } from "../models";
+import { User, Person, Resident, Flat, Invite, Post } from "../models";
 import * as numeral from "numeral";
 import SMSC from "../lib/smsc";
 import errors from "./errors";
 import ResponseUpdate from "../responses/response.update";
-import { iAccess } from "../models/person/person.model";
-
-const DEFAULT_ACCESS: iAccess = {
-  name: { level: "all", format: "name" },
-  mobile: { level: "friends" },
-  telegram: { level: "all" },
-};
+import { UserResponse } from "../responses";
 
 export async function auth({ mobile, invite, code }, respond) {
   console.log(">>>>> actions/user.auth");
@@ -147,26 +141,7 @@ function generateCode(len: number) {
 }
 
 async function newToken(user: User) {
-  const person = await Person.findOne({ where: { userId: user.id } });
-  const role = await Role.findByPk(user.roleId);
-  
-  let resident = null;
-  if (person != null) resident = await Resident.findOne({ where: { personId: person.id }, include: [{ model: Flat }] });
-
-  if (person.access == null) {
-    // устанавливаем права по-умолчанию
-    person.access = DEFAULT_ACCESS;
-    await person.save();
-  }
-
-  const token = {
-    id: user.id,
-    mobile: user.mobile,
-    banned: user.banned,
-    role: { id: role.id, name: role.name },
-    person,
-    resident
-  };
+  const token = await UserResponse.info(user.id);
   console.log(`actions/user.newToken: ${JSON.stringify(token)}`);
   return token;
 }

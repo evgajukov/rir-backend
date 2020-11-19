@@ -1,10 +1,20 @@
 import Response from "../response";
-import { User } from "../../models";
+import { Flat, Person, Resident, Role, User } from "../../models";
+import { iAccess } from "../../models/person/person.model";
+
+export const DEFAULT_ACCESS: iAccess = {
+  name: { level: "all", format: "name" },
+  mobile: { level: "friends" },
+  telegram: { level: "all" },
+};
 
 export default class UserResponse extends Response {
 
   mobile: string;
   banned: boolean;
+  role: Role;
+  person: Person;
+  resident: Resident;
   
   constructor(model: User) {
     super(model.id);
@@ -12,15 +22,32 @@ export default class UserResponse extends Response {
     this.banned = model.banned;
   }
 
-  static create(model: User) {
-    return new UserResponse(model);
+  static async create(model: User) {
+    let token = new UserResponse(model);
+    const person = await Person.findOne({ where: { userId: model.id } });
+    const role = await Role.findByPk(model.roleId);
+
+    let resident = null;
+    if (person != null) resident = await Resident.findOne({ where: { personId: person.id }, include: [{ model: Flat }] });
+
+    if (person.access == null) {
+      // устанавливаем права по-умолчанию
+      person.access = DEFAULT_ACCESS;
+      await person.save();
+    }
+
+    token.role = role;
+    token.person = person;
+    token.resident = resident;
+
+    return token;
   }
 
   static async info(userId: number) {
     const user = await User.findByPk(userId);
     if (user == null) return null;
-    const userInfo = await UserResponse.create(user);
-    return userInfo;
+    const token = await UserResponse.create(user);
+    return token;
   }
 
   static async seed(action, params, socket) {

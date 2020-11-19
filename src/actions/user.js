@@ -15,7 +15,6 @@ const numeral = require("numeral");
 const smsc_1 = require("../lib/smsc");
 const errors_1 = require("./errors");
 const response_update_1 = require("../responses/response.update");
-const responses_1 = require("../responses");
 function auth({ mobile, invite, code }, respond) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log(">>>>> actions/user.auth");
@@ -170,7 +169,13 @@ function generateCode(len) {
 }
 function newToken(user) {
     return __awaiter(this, void 0, void 0, function* () {
-        const token = yield responses_1.UserResponse.info(user.id);
+        const role = yield models_1.Role.findByPk(user.roleId);
+        const token = {
+            id: user.id,
+            mobile: user.mobile,
+            banned: user.banned,
+            role: { id: role.id, name: role.name },
+        };
         console.log(`actions/user.newToken: ${JSON.stringify(token)}`);
         return token;
     });

@@ -1,9 +1,8 @@
-import { User, Person, Resident, Flat, Invite, Post } from "../models";
+import { User, Person, Resident, Flat, Invite, Post, Role } from "../models";
 import * as numeral from "numeral";
 import SMSC from "../lib/smsc";
 import errors from "./errors";
 import ResponseUpdate from "../responses/response.update";
-import { UserResponse } from "../responses";
 
 export async function auth({ mobile, invite, code }, respond) {
   console.log(">>>>> actions/user.auth");
@@ -141,7 +140,13 @@ function generateCode(len: number) {
 }
 
 async function newToken(user: User) {
-  const token = await UserResponse.info(user.id);
+  const role = await Role.findByPk(user.roleId);
+  const token = {
+    id: user.id,
+    mobile: user.mobile,
+    banned: user.banned,
+    role: { id: role.id, name: role.name },
+  };
   console.log(`actions/user.newToken: ${JSON.stringify(token)}`);
   return token;
 }

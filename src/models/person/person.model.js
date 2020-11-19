@@ -50,6 +50,19 @@ __decorate([
     __metadata("design:type", String)
 ], Person.prototype, "biography", void 0);
 __decorate([
+    sequelize_typescript_1.Column({
+        comment: "Аккаунт в Телеграм"
+    }),
+    __metadata("design:type", String)
+], Person.prototype, "telegram", void 0);
+__decorate([
+    sequelize_typescript_1.Column({
+        type: sequelize_typescript_1.DataType.JSON,
+        comment: "json с настройками безопасности по отображению персональных данных"
+    }),
+    __metadata("design:type", Object)
+], Person.prototype, "access", void 0);
+__decorate([
     sequelize_typescript_1.HasMany(() => __1.Resident),
     __metadata("design:type", Array)
 ], Person.prototype, "residents", void 0);

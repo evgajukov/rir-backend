@@ -1,6 +1,15 @@
 import { Table, Model, ForeignKey, Column, BelongsTo, Default, DataType, HasMany } from "sequelize-typescript";
 import { Resident, User } from "..";
 
+type tAccessLevel = "all" | "friends" | "nothing";
+type tAccessNameFormat = "all" | "name";
+
+interface iAccess {
+  name: { level: tAccessLevel, format: tAccessNameFormat };
+  mobile: { level: tAccessLevel };
+  telegram: { level: tAccessLevel };
+}
+
 @Table({
   tableName: "persons",
   comment: "Профили пользователей"
@@ -34,6 +43,17 @@ export default class Person extends Model<Person> {
     type: DataType.TEXT
   })
   biography: string;
+
+  @Column({
+    comment: "Аккаунт в Телеграм"
+  })
+  telegram: string;
+
+  @Column({
+    type: DataType.JSON,
+    comment: "json с настройками безопасности по отображению персональных данных"
+  })
+  access: iAccess;
 
   @HasMany(() => Resident)
   residents: Resident[];

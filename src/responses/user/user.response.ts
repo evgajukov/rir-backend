@@ -12,7 +12,7 @@ export default class UserResponse extends Response {
 
   mobile: string;
   banned: boolean;
-  role: Role;
+  role: { id: number, name: string, };
   person: Person;
   resident: Resident;
   
@@ -36,7 +36,7 @@ export default class UserResponse extends Response {
       await person.save();
     }
 
-    token.role = role;
+    token.role = { id: role.id, name: role.name };
     token.person = person;
     token.resident = resident;
 

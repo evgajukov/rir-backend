@@ -36,7 +36,7 @@ class UserResponse extends response_1.default {
                 person.access = exports.DEFAULT_ACCESS;
                 yield person.save();
             }
-            token.role = role;
+            token.role = { id: role.id, name: role.name };
             token.person = person;
             token.resident = resident;
             return token;

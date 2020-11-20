@@ -1,7 +1,8 @@
 import db from "./db";
 
-import * as user from "./actions/user";
 import * as ping from "./actions/ping";
+import * as user from "./actions/user";
+import * as flat from "./actions/flat";
 
 import * as responses from "./responses";
 
@@ -13,8 +14,9 @@ export default function handleSocket(socket) {
   socket.on("deauthenticate", (Session as any).onLogout.bind(socket));
   socket.on("disconnect", (Session as any).onLogout.bind(socket));
 
-  bindActions(socket, "user", user);
   bindActions(socket, "test", ping);
+  bindActions(socket, "user", user);
+  bindActions(socket, "flat", flat);
 }
 
 function bindActions(socket, namespace, actions) {

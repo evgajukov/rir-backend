@@ -10,6 +10,12 @@ export interface iAccess {
   telegram: { level: tAccessLevel };
 }
 
+export const DEFAULT_ACCESS: iAccess = {
+  name: { level: "all", format: "name" },
+  mobile: { level: "friends" },
+  telegram: { level: "all" },
+};
+
 @Table({
   tableName: "persons",
   comment: "Профили пользователей"

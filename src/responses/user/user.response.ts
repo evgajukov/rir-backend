@@ -1,12 +1,6 @@
 import Response from "../response";
 import { Flat, Person, Resident, Role, User } from "../../models";
-import { iAccess } from "../../models/person/person.model";
-
-export const DEFAULT_ACCESS: iAccess = {
-  name: { level: "all", format: "name" },
-  mobile: { level: "friends" },
-  telegram: { level: "all" },
-};
+import { DEFAULT_ACCESS } from "../../models/person/person.model";
 
 export default class UserResponse extends Response {
 

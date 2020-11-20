@@ -9,14 +9,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DEFAULT_ACCESS = void 0;
 const response_1 = require("../response");
 const models_1 = require("../../models");
-exports.DEFAULT_ACCESS = {
-    name: { level: "all", format: "name" },
-    mobile: { level: "friends" },
-    telegram: { level: "all" },
-};
+const person_model_1 = require("../../models/person/person.model");
 class UserResponse extends response_1.default {
     constructor(model) {
         super(model.id);
@@ -33,7 +28,7 @@ class UserResponse extends response_1.default {
                 resident = yield models_1.Resident.findOne({ where: { personId: person.id }, include: [{ model: models_1.Flat }] });
             if (person.access == null) {
                 // устанавливаем права по-умолчанию
-                person.access = exports.DEFAULT_ACCESS;
+                person.access = person_model_1.DEFAULT_ACCESS;
                 yield person.save();
             }
             token.role = { id: role.id, name: role.name };

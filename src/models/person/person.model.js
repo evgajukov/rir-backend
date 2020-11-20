@@ -9,8 +9,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.DEFAULT_ACCESS = void 0;
 const sequelize_typescript_1 = require("sequelize-typescript");
 const __1 = require("..");
+exports.DEFAULT_ACCESS = {
+    name: { level: "all", format: "name" },
+    mobile: { level: "friends" },
+    telegram: { level: "all" },
+};
 let Person = class Person extends sequelize_typescript_1.Model {
 };
 __decorate([

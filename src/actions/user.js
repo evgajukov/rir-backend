@@ -118,13 +118,15 @@ function saveProfile({ surname, name, midname, telegram, flat, access }, respond
         try {
             if (!this.authToken)
                 throw new Error(errors_1.default.user["004"].code);
+            const flatDb = yield models_1.Flat.findByPk(flat);
+            if (flatDb == null)
+                throw new Error(errors_1.default.flat["001"].code);
             let person = yield models_1.Person.findOne({ where: { userId: this.authToken.id } });
             if (person == null) {
                 // только что зарегистрировались и еще нет профиля
-                person = yield models_1.Person.create({ userId: this.authToken.id, surname, name, midname, telegram, access });
+                person = yield models_1.Person.create({ userId: this.authToken.id, surname: surname, name: name, midname: midname, telegram: telegram, access: access });
                 yield models_1.Resident.create({ personId: person.id, flatId: flat });
                 // генерируем новость, что у нас новый сосед
-                const flatDb = yield models_1.Flat.findByPk(flat);
                 const post = yield models_1.Post.create({ title: "Новый сосед", type: "person", body: `К нам присоединился новый сосед с кв. №${flatDb.number}, этаж ${flatDb.floor}, подъезд ${flatDb.section}` });
                 // обновляем канал "posts"
                 const responseUpdate = new response_update_1.default(this.exchange);
@@ -154,7 +156,24 @@ function saveProfile({ surname, name, midname, telegram, flat, access }, respond
                 person.access = access;
                 yield person.save();
             }
-            const resident = yield models_1.Resident.findOne({ where: { personId: person.id }, include: [{ model: models_1.Flat }] });
+            let resident = yield models_1.Resident.findOne({ where: { personId: person.id }, include: [{ model: models_1.Flat }] });
+            if (resident == null) {
+                // !!! странная ситуация !!!
+                console.log(`!!!!!! СТРАННАЯ СИТУАЦИЯ !!!!! personId: ${person.id}`);
+                yield models_1.Resident.create({ personId: person.id, flatId: flat });
+                // генерируем новость, что у нас новый сосед
+                const post = yield models_1.Post.create({ title: "Новый сосед", type: "person", body: `К нам присоединился новый сосед с кв. №${flatDb.number}, этаж ${flatDb.floor}, подъезд ${flatDb.section}` });
+                // обновляем канал "posts"
+                const responseUpdate = new response_update_1.default(this.exchange);
+                yield responseUpdate.update({
+                    userId: this.authToken.id,
+                    createAt: new Date(),
+                    type: "POST.SAVE",
+                    status: "SUCCESS",
+                    data: JSON.stringify({ postId: post.id, event: "create" })
+                });
+                resident = yield models_1.Resident.findOne({ where: { personId: person.id }, include: [{ model: models_1.Flat }] });
+            }
             respond(null, { status: "OK", person, resident });
         }
         catch (error) {

@@ -67,18 +67,19 @@ export async function invite(params, respond) {
     do {
       code = generateCode(6);
       inviteDb = await Invite.findOne({ where: { code } });
-
-      // обновляем канал "invites"
-      const responseUpdate = new ResponseUpdate(this.exchange);
-      await responseUpdate.update({
-        userId: this.authToken.id,
-        createAt: new Date(),
-        type: "INVITE.SAVE",
-        status: "SUCCESS",
-        data: JSON.stringify({ inviteId: inviteDb.id, event: "create" })
-      });
     } while (inviteDb != null);
     inviteDb = await Invite.create({ userId: this.authToken.id, code });
+
+    // обновляем канал "invites"
+    const responseUpdate = new ResponseUpdate(this.exchange);
+    await responseUpdate.update({
+      userId: this.authToken.id,
+      createAt: new Date(),
+      type: "INVITE.SAVE",
+      status: "SUCCESS",
+      data: JSON.stringify({ inviteId: inviteDb.id, event: "create" })
+    });
+    
     respond(null, { id: inviteDb.id, code });
   } catch (error) {
     console.error(error);

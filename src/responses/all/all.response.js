@@ -23,7 +23,6 @@ class AllResponse extends response_1.default {
             let posts = [];
             let flats = [];
             let invites = [];
-            console.time(`all channel: ${channelName}`);
             if (channelName == null || channelName == "posts")
                 posts = yield __1.PostResponse.list();
             if (channelName == null || channelName == "flats")

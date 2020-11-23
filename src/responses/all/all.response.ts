@@ -20,7 +20,6 @@ export default class AllResponse extends Response {
     let flats: FlatResponse[] = [];
     let invites: InviteResponse[] = [];
 
-    console.time(`all channel: ${channelName}`);
     if (channelName == null || channelName == "posts") posts = await PostResponse.list();
     if (channelName == null || channelName == "flats") flats = await FlatResponse.list();
     if (channelName == null || channelName == "invites") invites = await InviteResponse.list(userId);

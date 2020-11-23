@@ -26,7 +26,7 @@ class UserResponse extends response_1.default {
             let resident = null;
             if (person != null)
                 resident = yield models_1.Resident.findOne({ where: { personId: person.id }, include: [{ model: models_1.Flat }] });
-            if (person.access == null) {
+            if (person != null && person.access == null) {
                 // устанавливаем права по-умолчанию
                 person.access = person_model_1.DEFAULT_ACCESS;
                 yield person.save();

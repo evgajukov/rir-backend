@@ -29,7 +29,6 @@ export default class AllResponse extends Response {
     result.posts = posts;
     result.flats = flats;
     result.invites = invites;
-    console.timeEnd(`all channel: ${channelName}`);
     return result;
   }
 

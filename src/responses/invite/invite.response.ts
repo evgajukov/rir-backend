@@ -31,7 +31,9 @@ export default class InviteResponse extends Response {
       if (person != null) {
         item.person = { surname: person.surname, name: person.name, midname: person.midname };
         const resident = await Resident.findOne({ where: { personId: person.id }, include: [{ model: Flat }] });
-        item.flat = { number: resident.flat.number, floor: resident.flat.floor, section: resident.flat.section };
+        if (resident != null) {
+          item.flat = { number: resident.flat.number, floor: resident.flat.floor, section: resident.flat.section };
+        }
       }
     }
     return item;

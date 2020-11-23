@@ -24,7 +24,7 @@ export default class UserResponse extends Response {
     let resident = null;
     if (person != null) resident = await Resident.findOne({ where: { personId: person.id }, include: [{ model: Flat }] });
 
-    if (person.access == null) {
+    if (person != null && person.access == null) {
       // устанавливаем права по-умолчанию
       person.access = DEFAULT_ACCESS;
       await person.save();

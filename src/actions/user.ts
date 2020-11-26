@@ -99,29 +99,6 @@ export async function saveProfile({ surname, name, midname, telegram, flat, acce
     if (person == null) {
       // только что зарегистрировались и еще нет профиля
       person = await Person.create({ userId: this.authToken.id, surname: surname, name: name, midname: midname, telegram: telegram, access: access });
-      await Resident.create({ personId: person.id, flatId: flat });
-      // генерируем новость, что у нас новый сосед
-      const post = await Post.create({ title: "Новый сосед", type: "person", body: `К нам присоединился новый сосед с кв. №${flatDb.number}, этаж ${flatDb.floor}, подъезд ${flatDb.section}` });
-
-      // обновляем канал "posts"
-      const responseUpdate = new ResponseUpdate(this.exchange);
-      await responseUpdate.update({
-        userId: this.authToken.id,
-        createAt: new Date(),
-        type: "POST.SAVE",
-        status: "SUCCESS",
-        data: JSON.stringify({ postId: post.id, event: "create" })
-      });
-
-      // обновляем канал "invites"
-      const inviteDb = await Invite.findOne({ where: { newUserId: this.authToken.id } });
-      await responseUpdate.update({
-        userId: this.authToken.id,
-        createAt: new Date(),
-        type: "INVITE.SAVE",
-        status: "SUCCESS",
-        data: JSON.stringify({ inviteId: inviteDb.id, event: "update" })
-      });
     } else {
       // обновляем только данные по персоне, изменения по квартире пока игнорируем
       person.surname = surname;
@@ -134,11 +111,16 @@ export async function saveProfile({ surname, name, midname, telegram, flat, acce
 
     let resident = await Resident.findOne({ where: { personId: person.id }, include: [{ model: Flat }] });
     if (resident == null) {
-      // !!! странная ситуация !!!
-      console.log(`!!!!!! СТРАННАЯ СИТУАЦИЯ !!!!! personId: ${person.id}`);
       await Resident.create({ personId: person.id, flatId: flat });
+      
       // генерируем новость, что у нас новый сосед
-      const post = await Post.create({ title: "Новый сосед", type: "person", body: `К нам присоединился новый сосед с кв. №${flatDb.number}, этаж ${flatDb.floor}, подъезд ${flatDb.section}` });
+      const post = await Post.create({
+        title: "Новый сосед",
+        type: "person",
+        body: `К нам присоединился новый сосед с кв. №${flatDb.number}, этаж ${flatDb.floor}, подъезд ${flatDb.section}`,
+        url: `/flat/${flatDb.number}`,
+      });
+      
       // обновляем канал "posts"
       const responseUpdate = new ResponseUpdate(this.exchange);
       await responseUpdate.update({
@@ -150,6 +132,16 @@ export async function saveProfile({ surname, name, midname, telegram, flat, acce
       });
 
       resident = await Resident.findOne({ where: { personId: person.id }, include: [{ model: Flat }] });
+
+      // обновляем канал "invites"
+      const inviteDb = await Invite.findOne({ where: { newUserId: this.authToken.id } });
+      await responseUpdate.update({
+        userId: this.authToken.id,
+        createAt: new Date(),
+        type: "INVITE.SAVE",
+        status: "SUCCESS",
+        data: JSON.stringify({ inviteId: inviteDb.id, event: "update" })
+      });
     }
 
     respond(null, { status: "OK", person, resident });

@@ -125,27 +125,6 @@ function saveProfile({ surname, name, midname, telegram, flat, access }, respond
             if (person == null) {
                 // только что зарегистрировались и еще нет профиля
                 person = yield models_1.Person.create({ userId: this.authToken.id, surname: surname, name: name, midname: midname, telegram: telegram, access: access });
-                yield models_1.Resident.create({ personId: person.id, flatId: flat });
-                // генерируем новость, что у нас новый сосед
-                const post = yield models_1.Post.create({ title: "Новый сосед", type: "person", body: `К нам присоединился новый сосед с кв. №${flatDb.number}, этаж ${flatDb.floor}, подъезд ${flatDb.section}` });
-                // обновляем канал "posts"
-                const responseUpdate = new response_update_1.default(this.exchange);
-                yield responseUpdate.update({
-                    userId: this.authToken.id,
-                    createAt: new Date(),
-                    type: "POST.SAVE",
-                    status: "SUCCESS",
-                    data: JSON.stringify({ postId: post.id, event: "create" })
-                });
-                // обновляем канал "invites"
-                const inviteDb = yield models_1.Invite.findOne({ where: { newUserId: this.authToken.id } });
-                yield responseUpdate.update({
-                    userId: this.authToken.id,
-                    createAt: new Date(),
-                    type: "INVITE.SAVE",
-                    status: "SUCCESS",
-                    data: JSON.stringify({ inviteId: inviteDb.id, event: "update" })
-                });
             }
             else {
                 // обновляем только данные по персоне, изменения по квартире пока игнорируем
@@ -158,11 +137,14 @@ function saveProfile({ surname, name, midname, telegram, flat, access }, respond
             }
             let resident = yield models_1.Resident.findOne({ where: { personId: person.id }, include: [{ model: models_1.Flat }] });
             if (resident == null) {
-                // !!! странная ситуация !!!
-                console.log(`!!!!!! СТРАННАЯ СИТУАЦИЯ !!!!! personId: ${person.id}`);
                 yield models_1.Resident.create({ personId: person.id, flatId: flat });
                 // генерируем новость, что у нас новый сосед
-                const post = yield models_1.Post.create({ title: "Новый сосед", type: "person", body: `К нам присоединился новый сосед с кв. №${flatDb.number}, этаж ${flatDb.floor}, подъезд ${flatDb.section}` });
+                const post = yield models_1.Post.create({
+                    title: "Новый сосед",
+                    type: "person",
+                    body: `К нам присоединился новый сосед с кв. №${flatDb.number}, этаж ${flatDb.floor}, подъезд ${flatDb.section}`,
+                    url: `/flat/${flatDb.number}`,
+                });
                 // обновляем канал "posts"
                 const responseUpdate = new response_update_1.default(this.exchange);
                 yield responseUpdate.update({
@@ -173,6 +155,15 @@ function saveProfile({ surname, name, midname, telegram, flat, access }, respond
                     data: JSON.stringify({ postId: post.id, event: "create" })
                 });
                 resident = yield models_1.Resident.findOne({ where: { personId: person.id }, include: [{ model: models_1.Flat }] });
+                // обновляем канал "invites"
+                const inviteDb = yield models_1.Invite.findOne({ where: { newUserId: this.authToken.id } });
+                yield responseUpdate.update({
+                    userId: this.authToken.id,
+                    createAt: new Date(),
+                    type: "INVITE.SAVE",
+                    status: "SUCCESS",
+                    data: JSON.stringify({ inviteId: inviteDb.id, event: "update" })
+                });
             }
             respond(null, { status: "OK", person, resident });
         }

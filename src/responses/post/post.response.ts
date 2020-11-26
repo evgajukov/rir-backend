@@ -7,6 +7,7 @@ export default class PostResponse extends Response {
   type: string;
   title: string;
   body: string;
+  url: string;
 
   constructor(model: Post) {
     super(model.id);
@@ -14,6 +15,7 @@ export default class PostResponse extends Response {
     this.type = model.type;
     this.title = model.title;
     this.body = model.body;
+    this.url = model.url;
   }
 
   static create(model: Post) {

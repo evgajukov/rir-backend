@@ -18,4 +18,9 @@ export default class Post extends Model<Post> {
     type: DataType.TEXT
   })
   body: string;
+
+  @Column({
+    comment: "Ссылка на объект, о которой новость"
+  })
+  url: string
 }

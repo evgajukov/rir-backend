@@ -28,6 +28,12 @@ __decorate([
     }),
     __metadata("design:type", String)
 ], Post.prototype, "body", void 0);
+__decorate([
+    sequelize_typescript_1.Column({
+        comment: "Ссылка на объект, о которой новость"
+    }),
+    __metadata("design:type", String)
+], Post.prototype, "url", void 0);
 Post = __decorate([
     sequelize_typescript_1.Table({
         tableName: "posts",

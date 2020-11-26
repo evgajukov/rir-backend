@@ -18,6 +18,7 @@ class PostResponse extends response_1.default {
         this.type = model.type;
         this.title = model.title;
         this.body = model.body;
+        this.url = model.url;
     }
     static create(model) {
         return new PostResponse(model);

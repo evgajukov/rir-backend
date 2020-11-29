@@ -18,6 +18,7 @@ const invite_response_1 = require("./invite/invite.response");
 exports.InviteResponse = invite_response_1.default;
 const document_response_1 = require("./document/document.response");
 exports.DocumentResponse = document_response_1.default;
+const faq_response_1 = require("./faq/faq.response");
 const channels = {
     events: {
         action: "LIST",
@@ -54,6 +55,10 @@ const channels = {
     documents: {
         action: "LIST",
         response: document_response_1.default
+    },
+    faq: {
+        action: "LIST",
+        response: faq_response_1.default
     },
 };
 exports.channels = channels;

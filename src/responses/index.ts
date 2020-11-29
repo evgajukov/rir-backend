@@ -7,6 +7,7 @@ import PostResponse from "./post/post.response";
 import InstructionResponse from "./instruction/instruction.response";
 import InviteResponse from "./invite/invite.response";
 import DocumentResponse from "./document/document.response";
+import FAQResponse from "./faq/faq.response";
 
 const channels = {
   events: {
@@ -44,6 +45,10 @@ const channels = {
   documents: {
     action: "LIST", // documents
     response: DocumentResponse
+  },
+  faq: {
+    action: "LIST", // faq
+    response: FAQResponse
   },
 }
 

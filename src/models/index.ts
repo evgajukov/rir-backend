@@ -15,6 +15,8 @@ import Post from "./post/post.model";
 
 import Instruction from "./instruction/instruction.model";
 import Document from "./document/document.model";
+import FAQCategory from "./faq/faq.category.model";
+import FAQItem from "./faq/faq.model";
 
 import sequelize from "../db";
 
@@ -23,4 +25,5 @@ export {
   Session, User, Role,
   Person, Flat, Resident, Invite,
   Post, Instruction, Document,
+  FAQCategory, FAQItem,
 };

@@ -19,6 +19,10 @@ __decorate([
     __metadata("design:type", String)
 ], FAQCategory.prototype, "name", void 0);
 __decorate([
+    sequelize_typescript_1.Column,
+    __metadata("design:type", String)
+], FAQCategory.prototype, "description", void 0);
+__decorate([
     sequelize_typescript_1.HasMany(() => __1.FAQItem),
     __metadata("design:type", Array)
 ], FAQCategory.prototype, "items", void 0);

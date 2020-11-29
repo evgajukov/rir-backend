@@ -7,7 +7,8 @@ export default class FAQResponse extends Response {
   body: string;
   category: {
     id: number,
-    name: string
+    name: string,
+    description: string
   }
 
   constructor(model: FAQItem) {
@@ -16,7 +17,8 @@ export default class FAQResponse extends Response {
     this.body = model.body;
     this.category = {
       id: model.category.id,
-      name: model.category.name
+      name: model.category.name,
+      description: model.category.description
     };
   }
 

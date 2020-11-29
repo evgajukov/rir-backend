@@ -18,7 +18,8 @@ class FAQResponse extends response_1.default {
         this.body = model.body;
         this.category = {
             id: model.category.id,
-            name: model.category.name
+            name: model.category.name,
+            description: model.category.description
         };
     }
     static create(model) {

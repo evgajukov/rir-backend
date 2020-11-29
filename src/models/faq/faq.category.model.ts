@@ -11,6 +11,9 @@ export default class FAQCategory extends Model<FAQCategory> {
   @Column
   name: string;
 
+  @Column
+  description: string;
+
   @HasMany(() => FAQItem)
   items: FAQItem[];
 }

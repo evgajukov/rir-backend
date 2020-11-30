@@ -77,7 +77,7 @@ __decorate([
     __metadata("design:type", Array)
 ], Person.prototype, "answers", void 0);
 __decorate([
-    sequelize_typescript_1.HasMany(() => __1.Vote),
+    sequelize_typescript_1.HasMany(() => __1.VotePerson),
     __metadata("design:type", Array)
 ], Person.prototype, "votes", void 0);
 Person = __decorate([

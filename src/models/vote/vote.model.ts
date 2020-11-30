@@ -1,4 +1,4 @@
-import { Column, HasMany, Model, Table } from "sequelize-typescript";
+import { Column, Default, HasMany, Model, Table } from "sequelize-typescript";
 import { VoteAnswer, VotePerson, VoteQuestion } from "..";
 
 @Table({
@@ -10,21 +10,25 @@ export default class Vote extends Model<Vote> {
   @Column
   title: string;
 
+  @Default(false)
   @Column({
     comment: "Признак, что можно выбирать сразу несколько вариантов"
   })
   multi: boolean;
 
+  @Default(false)
   @Column({
     comment: "Признак, что голосование анонимное"
   })
   anonymous: boolean;
 
+  @Default(false)
   @Column({
     comment: "Признак, что голосование закрыто"
   })
   closed: boolean;
 
+  @Default(false)
   @Column({
     comment: "Признак, что голосование на весь дом"
   })

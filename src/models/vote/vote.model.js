@@ -18,24 +18,28 @@ __decorate([
     __metadata("design:type", String)
 ], Vote.prototype, "title", void 0);
 __decorate([
+    sequelize_typescript_1.Default(false),
     sequelize_typescript_1.Column({
         comment: "Признак, что можно выбирать сразу несколько вариантов"
     }),
     __metadata("design:type", Boolean)
 ], Vote.prototype, "multi", void 0);
 __decorate([
+    sequelize_typescript_1.Default(false),
     sequelize_typescript_1.Column({
         comment: "Признак, что голосование анонимное"
     }),
     __metadata("design:type", Boolean)
 ], Vote.prototype, "anonymous", void 0);
 __decorate([
+    sequelize_typescript_1.Default(false),
     sequelize_typescript_1.Column({
         comment: "Признак, что голосование закрыто"
     }),
     __metadata("design:type", Boolean)
 ], Vote.prototype, "closed", void 0);
 __decorate([
+    sequelize_typescript_1.Default(false),
     sequelize_typescript_1.Column({
         comment: "Признак, что голосование на весь дом"
     }),

@@ -23,6 +23,10 @@ __decorate([
     __metadata("design:type", __1.Vote)
 ], VoteQuestion.prototype, "vote", void 0);
 __decorate([
+    sequelize_typescript_1.Column,
+    __metadata("design:type", String)
+], VoteQuestion.prototype, "body", void 0);
+__decorate([
     sequelize_typescript_1.HasMany(() => __1.VoteAnswer),
     __metadata("design:type", Array)
 ], VoteQuestion.prototype, "answers", void 0);

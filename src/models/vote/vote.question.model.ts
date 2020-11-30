@@ -14,6 +14,9 @@ export default class VoteQuestion extends Model<VoteQuestion> {
   @BelongsTo(() => Vote)
   vote: Vote;
 
+  @Column
+  body: string;
+
   @HasMany(() => VoteAnswer)
   answers: VoteAnswer[];
 }

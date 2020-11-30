@@ -138,6 +138,7 @@ function saveProfile({ surname, name, midname, telegram, flat, access }, respond
             let resident = yield models_1.Resident.findOne({ where: { personId: person.id }, include: [{ model: models_1.Flat }] });
             if (resident == null) {
                 yield models_1.Resident.create({ personId: person.id, flatId: flat });
+                // TODO: проверяем активные голосования и, при необходимости, добавляем в нужные
                 // генерируем новость, что у нас новый сосед
                 const post = yield models_1.Post.create({
                     title: "Новый сосед",

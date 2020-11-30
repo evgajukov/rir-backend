@@ -9,11 +9,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const models_1 = require("../models");
+const vote_response_1 = require("../responses/vote/vote.response");
 (() => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const item = yield models_1.Instruction.findByPk(1);
-        console.log(item.body);
+        const items = yield vote_response_1.default.list(1);
+        console.log(items);
     }
     catch (error) {
         console.error(error);

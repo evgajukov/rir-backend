@@ -1,9 +1,9 @@
-import { Instruction } from "../models";
+import VoteResponse from "../responses/vote/vote.response";
 
 (async () => {
   try {
-    const item = await Instruction.findByPk(1);
-    console.log(item.body);
+    const items = await VoteResponse.list(1);
+    console.log(items);
   } catch (error) {
     console.error(error);
   } finally {

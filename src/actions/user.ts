@@ -112,6 +112,8 @@ export async function saveProfile({ surname, name, midname, telegram, flat, acce
     let resident = await Resident.findOne({ where: { personId: person.id }, include: [{ model: Flat }] });
     if (resident == null) {
       await Resident.create({ personId: person.id, flatId: flat });
+
+      // TODO: проверяем активные голосования и, при необходимости, добавляем в нужные
       
       // генерируем новость, что у нас новый сосед
       const post = await Post.create({

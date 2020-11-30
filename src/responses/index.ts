@@ -57,4 +57,4 @@ const channels = {
   },
 }
 
-export { channels, EventResponse, PingResponse, FlatResponse, UserResponse, PostResponse, InstructionResponse, InviteResponse, DocumentResponse };
+export { channels, EventResponse, PingResponse, FlatResponse, UserResponse, PostResponse, InstructionResponse, InviteResponse, DocumentResponse, VoteResponse };

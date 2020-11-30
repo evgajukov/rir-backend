@@ -1,4 +1,4 @@
-import { Person, Vote, VoteAnswer, VotePerson, VoteQuestion } from "../../models";
+import { Flat, Person, Resident, Vote, VoteAnswer, VotePerson, VoteQuestion } from "../../models";
 import Response from "../response";
 
 type tQuestion = {
@@ -6,7 +6,13 @@ type tQuestion = {
   body?: string
 };
 type tPerson = {
-  id: number
+  id: number,
+  flat: {
+    id: number,
+    number: number,
+    section: number,
+    floor: number
+  }
 };
 type tAnswer = {
   id: number,
@@ -42,10 +48,23 @@ export default class VoteResponse extends Response {
       };
     });
     this.answers = model.answers.map(answer => {
+      let flat = null;
+      if (answer.person.residents.length > 0) {
+        const flatInfo = answer.person.residents[0].flat;
+        flat = {
+          id: flatInfo.id,
+          number: flatInfo.number,
+          section: flatInfo.section,
+          floor: flatInfo.floor
+        };
+      }
       return {
         id: answer.id,
         question: { id: answer.questionId },
-        person: { id: answer.personId }
+        person: {
+          id: answer.personId,
+          flat
+        }
       };
     });
   }
@@ -65,7 +84,20 @@ export default class VoteResponse extends Response {
           model: Vote,
           include: [
             { model: VoteQuestion },
-            { model: VoteAnswer }
+            {
+              model: VoteAnswer,
+              include: [
+                {
+                  model: Person,
+                  include: [
+                    {
+                      model: Resident,
+                      include: [{ model: Flat }]
+                    }
+                  ]
+                }
+              ]
+            }
           ]
         }
       ],

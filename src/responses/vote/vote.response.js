@@ -28,10 +28,23 @@ class VoteResponse extends response_1.default {
             };
         });
         this.answers = model.answers.map(answer => {
+            let flat = null;
+            if (answer.person.residents.length > 0) {
+                const flatInfo = answer.person.residents[0].flat;
+                flat = {
+                    id: flatInfo.id,
+                    number: flatInfo.number,
+                    section: flatInfo.section,
+                    floor: flatInfo.floor
+                };
+            }
             return {
                 id: answer.id,
                 question: { id: answer.questionId },
-                person: { id: answer.personId }
+                person: {
+                    id: answer.personId,
+                    flat
+                }
             };
         });
     }
@@ -50,7 +63,20 @@ class VoteResponse extends response_1.default {
                         model: models_1.Vote,
                         include: [
                             { model: models_1.VoteQuestion },
-                            { model: models_1.VoteAnswer }
+                            {
+                                model: models_1.VoteAnswer,
+                                include: [
+                                    {
+                                        model: models_1.Person,
+                                        include: [
+                                            {
+                                                model: models_1.Resident,
+                                                include: [{ model: models_1.Flat }]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
                         ]
                     }
                 ],

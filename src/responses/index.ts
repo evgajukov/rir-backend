@@ -8,6 +8,7 @@ import InstructionResponse from "./instruction/instruction.response";
 import InviteResponse from "./invite/invite.response";
 import DocumentResponse from "./document/document.response";
 import FAQResponse from "./faq/faq.response";
+import VoteResponse from "./vote/vote.response";
 
 const channels = {
   events: {
@@ -49,6 +50,10 @@ const channels = {
   faq: {
     action: "LIST", // faq
     response: FAQResponse
+  },
+  votes: {
+    action: "LIST", // votes.userId
+    response: VoteResponse
   },
 }
 

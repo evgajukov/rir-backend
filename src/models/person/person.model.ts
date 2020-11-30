@@ -1,5 +1,5 @@
 import { Table, Model, ForeignKey, Column, BelongsTo, Default, DataType, HasMany } from "sequelize-typescript";
-import { Resident, User } from "..";
+import { Resident, User, Vote, VoteAnswer } from "..";
 
 export type tAccessLevel = "all" | "friends" | "nothing";
 export type tAccessNameFormat = "all" | "name";
@@ -63,4 +63,10 @@ export default class Person extends Model<Person> {
 
   @HasMany(() => Resident)
   residents: Resident[];
+
+  @HasMany(() => VoteAnswer)
+  answers: VoteAnswer[];
+
+  @HasMany(() => Vote)
+  votes: Vote[];
 }

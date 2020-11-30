@@ -18,6 +18,11 @@ import Document from "./document/document.model";
 import FAQCategory from "./faq/faq.category.model";
 import FAQItem from "./faq/faq.model";
 
+import Vote from "./vote/vote.model";
+import VoteQuestion from "./vote/vote.question.model";
+import VoteAnswer from "./vote/vote.answer.model";
+import VotePerson from "./vote/vote.person.model";
+
 import sequelize from "../db";
 
 export {
@@ -26,4 +31,5 @@ export {
   Person, Flat, Resident, Invite,
   Post, Instruction, Document,
   FAQCategory, FAQItem,
+  Vote, VoteQuestion, VoteAnswer, VotePerson,
 };

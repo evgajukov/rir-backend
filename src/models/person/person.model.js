@@ -72,6 +72,14 @@ __decorate([
     sequelize_typescript_1.HasMany(() => __1.Resident),
     __metadata("design:type", Array)
 ], Person.prototype, "residents", void 0);
+__decorate([
+    sequelize_typescript_1.HasMany(() => __1.VoteAnswer),
+    __metadata("design:type", Array)
+], Person.prototype, "answers", void 0);
+__decorate([
+    sequelize_typescript_1.HasMany(() => __1.Vote),
+    __metadata("design:type", Array)
+], Person.prototype, "votes", void 0);
 Person = __decorate([
     sequelize_typescript_1.Table({
         tableName: "persons",

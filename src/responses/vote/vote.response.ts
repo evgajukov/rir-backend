@@ -23,6 +23,7 @@ type tAnswer = {
 export default class VoteResponse extends Response {
 
   title: string;
+  createdAt: number;
   multi: boolean;
   anonymous: boolean;
   closed: boolean;
@@ -35,6 +36,7 @@ export default class VoteResponse extends Response {
   constructor(model: Vote) {
     super(model.id);
     this.title = model.title;
+    this.createdAt = model.createdAt.getTime();
     this.multi = model.multi;
     this.anonymous = model.anonymous;
     this.closed = model.closed;

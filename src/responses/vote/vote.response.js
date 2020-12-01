@@ -15,6 +15,7 @@ class VoteResponse extends response_1.default {
     constructor(model) {
         super(model.id);
         this.title = model.title;
+        this.createdAt = model.createdAt.getTime();
         this.multi = model.multi;
         this.anonymous = model.anonymous;
         this.closed = model.closed;

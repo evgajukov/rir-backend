@@ -22,6 +22,7 @@ class VoteResponse extends response_1.default {
         this.house = model.house;
         this.section = model.section;
         this.floor = model.floor;
+        this.persons = model.persons.length;
         this.questions = model.questions.map(question => {
             return {
                 id: question.id,
@@ -63,6 +64,7 @@ class VoteResponse extends response_1.default {
                     {
                         model: models_1.Vote,
                         include: [
+                            { model: models_1.VotePerson },
                             { model: models_1.VoteQuestion },
                             {
                                 model: models_1.VoteAnswer,

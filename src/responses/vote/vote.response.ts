@@ -32,6 +32,7 @@ export default class VoteResponse extends Response {
   floor: number;
   questions: tQuestion[];
   answers: tAnswer[];
+  persons: number;
 
   constructor(model: Vote) {
     super(model.id);
@@ -43,6 +44,7 @@ export default class VoteResponse extends Response {
     this.house = model.house;
     this.section = model.section;
     this.floor = model.floor;
+    this.persons = model.persons.length;
     this.questions = model.questions.map(question => {
       return {
         id: question.id,
@@ -85,6 +87,7 @@ export default class VoteResponse extends Response {
         {
           model: Vote,
           include: [
+            { model: VotePerson },
             { model: VoteQuestion },
             {
               model: VoteAnswer,

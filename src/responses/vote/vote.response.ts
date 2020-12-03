@@ -77,6 +77,13 @@ export default class VoteResponse extends Response {
     return new VoteResponse(model);
   }
 
+  static async get(voteId: number) {
+    const vote = await Vote.findByPk(voteId, { include: VoteResponse.include() });
+    if (vote == null) return null;
+
+    return VoteResponse.create(vote);
+  }
+
   static async list(userId: number) {
     const person = await Person.findOne({ where: { userId } });
     if (person == null) return [];
@@ -86,24 +93,7 @@ export default class VoteResponse extends Response {
       include: [
         {
           model: Vote,
-          include: [
-            { model: VotePerson },
-            { model: VoteQuestion },
-            {
-              model: VoteAnswer,
-              include: [
-                {
-                  model: Person,
-                  include: [
-                    {
-                      model: Resident,
-                      include: [{ model: Flat }]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
+          include: VoteResponse.include(),
         }
       ],
       order: [["id", "desc"]]
@@ -115,5 +105,26 @@ export default class VoteResponse extends Response {
   static async seed(action, params, socket) {
     if (socket.authToken == null) return [];
     return await VoteResponse.list(socket.authToken.id);
+  }
+
+  private static include() {
+    return [
+      { model: VotePerson },
+      { model: VoteQuestion },
+      {
+        model: VoteAnswer,
+        include: [
+          {
+            model: Person,
+            include: [
+              {
+                model: Resident,
+                include: [{ model: Flat }]
+              }
+            ]
+          }
+        ]
+      }
+    ];
   }
 }

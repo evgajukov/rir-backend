@@ -53,6 +53,14 @@ class VoteResponse extends response_1.default {
     static create(model) {
         return new VoteResponse(model);
     }
+    static get(voteId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const vote = yield models_1.Vote.findByPk(voteId, { include: VoteResponse.include() });
+            if (vote == null)
+                return null;
+            return VoteResponse.create(vote);
+        });
+    }
     static list(userId) {
         return __awaiter(this, void 0, void 0, function* () {
             const person = yield models_1.Person.findOne({ where: { userId } });
@@ -63,24 +71,7 @@ class VoteResponse extends response_1.default {
                 include: [
                     {
                         model: models_1.Vote,
-                        include: [
-                            { model: models_1.VotePerson },
-                            { model: models_1.VoteQuestion },
-                            {
-                                model: models_1.VoteAnswer,
-                                include: [
-                                    {
-                                        model: models_1.Person,
-                                        include: [
-                                            {
-                                                model: models_1.Resident,
-                                                include: [{ model: models_1.Flat }]
-                                            }
-                                        ]
-                                    }
-                                ]
-                            }
-                        ]
+                        include: VoteResponse.include(),
                     }
                 ],
                 order: [["id", "desc"]]
@@ -96,6 +87,26 @@ class VoteResponse extends response_1.default {
                 return [];
             return yield VoteResponse.list(socket.authToken.id);
         });
+    }
+    static include() {
+        return [
+            { model: models_1.VotePerson },
+            { model: models_1.VoteQuestion },
+            {
+                model: models_1.VoteAnswer,
+                include: [
+                    {
+                        model: models_1.Person,
+                        include: [
+                            {
+                                model: models_1.Resident,
+                                include: [{ model: models_1.Flat }]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ];
     }
 }
 exports.default = VoteResponse;

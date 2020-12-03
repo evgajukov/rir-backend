@@ -1,5 +1,6 @@
-import { InviteResponse, PostResponse, UserResponse } from ".";
+import { InviteResponse, PostResponse, UserResponse, VoteResponse } from ".";
 import * as _ from "lodash";
+import { Person, User, VotePerson } from "../models";
 
 export type tPublishEvent = "create" | "update" | "destroy" | "ready";
 
@@ -26,6 +27,9 @@ export default class ResponseUpdate {
         case "INVITE.SAVE":
           await this.updateInviteSave(eventData);
           break;
+        case "VOTE.ANSWER.SAVE":
+          await this.updateVoteAnswerSave(eventData);
+          break;
       }
     } catch (error) {
       console.error(error);
@@ -45,6 +49,18 @@ export default class ResponseUpdate {
   private async updateInviteSave(eventData) {
     const invite = await InviteResponse.get(eventData.data.inviteId);
     await this.publish(`invites.${eventData.userId}`, invite, eventData.data.event);
+  }
+
+  private async updateVoteAnswerSave(eventData) {
+    const vote = await VoteResponse.get(eventData.data.voteId);
+    // нужно обновить каналы всех пользователей, кому доступно голосование
+    const votePersons = await VotePerson.findAll({
+      where: { voteId: eventData.data.voteId },
+      include: [{ model: Person }]
+    });
+    for (let votePerson of votePersons) {
+      await this.publish(`votes.${votePerson.person.userId}`, vote, eventData.data.event);
+    }
   }
 
   /**

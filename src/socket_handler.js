@@ -13,6 +13,7 @@ const db_1 = require("./db");
 const ping = require("./actions/ping");
 const user = require("./actions/user");
 const flat = require("./actions/flat");
+const vote = require("./actions/vote");
 const responses = require("./responses");
 function handleSocket(socket) {
     socket.on("subscribe", channel => seedData(channel, socket));
@@ -23,6 +24,7 @@ function handleSocket(socket) {
     bindActions(socket, "test", ping);
     bindActions(socket, "user", user);
     bindActions(socket, "flat", flat);
+    bindActions(socket, "vote", vote);
 }
 exports.default = handleSocket;
 function bindActions(socket, namespace, actions) {

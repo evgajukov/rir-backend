@@ -58,6 +58,15 @@ __decorate([
     __metadata("design:type", Number)
 ], Vote.prototype, "floor", void 0);
 __decorate([
+    sequelize_typescript_1.ForeignKey(() => __1.User),
+    sequelize_typescript_1.Column,
+    __metadata("design:type", Number)
+], Vote.prototype, "userId", void 0);
+__decorate([
+    sequelize_typescript_1.BelongsTo(() => __1.User),
+    __metadata("design:type", __1.User)
+], Vote.prototype, "user", void 0);
+__decorate([
     sequelize_typescript_1.HasMany(() => __1.VoteQuestion),
     __metadata("design:type", Array)
 ], Vote.prototype, "questions", void 0);

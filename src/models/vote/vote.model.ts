@@ -1,5 +1,5 @@
-import { Column, Default, HasMany, Model, Table } from "sequelize-typescript";
-import { VoteAnswer, VotePerson, VoteQuestion } from "..";
+import { BelongsTo, Column, Default, ForeignKey, HasMany, Model, Table } from "sequelize-typescript";
+import { User, VoteAnswer, VotePerson, VoteQuestion } from "..";
 
 @Table({
   tableName: "votes",
@@ -43,6 +43,13 @@ export default class Vote extends Model<Vote> {
     comment: "Указывается совместно с параметром секции. Если указан, то голосование по конкретному этажу в секции"
   })
   floor: number;
+
+  @ForeignKey(() => User)
+  @Column
+  userId: number;
+
+  @BelongsTo(() => User)
+  user: User;
 
   @HasMany(() => VoteQuestion)
   questions: VoteQuestion[];

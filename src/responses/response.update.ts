@@ -1,6 +1,6 @@
 import { InviteResponse, PostResponse, UserResponse, VoteResponse } from ".";
 import * as _ from "lodash";
-import { Person, User, VotePerson } from "../models";
+import { Person, VotePerson } from "../models";
 
 export type tPublishEvent = "create" | "update" | "destroy" | "ready";
 

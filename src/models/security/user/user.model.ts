@@ -1,7 +1,7 @@
 import {
   AllowNull, Column, Default, Model, Table, Unique, HasMany, BelongsTo, ForeignKey, HasOne
 } from "sequelize-typescript";
-import { Session, Role, Person, Invite } from "../..";
+import { Session, Role, Person, Invite, Vote } from "../..";
 
 @Table({
   tableName: "users"
@@ -38,4 +38,7 @@ export default class User extends Model<User> {
 
   @HasOne(() => Invite)
   invite: Invite; // каким кодом пригласили нас
+
+  @HasMany(() => Vote)
+  votes: Vote[];
 }

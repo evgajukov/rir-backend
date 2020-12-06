@@ -73,8 +73,7 @@ class VoteResponse extends response_1.default {
                         model: models_1.Vote,
                         include: VoteResponse.include(),
                     }
-                ],
-                order: [["id", "desc"]]
+                ]
             });
             if (list == null || list.length == 0)
                 return [];

@@ -95,8 +95,7 @@ export default class VoteResponse extends Response {
           model: Vote,
           include: VoteResponse.include(),
         }
-      ],
-      order: [["id", "desc"]]
+      ]
     });
     if (list == null || list.length == 0) return [];
     return list.map(item => VoteResponse.create(item.vote));

@@ -30,6 +30,9 @@ class ResponseUpdate {
                     case "INVITE.SAVE":
                         yield this.updateInviteSave(eventData);
                         break;
+                    case "VOTE.SAVE":
+                        yield this.updateVoteSave(eventData);
+                        break;
                     case "VOTE.ANSWER.SAVE":
                         yield this.updateVoteAnswerSave(eventData);
                         break;
@@ -56,6 +59,19 @@ class ResponseUpdate {
         return __awaiter(this, void 0, void 0, function* () {
             const invite = yield _1.InviteResponse.get(eventData.data.inviteId);
             yield this.publish(`invites.${eventData.userId}`, invite, eventData.data.event);
+        });
+    }
+    updateVoteSave(eventData) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const vote = yield _1.VoteResponse.get(eventData.data.voteId);
+            // нужно обновить каналы всех пользователей, кому доступно голосование
+            const votePersons = yield models_1.VotePerson.findAll({
+                where: { voteId: eventData.data.voteId },
+                include: [{ model: models_1.Person }]
+            });
+            for (let votePerson of votePersons) {
+                yield this.publish(`votes.${votePerson.person.userId}`, vote, eventData.data.event);
+            }
         });
     }
     updateVoteAnswerSave(eventData) {

@@ -138,7 +138,42 @@ function saveProfile({ surname, name, midname, telegram, flat, access }, respond
             let resident = yield models_1.Resident.findOne({ where: { personId: person.id }, include: [{ model: models_1.Flat }] });
             if (resident == null) {
                 yield models_1.Resident.create({ personId: person.id, flatId: flat });
-                // TODO: проверяем активные голосования и, при необходимости, добавляем в нужные
+                // проверяем активные голосования и, при необходимости, добавляем в нужные
+                try {
+                    const votes = yield models_1.Vote.findAll({ where: { closed: false } });
+                    if (votes != null) {
+                        for (let vote of votes) {
+                            if (vote.house) {
+                                // голосование на весь дом
+                                const votePerson = yield models_1.VotePerson.findOne({ where: { voteId: vote.id, personId: person.id } });
+                                if (votePerson == null)
+                                    yield models_1.VotePerson.create({ voteId: vote.id, personId: person.id });
+                            }
+                            else {
+                                // голосование на подъезд, либо этаж
+                                if (resident.flat.section == vote.section) {
+                                    if (vote.floor != null) {
+                                        // голосование на этаж
+                                        if (resident.flat.floor == vote.floor) {
+                                            const votePerson = yield models_1.VotePerson.findOne({ where: { voteId: vote.id, personId: person.id } });
+                                            if (votePerson == null)
+                                                yield models_1.VotePerson.create({ voteId: vote.id, personId: person.id });
+                                        }
+                                    }
+                                    else {
+                                        // голосование на подъезд
+                                        const votePerson = yield models_1.VotePerson.findOne({ where: { voteId: vote.id, personId: person.id } });
+                                        if (votePerson == null)
+                                            yield models_1.VotePerson.create({ voteId: vote.id, personId: person.id });
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (error) {
+                    console.error(error.message);
+                }
                 // генерируем новость, что у нас новый сосед
                 const post = yield models_1.Post.create({
                     title: "Новый сосед",

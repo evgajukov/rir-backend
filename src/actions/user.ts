@@ -1,4 +1,4 @@
-import { User, Person, Resident, Flat, Invite, Post, Role } from "../models";
+import { User, Person, Resident, Flat, Invite, Post, Role, Vote, VotePerson } from "../models";
 import * as numeral from "numeral";
 import SMSC from "../lib/smsc";
 import errors from "./errors";
@@ -113,7 +113,36 @@ export async function saveProfile({ surname, name, midname, telegram, flat, acce
     if (resident == null) {
       await Resident.create({ personId: person.id, flatId: flat });
 
-      // TODO: проверяем активные голосования и, при необходимости, добавляем в нужные
+      // проверяем активные голосования и, при необходимости, добавляем в нужные
+      try {
+        const votes = await Vote.findAll({ where: { closed: false } });
+        if (votes != null) {
+          for (let vote of votes) {
+            if (vote.house) {
+              // голосование на весь дом
+              const votePerson = await VotePerson.findOne({ where: { voteId: vote.id, personId: person.id } });
+              if (votePerson == null) await VotePerson.create({ voteId: vote.id, personId: person.id });
+            } else {
+              // голосование на подъезд, либо этаж
+              if (resident.flat.section == vote.section) {
+                if (vote.floor != null) {
+                  // голосование на этаж
+                  if (resident.flat.floor == vote.floor) {
+                    const votePerson = await VotePerson.findOne({ where: { voteId: vote.id, personId: person.id } });
+                    if (votePerson == null) await VotePerson.create({ voteId: vote.id, personId: person.id });
+                  }
+                } else {
+                  // голосование на подъезд
+                  const votePerson = await VotePerson.findOne({ where: { voteId: vote.id, personId: person.id } });
+                  if (votePerson == null) await VotePerson.create({ voteId: vote.id, personId: person.id });
+                }
+              }
+            }
+          }
+        }
+      } catch (error) {
+        console.error(error.message);
+      }
       
       // генерируем новость, что у нас новый сосед
       const post = await Post.create({

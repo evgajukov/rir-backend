@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.VotePerson = exports.VoteAnswer = exports.VoteQuestion = exports.Vote = exports.FAQItem = exports.FAQCategory = exports.Document = exports.Instruction = exports.Post = exports.Invite = exports.Resident = exports.Flat = exports.Person = exports.Role = exports.User = exports.Session = exports.EventLog = exports.Event = exports.sequelize = void 0;
+exports.NotificationToken = exports.VotePerson = exports.VoteAnswer = exports.VoteQuestion = exports.Vote = exports.FAQItem = exports.FAQCategory = exports.Document = exports.Instruction = exports.Post = exports.Invite = exports.Resident = exports.Flat = exports.Person = exports.Role = exports.User = exports.Session = exports.EventLog = exports.Event = exports.sequelize = void 0;
 const event_model_1 = require("./event/event.model");
 exports.Event = event_model_1.default;
 const logger_model_1 = require("./event/logger.model");
@@ -37,5 +37,7 @@ const vote_answer_model_1 = require("./vote/vote.answer.model");
 exports.VoteAnswer = vote_answer_model_1.default;
 const vote_person_model_1 = require("./vote/vote.person.model");
 exports.VotePerson = vote_person_model_1.default;
+const notification_token_model_1 = require("./notification/notification.token.model");
+exports.NotificationToken = notification_token_model_1.default;
 const db_1 = require("../db");
 exports.sequelize = db_1.default;

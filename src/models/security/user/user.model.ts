@@ -1,7 +1,7 @@
 import {
   AllowNull, Column, Default, Model, Table, Unique, HasMany, BelongsTo, ForeignKey, HasOne
 } from "sequelize-typescript";
-import { Session, Role, Person, Invite, Vote } from "../..";
+import { Session, Role, Person, Invite, Vote, NotificationToken } from "../..";
 
 @Table({
   tableName: "users"
@@ -41,4 +41,7 @@ export default class User extends Model<User> {
 
   @HasMany(() => Vote)
   votes: Vote[];
+
+  @HasMany(() => NotificationToken)
+  tokens: NotificationToken[];
 }

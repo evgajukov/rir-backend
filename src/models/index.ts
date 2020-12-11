@@ -23,6 +23,8 @@ import VoteQuestion from "./vote/vote.question.model";
 import VoteAnswer from "./vote/vote.answer.model";
 import VotePerson from "./vote/vote.person.model";
 
+import NotificationToken from "./notification/notification.token.model";
+
 import sequelize from "../db";
 
 export {
@@ -32,4 +34,5 @@ export {
   Post, Instruction, Document,
   FAQCategory, FAQItem,
   Vote, VoteQuestion, VoteAnswer, VotePerson,
+  NotificationToken,
 };

@@ -18,7 +18,9 @@ function saveToken({ token }, respond) {
         try {
             if (!this.authToken)
                 throw new Error(errors_1.default.user["004"].code);
-            yield models_1.NotificationToken.create({ userId: this.authToken.id, token });
+            const notifToken = yield models_1.NotificationToken.findOne({ where: { token } });
+            if (!notifToken)
+                yield models_1.NotificationToken.create({ userId: this.authToken.id, token });
             respond(null, { status: "OK" });
         }
         catch (error) {

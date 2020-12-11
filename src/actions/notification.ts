@@ -6,7 +6,8 @@ export async function saveToken({ token }, respond) {
   try {
     if (!this.authToken) throw new Error(errors.user["004"].code);
 
-    await NotificationToken.create({ userId: this.authToken.id, token });
+    const notifToken = await NotificationToken.findOne({ where: { token } });
+    if (!notifToken) await NotificationToken.create({ userId: this.authToken.id, token });
 
     respond(null, { status: "OK" });
   } catch (error) {

@@ -15,6 +15,7 @@ const numeral = require("numeral");
 const smsc_1 = require("../lib/smsc");
 const errors_1 = require("./errors");
 const response_update_1 = require("../responses/response.update");
+const push_1 = require("../lib/push");
 function auth({ mobile, invite, code }, respond) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log(">>>>> actions/user.auth");
@@ -181,6 +182,8 @@ function saveProfile({ surname, name, midname, telegram, flat, access }, respond
                     body: `К нам присоединился новый сосед с кв. №${flatDb.number}, этаж ${flatDb.floor}, подъезд ${flatDb.section}`,
                     url: `/flat/${flatDb.number}`,
                 });
+                // отправляем нотификацию всем соседям
+                push_1.default.send({ body: post.body, uri: post.url, all: true });
                 // обновляем канал "posts"
                 const responseUpdate = new response_update_1.default(this.exchange);
                 yield responseUpdate.update({

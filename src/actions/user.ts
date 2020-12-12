@@ -3,6 +3,7 @@ import * as numeral from "numeral";
 import SMSC from "../lib/smsc";
 import errors from "./errors";
 import ResponseUpdate from "../responses/response.update";
+import Push from "../lib/push";
 
 export async function auth({ mobile, invite, code }, respond) {
   console.log(">>>>> actions/user.auth");
@@ -151,6 +152,8 @@ export async function saveProfile({ surname, name, midname, telegram, flat, acce
         body: `К нам присоединился новый сосед с кв. №${flatDb.number}, этаж ${flatDb.floor}, подъезд ${flatDb.section}`,
         url: `/flat/${flatDb.number}`,
       });
+      // отправляем нотификацию всем соседям
+      Push.send({ body: post.body, uri: post.url, all: true });
       
       // обновляем канал "posts"
       const responseUpdate = new ResponseUpdate(this.exchange);

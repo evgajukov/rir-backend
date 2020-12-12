@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.answer = exports.save = void 0;
+const push_1 = require("../lib/push");
 const models_1 = require("../models");
 const response_update_1 = require("../responses/response.update");
 const errors_1 = require("./errors");
@@ -38,7 +39,7 @@ function save({ title, questions, anonymous, multi, type }, respond) {
             let residents = [];
             if (type == "house") {
                 // весь дом
-                residents = yield models_1.Resident.findAll();
+                residents = yield models_1.Resident.findAll({ include: [{ model: models_1.Person }] });
             }
             else if (type == "section") {
                 // весь подъезд
@@ -52,6 +53,12 @@ function save({ title, questions, anonymous, multi, type }, respond) {
             }
             for (let resident of residents) {
                 yield models_1.VotePerson.create({ voteId: vote.id, personId: resident.personId });
+                // если необходимо отправляем нотификации пользователям, но только не создателю
+                if (resident.person.userId != this.authToken.id) {
+                    const token = yield models_1.NotificationToken.findOne({ where: { userId: resident.person.userId } }); // FIXME: у пользователя может быть несколько устройств
+                    if (token != null)
+                        push_1.default.send({ body: title, uri: `/vote/${vote.id}`, to: token.token });
+                }
             }
             // обновляем канал "votes"
             const responseUpdate = new response_update_1.default(this.exchange);

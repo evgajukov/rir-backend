@@ -10,8 +10,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const axios_1 = require("axios");
+const models_1 = require("../../models");
 class Push {
-    static send(body, uri, to) {
+    static send(data) {
         return __awaiter(this, void 0, void 0, function* () {
             const config = {
                 headers: {
@@ -19,18 +20,36 @@ class Push {
                     "Content-Type": "application/json"
                 }
             };
-            const data = {
-                notification: {
-                    title: Push.TITLE,
-                    body,
-                    icon: Push.ICON,
-                    click_action: Push.APP_URL + uri,
-                },
-                to
-            };
-            console.log(data);
-            const result = yield axios_1.default.post(Push.URL, data, config);
-            return result;
+            if (data.all) {
+                // отправляем всем
+                const tokens = yield models_1.NotificationToken.findAll();
+                const list = tokens.map(item => item.token);
+                const pushData = {
+                    notification: {
+                        title: Push.TITLE,
+                        body: data.body,
+                        icon: Push.ICON,
+                        click_action: Push.APP_URL + (data.uri != null ? data.uri : ""),
+                    },
+                    registration_ids: list // FIXME: должно быть не более 1000 адресов
+                };
+                const result = yield axios_1.default.post(Push.URL, pushData, config);
+                return result;
+            }
+            else if (data.to) {
+                // отправляем конкретному пользователю
+                const pushData = {
+                    notification: {
+                        title: Push.TITLE,
+                        body: data.body,
+                        icon: Push.ICON,
+                        click_action: Push.APP_URL + (data.uri != null ? data.uri : ""),
+                    },
+                    to: data.to
+                };
+                const result = yield axios_1.default.post(Push.URL, pushData, config);
+                return result;
+            }
         });
     }
 }

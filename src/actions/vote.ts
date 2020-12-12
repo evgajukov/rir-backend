@@ -1,4 +1,5 @@
-import { Flat, Person, Resident, Vote, VoteAnswer, VotePerson, VoteQuestion } from "../models";
+import Push from "../lib/push";
+import { Flat, NotificationToken, Person, Resident, Vote, VoteAnswer, VotePerson, VoteQuestion } from "../models";
 import ResponseUpdate from "../responses/response.update";
 import errors from "./errors";
 
@@ -28,7 +29,7 @@ export async function save({ title, questions, anonymous, multi, type }, respond
     let residents: Resident[] = [];
     if (type == "house") {
       // весь дом
-      residents = await Resident.findAll();
+      residents = await Resident.findAll({ include: [{ model: Person }] });
     } else if (type == "section") {
       // весь подъезд
       const flats = await Flat.findAll({ where: { section } });
@@ -40,6 +41,11 @@ export async function save({ title, questions, anonymous, multi, type }, respond
     }
     for (let resident of residents) {
       await VotePerson.create({ voteId: vote.id, personId: resident.personId });
+      // если необходимо отправляем нотификации пользователям, но только не создателю
+      if (resident.person.userId != this.authToken.id) {
+        const token = await NotificationToken.findOne({ where: { userId: resident.person.userId } }); // FIXME: у пользователя может быть несколько устройств
+        if (token != null) Push.send({ body: title, uri: `/vote/${vote.id}`, to: token.token });
+      }
     }
 
     // обновляем канал "votes"

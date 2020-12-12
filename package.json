@@ -12,6 +12,7 @@
     "@types/bluebird": "^3.5.33",
     "@types/node": "^12.19.3",
     "@types/validator": "^10.11.2",
+    "axios": "^0.21.0",
     "body-parser": "^1.19.0",
     "connect": "3.6.6",
     "continuation-local-storage": "^3.2.1",
@@ -56,6 +57,6 @@
     "dev": "tsc && babel-node server.js",
     "plogic": "tsc && babel-node ./src/logic/logic.runner.js",
     "init": "tsc && babel-node ./src/init/dom24x7.init.js",
-    "test": "tsc && babel-node ./src/test/channels.test.js"
+    "test": "tsc && babel-node ./src/test/notification.test.js"
   }
 }

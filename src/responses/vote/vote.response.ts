@@ -7,6 +7,9 @@ type tQuestion = {
 };
 type tPerson = {
   id: number,
+  surname: string,
+  name: string,
+  midname: string,
   flat: {
     id: number,
     number: number,
@@ -62,13 +65,27 @@ export default class VoteResponse extends Response {
           floor: flatInfo.floor
         };
       }
+      let person = {
+        id: answer.personId,
+        surname: null,
+        name: null,
+        midname: null,
+        flat
+      };
+      const access = answer.person.access;
+      if (access.name.level == "all") {
+        if (access.name.format == "all") {
+          person.surname = answer.person.surname;
+          person.name = answer.person.name;
+          person.midname = answer.person.midname;
+        } else if (access.name.format == "name") {
+          person.name = answer.person.name;
+        }
+      }
       return {
         id: answer.id,
         question: { id: answer.questionId },
-        person: {
-          id: answer.personId,
-          flat
-        }
+        person
       };
     });
   }

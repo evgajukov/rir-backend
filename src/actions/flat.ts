@@ -17,7 +17,7 @@ export async function info({ flatNumber }, respond) {
         await person.save();
       }
       const access = person.access;
-      const info = { surname: null, name: null, midname: null, mobile: null, telegram: null };
+      const info = { personId: person.id, surname: null, name: null, midname: null, mobile: null, telegram: null };
       if (access.name.level == "all") {
         if (access.name.format == "all") {
           info.surname = person.surname;

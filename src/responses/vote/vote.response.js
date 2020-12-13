@@ -30,6 +30,16 @@ class VoteResponse extends response_1.default {
             };
         });
         this.answers = model.answers.map(answer => {
+            if (model.anonymous) {
+                return {
+                    id: answer.id,
+                    question: { id: answer.questionId },
+                    person: {
+                        id: answer.personId
+                    }
+                };
+            }
+            // дальше только для неанонимного голосования
             let flat = null;
             if (answer.person.residents.length > 0) {
                 const flatInfo = answer.person.residents[0].flat;

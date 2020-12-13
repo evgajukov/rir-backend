@@ -7,10 +7,10 @@ type tQuestion = {
 };
 type tPerson = {
   id: number,
-  surname: string,
-  name: string,
-  midname: string,
-  flat: {
+  surname?: string,
+  name?: string,
+  midname?: string,
+  flat?: {
     id: number,
     number: number,
     section: number,
@@ -55,6 +55,16 @@ export default class VoteResponse extends Response {
       };
     });
     this.answers = model.answers.map(answer => {
+      if (model.anonymous) {
+        return {
+          id: answer.id,
+          question: { id: answer.questionId },
+          person: {
+            id: answer.personId
+          }
+        }
+      }
+      // дальше только для неанонимного голосования
       let flat = null;
       if (answer.person.residents.length > 0) {
         const flatInfo = answer.person.residents[0].flat;

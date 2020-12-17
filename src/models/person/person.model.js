@@ -80,6 +80,18 @@ __decorate([
     sequelize_typescript_1.HasMany(() => __1.VotePerson),
     __metadata("design:type", Array)
 ], Person.prototype, "votes", void 0);
+__decorate([
+    sequelize_typescript_1.HasMany(() => __1.IMMessage),
+    __metadata("design:type", Array)
+], Person.prototype, "imMessages", void 0);
+__decorate([
+    sequelize_typescript_1.HasMany(() => __1.IMChannelPerson),
+    __metadata("design:type", Array)
+], Person.prototype, "channels", void 0);
+__decorate([
+    sequelize_typescript_1.HasMany(() => __1.IMMessageShow),
+    __metadata("design:type", Array)
+], Person.prototype, "shownMessages", void 0);
 Person = __decorate([
     sequelize_typescript_1.Table({
         tableName: "persons",

@@ -23,6 +23,11 @@ import VoteQuestion from "./vote/vote.question.model";
 import VoteAnswer from "./vote/vote.answer.model";
 import VotePerson from "./vote/vote.person.model";
 
+import IMMessage from "./im/im.message.model";
+import IMChannel from "./im/im.channel.model";
+import IMChannelPerson from "./im/im.channel.person.model";
+import IMMessageShow from "./im/im.message.show.model";
+
 import NotificationToken from "./notification/notification.token.model";
 
 import sequelize from "../db";
@@ -34,5 +39,6 @@ export {
   Post, Instruction, Document,
   FAQCategory, FAQItem,
   Vote, VoteQuestion, VoteAnswer, VotePerson,
+  IMMessage, IMChannel, IMChannelPerson, IMMessageShow,
   NotificationToken,
 };

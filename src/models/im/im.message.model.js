@@ -38,6 +38,11 @@ __decorate([
     __metadata("design:type", Object)
 ], IMMessage.prototype, "body", void 0);
 __decorate([
+    sequelize_typescript_1.Default(false),
+    sequelize_typescript_1.Column,
+    __metadata("design:type", Boolean)
+], IMMessage.prototype, "deleted", void 0);
+__decorate([
     sequelize_typescript_1.HasMany(() => __1.IMMessageShow),
     __metadata("design:type", Array)
 ], IMMessage.prototype, "shownPersons", void 0);

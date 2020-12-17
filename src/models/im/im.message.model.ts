@@ -1,4 +1,4 @@
-import { BelongsTo, Column, DataType, ForeignKey, HasMany, Model, Table } from "sequelize-typescript";
+import { BelongsTo, Column, DataType, Default, ForeignKey, HasMany, Model, Table } from "sequelize-typescript";
 import { IMChannel, IMMessageShow, Person } from "..";
 
 export type tIMMessageBody = {
@@ -29,6 +29,10 @@ export default class IMMessage extends Model<IMMessage> {
     type: DataType.JSON
   })
   body: tIMMessageBody;
+
+  @Default(false)
+  @Column
+  deleted: boolean;
 
   @HasMany(() => IMMessageShow)
   shownPersons: IMMessageShow[];

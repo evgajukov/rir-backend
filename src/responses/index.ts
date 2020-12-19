@@ -9,6 +9,8 @@ import InviteResponse from "./invite/invite.response";
 import DocumentResponse from "./document/document.response";
 import FAQResponse from "./faq/faq.response";
 import VoteResponse from "./vote/vote.response";
+import IMMessageResponse from "./im/im.message.response";
+import IMChannelResponse from "./im/im.channel.response";
 
 const channels = {
   events: {
@@ -55,6 +57,19 @@ const channels = {
     action: "LIST", // votes.userId
     response: VoteResponse
   },
+  imMessages: {
+    action: "LIST", // imMessages.channelId.userId
+    response: IMMessageResponse
+  },
+  imChannels: {
+    action: "LIST",  // imChannels.userId
+    response: IMChannelResponse
+  },
 }
 
-export { channels, EventResponse, PingResponse, FlatResponse, UserResponse, PostResponse, InstructionResponse, InviteResponse, DocumentResponse, VoteResponse };
+export {
+  channels,
+  EventResponse, PingResponse,
+  FlatResponse, UserResponse, PostResponse, InstructionResponse, InviteResponse, DocumentResponse, VoteResponse,
+  IMMessageResponse, IMChannelResponse,
+};

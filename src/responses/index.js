@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.VoteResponse = exports.DocumentResponse = exports.InviteResponse = exports.InstructionResponse = exports.PostResponse = exports.UserResponse = exports.FlatResponse = exports.PingResponse = exports.EventResponse = exports.channels = void 0;
+exports.IMChannelResponse = exports.IMMessageResponse = exports.VoteResponse = exports.DocumentResponse = exports.InviteResponse = exports.InstructionResponse = exports.PostResponse = exports.UserResponse = exports.FlatResponse = exports.PingResponse = exports.EventResponse = exports.channels = void 0;
 const event_response_1 = require("./event/event.response");
 exports.EventResponse = event_response_1.default;
 const all_response_1 = require("./all/all.response");
@@ -21,6 +21,10 @@ exports.DocumentResponse = document_response_1.default;
 const faq_response_1 = require("./faq/faq.response");
 const vote_response_1 = require("./vote/vote.response");
 exports.VoteResponse = vote_response_1.default;
+const im_message_response_1 = require("./im/im.message.response");
+exports.IMMessageResponse = im_message_response_1.default;
+const im_channel_response_1 = require("./im/im.channel.response");
+exports.IMChannelResponse = im_channel_response_1.default;
 const channels = {
     events: {
         action: "LIST",
@@ -65,6 +69,14 @@ const channels = {
     votes: {
         action: "LIST",
         response: vote_response_1.default
+    },
+    imMessages: {
+        action: "LIST",
+        response: im_message_response_1.default
+    },
+    imChannels: {
+        action: "LIST",
+        response: im_channel_response_1.default
     },
 };
 exports.channels = channels;

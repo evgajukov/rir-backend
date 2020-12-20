@@ -175,6 +175,26 @@ function saveProfile({ surname, name, midname, telegram, flat, access }, respond
                 catch (error) {
                     console.error(error.message);
                 }
+                // добавляем пользователя в чаты
+                try {
+                    const flatDb = yield models_1.Flat.findByPk(flat);
+                    const flatTxt = `кв. ${flatDb.number}, этаж ${flatDb.floor}, подъезд ${flatDb.section}`;
+                    // в общедомовой
+                    let channel = yield models_1.IMChannel.findOne({ where: { house: true } });
+                    yield models_1.IMChannelPerson.create({ channelId: channel.id, personId: person.id });
+                    yield models_1.IMMessage.create({ channelId: channel.id, body: { text: `Сосед(ка) из ${flatTxt} вступил(а) в группу` } });
+                    // в чат секции
+                    channel = yield models_1.IMChannel.findOne({ where: { section: flatDb.section, floor: null } });
+                    yield models_1.IMChannelPerson.create({ channelId: channel.id, personId: person.id });
+                    yield models_1.IMMessage.create({ channelId: channel.id, body: { text: `Сосед(ка) из ${flatTxt} вступил(а) в группу` } });
+                    // в чат этажа
+                    channel = yield models_1.IMChannel.findOne({ where: { section: flatDb.section, floor: flatDb.floor } });
+                    yield models_1.IMChannelPerson.create({ channelId: channel.id, personId: person.id });
+                    yield models_1.IMMessage.create({ channelId: channel.id, body: { text: `Сосед(ка) из ${flatTxt} вступил(а) в группу` } });
+                }
+                catch (error) {
+                    console.error(error.message);
+                }
                 // генерируем новость, что у нас новый сосед
                 const post = yield models_1.Post.create({
                     title: "Новый сосед",

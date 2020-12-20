@@ -1,4 +1,4 @@
-import { User, Person, Resident, Flat, Invite, Post, Role, Vote, VotePerson } from "../models";
+import { User, Person, Resident, Flat, Invite, Post, Role, Vote, VotePerson, IMChannel, IMChannelPerson, IMMessage } from "../models";
 import * as numeral from "numeral";
 import SMSC from "../lib/smsc";
 import errors from "./errors";
@@ -141,6 +141,29 @@ export async function saveProfile({ surname, name, midname, telegram, flat, acce
             }
           }
         }
+      } catch (error) {
+        console.error(error.message);
+      }
+
+      // добавляем пользователя в чаты
+      try {
+        const flatDb = await Flat.findByPk(flat);
+        const flatTxt = `кв. ${flatDb.number}, этаж ${flatDb.floor}, подъезд ${flatDb.section}`;
+
+        // в общедомовой
+        let channel = await IMChannel.findOne({ where: { house: true } });
+        await IMChannelPerson.create({ channelId: channel.id, personId: person.id });
+        await IMMessage.create({ channelId: channel.id, body: { text: `Сосед(ка) из ${flatTxt} вступил(а) в группу` } });
+
+        // в чат секции
+        channel = await IMChannel.findOne({ where: { section: flatDb.section, floor: null } });
+        await IMChannelPerson.create({ channelId: channel.id, personId: person.id });
+        await IMMessage.create({ channelId: channel.id, body: { text: `Сосед(ка) из ${flatTxt} вступил(а) в группу` } });
+
+        // в чат этажа
+        channel = await IMChannel.findOne({ where: { section: flatDb.section, floor: flatDb.floor } });
+        await IMChannelPerson.create({ channelId: channel.id, personId: person.id });
+        await IMMessage.create({ channelId: channel.id, body: { text: `Сосед(ка) из ${flatTxt} вступил(а) в группу` } });
       } catch (error) {
         console.error(error.message);
       }

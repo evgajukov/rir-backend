@@ -1,6 +1,6 @@
-import { InviteResponse, PostResponse, UserResponse, VoteResponse } from ".";
+import { IMChannelResponse, IMMessageResponse, InviteResponse, PostResponse, UserResponse, VoteResponse } from ".";
 import * as _ from "lodash";
-import { Person, VotePerson } from "../models";
+import { IMChannelPerson, Person, VotePerson } from "../models";
 
 export type tPublishEvent = "create" | "update" | "destroy" | "ready";
 
@@ -32,6 +32,11 @@ export default class ResponseUpdate {
           break;
         case "VOTE.ANSWER.SAVE":
           await this.updateVoteAnswerSave(eventData);
+          break;
+        case "IM.SAVE":
+        case "IM.SHOWN":
+          await this.updateIMMessage(eventData);
+          await this.updateIMCategory(eventData);
           break;
       }
     } catch (error) {
@@ -75,6 +80,24 @@ export default class ResponseUpdate {
     });
     for (let votePerson of votePersons) {
       await this.publish(`votes.${votePerson.person.userId}`, vote, eventData.data.event);
+    }
+  }
+
+  private async updateIMMessage(eventData) {
+    const message = await IMMessageResponse.get(eventData.data.messageId);
+    // нужно обновить каналы всех пользователей этого чата
+    const channelPersons = await IMChannelPerson.findAll({ where: { channelId: message.channel.id }, include: [{ model: Person }] });
+    for (let channelPerson of channelPersons) {
+      await this.publish(`imMessages.${channelPerson.channelId}.${channelPerson.person.userId}`, message, eventData.data.event);
+    }
+  }
+
+  private async updateIMCategory(eventData) {
+    const channel = await IMChannelResponse.get(eventData.data.channelId);
+    // нужно обновить каналы всех пользователей этого чата
+    const channelPersons = await IMChannelPerson.findAll({ where: { channelId: channel.id }, include: [{ model: Person }] });
+    for (let channelPerson of channelPersons) {
+      await this.publish(`imChannels.${channelPerson.person.userId}`, channel, eventData.data.event);
     }
   }
 

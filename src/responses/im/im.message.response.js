@@ -15,6 +15,10 @@ class IMMessageResponse extends response_1.default {
     constructor(model) {
         super(model.id);
         this.createdAt = model.createdAt.getTime();
+        this.channel = {
+            id: model.channel.id,
+            title: model.channel.title
+        };
         this.body = model.body;
     }
     static create(model) {
@@ -22,7 +26,7 @@ class IMMessageResponse extends response_1.default {
     }
     static get(messageId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const message = yield models_1.IMMessage.findByPk(messageId);
+            const message = yield models_1.IMMessage.findByPk(messageId, { include: [{ model: models_1.IMChannel }] });
             if (message == null)
                 return null;
             return IMMessageResponse.create(message);
@@ -33,7 +37,7 @@ class IMMessageResponse extends response_1.default {
             const person = yield models_1.Person.findOne({ where: { userId } });
             if (person == null)
                 return [];
-            const messages = yield models_1.IMMessage.findAll({ where: { channelId, personId: person.id } });
+            const messages = yield models_1.IMMessage.findAll({ where: { channelId, personId: person.id }, include: [{ model: models_1.IMChannel }] });
             if (messages == null || messages.length == 0)
                 return [];
             return messages.map(message => IMMessageResponse.create(message));

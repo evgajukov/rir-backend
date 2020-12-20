@@ -21,7 +21,35 @@ export async function save({ channelId, body }, respond) {
       createAt: new Date(),
       type: "IM.SAVE",
       status: "SUCCESS",
-      data: JSON.stringify({ messageId: message.id, event: "create" })
+      data: JSON.stringify({ channelId, messageId: message.id, event: "create" })
+    });
+
+    respond(null, { status: "OK" });
+  } catch (error) {
+    console.error(error);
+    respond(errors.methods.check(errors, error.message));
+  }
+}
+
+export async function shown({ messageId }, respond) {
+  console.log(">>>>> actions/im.shown");
+  try {
+    if (!this.authToken) throw new Error(errors.user["004"].code);
+    const person = await Person.findOne({ where: { userId: this.authToken.id } });
+
+    const message = await IMMessage.findByPk(messageId);
+    if (message == null) throw new Error(errors.im["002"].code);
+
+    await IMMessageShow.create({ personId: person.id, messageId });
+
+    // обновляем канал с группами чатов и конкретную группу
+    const responseUpdate = new ResponseUpdate(this.exchange);
+    await responseUpdate.update({
+      userId: this.authToken.id,
+      createAt: new Date(),
+      type: "IM.SHOWN",
+      status: "SUCCESS",
+      data: JSON.stringify({ channelId: message.channelId, messageId, event: "create" })
     });
 
     respond(null, { status: "OK" });

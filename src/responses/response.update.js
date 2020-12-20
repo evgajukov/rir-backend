@@ -36,6 +36,11 @@ class ResponseUpdate {
                     case "VOTE.ANSWER.SAVE":
                         yield this.updateVoteAnswerSave(eventData);
                         break;
+                    case "IM.SAVE":
+                    case "IM.SHOWN":
+                        yield this.updateIMMessage(eventData);
+                        yield this.updateIMCategory(eventData);
+                        break;
                 }
             }
             catch (error) {
@@ -84,6 +89,26 @@ class ResponseUpdate {
             });
             for (let votePerson of votePersons) {
                 yield this.publish(`votes.${votePerson.person.userId}`, vote, eventData.data.event);
+            }
+        });
+    }
+    updateIMMessage(eventData) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const message = yield _1.IMMessageResponse.get(eventData.data.messageId);
+            // нужно обновить каналы всех пользователей этого чата
+            const channelPersons = yield models_1.IMChannelPerson.findAll({ where: { channelId: message.channel.id }, include: [{ model: models_1.Person }] });
+            for (let channelPerson of channelPersons) {
+                yield this.publish(`imMessages.${channelPerson.channelId}.${channelPerson.person.userId}`, message, eventData.data.event);
+            }
+        });
+    }
+    updateIMCategory(eventData) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const channel = yield _1.IMChannelResponse.get(eventData.data.channelId);
+            // нужно обновить каналы всех пользователей этого чата
+            const channelPersons = yield models_1.IMChannelPerson.findAll({ where: { channelId: channel.id }, include: [{ model: models_1.Person }] });
+            for (let channelPerson of channelPersons) {
+                yield this.publish(`imChannels.${channelPerson.person.userId}`, channel, eventData.data.event);
             }
         });
     }

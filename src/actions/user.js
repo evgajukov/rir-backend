@@ -16,6 +16,7 @@ const smsc_1 = require("../lib/smsc");
 const errors_1 = require("./errors");
 const response_update_1 = require("../responses/response.update");
 const push_1 = require("../lib/push");
+const cache_1 = require("../lib/cache");
 function auth({ mobile, invite, code }, respond) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log(">>>>> actions/user.auth");
@@ -147,8 +148,10 @@ function saveProfile({ surname, name, midname, telegram, flat, access }, respond
                             if (vote.house) {
                                 // голосование на весь дом
                                 const votePerson = yield models_1.VotePerson.findOne({ where: { voteId: vote.id, personId: person.id } });
-                                if (votePerson == null)
+                                if (votePerson == null) {
                                     yield models_1.VotePerson.create({ voteId: vote.id, personId: person.id });
+                                    cache_1.default.getInstance().clear("votes:*");
+                                }
                             }
                             else {
                                 // голосование на подъезд, либо этаж
@@ -157,15 +160,19 @@ function saveProfile({ surname, name, midname, telegram, flat, access }, respond
                                         // голосование на этаж
                                         if (resident.flat.floor == vote.floor) {
                                             const votePerson = yield models_1.VotePerson.findOne({ where: { voteId: vote.id, personId: person.id } });
-                                            if (votePerson == null)
+                                            if (votePerson == null) {
                                                 yield models_1.VotePerson.create({ voteId: vote.id, personId: person.id });
+                                                cache_1.default.getInstance().clear("votes:*");
+                                            }
                                         }
                                     }
                                     else {
                                         // голосование на подъезд
                                         const votePerson = yield models_1.VotePerson.findOne({ where: { voteId: vote.id, personId: person.id } });
-                                        if (votePerson == null)
+                                        if (votePerson == null) {
                                             yield models_1.VotePerson.create({ voteId: vote.id, personId: person.id });
+                                            cache_1.default.getInstance().clear("votes:*");
+                                        }
                                     }
                                 }
                             }

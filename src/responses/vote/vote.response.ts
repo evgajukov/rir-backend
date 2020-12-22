@@ -1,3 +1,4 @@
+import Cache from "../../lib/cache";
 import { Flat, Person, Resident, Vote, VoteAnswer, VotePerson, VoteQuestion } from "../../models";
 import Response from "../response";
 
@@ -112,6 +113,9 @@ export default class VoteResponse extends Response {
   }
 
   static async list(userId: number) {
+    const cacheData = await Cache.getInstance().get(`votes:${userId}`);
+    if (cacheData != null) return JSON.parse(cacheData);
+
     const person = await Person.findOne({ where: { userId } });
     if (person == null) return [];
 
@@ -125,7 +129,9 @@ export default class VoteResponse extends Response {
       ]
     });
     if (list == null || list.length == 0) return [];
-    return list.map(item => VoteResponse.create(item.vote));
+    const result = list.map(item => VoteResponse.create(item.vote));
+    Cache.getInstance().set(`votes:${userId}`, JSON.stringify(result));
+    return result;
   }
 
   static async seed(action, params, socket) {

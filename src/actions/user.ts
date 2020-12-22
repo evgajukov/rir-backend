@@ -4,6 +4,7 @@ import SMSC from "../lib/smsc";
 import errors from "./errors";
 import ResponseUpdate from "../responses/response.update";
 import Push from "../lib/push";
+import Cache from "../lib/cache";
 
 export async function auth({ mobile, invite, code }, respond) {
   console.log(">>>>> actions/user.auth");
@@ -122,7 +123,10 @@ export async function saveProfile({ surname, name, midname, telegram, flat, acce
             if (vote.house) {
               // голосование на весь дом
               const votePerson = await VotePerson.findOne({ where: { voteId: vote.id, personId: person.id } });
-              if (votePerson == null) await VotePerson.create({ voteId: vote.id, personId: person.id });
+              if (votePerson == null) {
+                await VotePerson.create({ voteId: vote.id, personId: person.id });
+                Cache.getInstance().clear("votes:*");
+              }
             } else {
               // голосование на подъезд, либо этаж
               if (resident.flat.section == vote.section) {
@@ -130,12 +134,18 @@ export async function saveProfile({ surname, name, midname, telegram, flat, acce
                   // голосование на этаж
                   if (resident.flat.floor == vote.floor) {
                     const votePerson = await VotePerson.findOne({ where: { voteId: vote.id, personId: person.id } });
-                    if (votePerson == null) await VotePerson.create({ voteId: vote.id, personId: person.id });
+                    if (votePerson == null) {
+                      await VotePerson.create({ voteId: vote.id, personId: person.id });
+                      Cache.getInstance().clear("votes:*");
+                    }
                   }
                 } else {
                   // голосование на подъезд
                   const votePerson = await VotePerson.findOne({ where: { voteId: vote.id, personId: person.id } });
-                  if (votePerson == null) await VotePerson.create({ voteId: vote.id, personId: person.id });
+                  if (votePerson == null) {
+                    await VotePerson.create({ voteId: vote.id, personId: person.id });
+                    Cache.getInstance().clear("votes:*");
+                  }
                 }
               }
             }

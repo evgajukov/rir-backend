@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const cache_1 = require("../../lib/cache");
 const models_1 = require("../../models");
 const response_1 = require("../response");
 class VoteResponse extends response_1.default {
@@ -88,6 +89,9 @@ class VoteResponse extends response_1.default {
     }
     static list(userId) {
         return __awaiter(this, void 0, void 0, function* () {
+            const cacheData = yield cache_1.default.getInstance().get(`votes:${userId}`);
+            if (cacheData != null)
+                return JSON.parse(cacheData);
             const person = yield models_1.Person.findOne({ where: { userId } });
             if (person == null)
                 return [];
@@ -102,7 +106,9 @@ class VoteResponse extends response_1.default {
             });
             if (list == null || list.length == 0)
                 return [];
-            return list.map(item => VoteResponse.create(item.vote));
+            const result = list.map(item => VoteResponse.create(item.vote));
+            cache_1.default.getInstance().set(`votes:${userId}`, JSON.stringify(result));
+            return result;
         });
     }
     static seed(action, params, socket) {

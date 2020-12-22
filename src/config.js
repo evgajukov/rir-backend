@@ -11,6 +11,11 @@ const plogicId = env == DEFAULT_ENV_NAME ? "srv00" : process.env.PLOGIC_ID;
 const config = {
     env,
     db: db,
+    redis: {
+        host: "136.144.29.95",
+        login: "admin",
+        password: "AENgcz02491"
+    },
     kue_web: {
         prefix: "dom24x7_kue_web",
     },

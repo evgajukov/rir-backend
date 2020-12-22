@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.answer = exports.save = void 0;
+const cache_1 = require("../lib/cache");
 const push_1 = require("../lib/push");
 const models_1 = require("../models");
 const response_update_1 = require("../responses/response.update");
@@ -60,6 +61,7 @@ function save({ title, questions, anonymous, multi, type }, respond) {
                         push_1.default.send({ body: title, uri: `/vote/${vote.id}`, to: token.token });
                 }
             }
+            cache_1.default.getInstance().clear("votes:*");
             // обновляем канал "votes"
             const responseUpdate = new response_update_1.default(this.exchange);
             yield responseUpdate.update({
@@ -95,6 +97,7 @@ function answer({ voteId, answers }, respond) {
                         yield models_1.VoteAnswer.create({ voteId, questionId, personId: person.id });
                 }
             }
+            cache_1.default.getInstance().clear("votes:*");
             // обновляем канал "votes"
             const responseUpdate = new response_update_1.default(this.exchange);
             yield responseUpdate.update({

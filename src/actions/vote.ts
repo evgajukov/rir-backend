@@ -1,3 +1,4 @@
+import Cache from "../lib/cache";
 import Push from "../lib/push";
 import { Flat, NotificationToken, Person, Resident, Vote, VoteAnswer, VotePerson, VoteQuestion } from "../models";
 import ResponseUpdate from "../responses/response.update";
@@ -48,6 +49,8 @@ export async function save({ title, questions, anonymous, multi, type }, respond
       }
     }
 
+    Cache.getInstance().clear("votes:*");
+
     // обновляем канал "votes"
     const responseUpdate = new ResponseUpdate(this.exchange);
     await responseUpdate.update({
@@ -79,6 +82,8 @@ export async function answer({ voteId, answers }, respond) {
         if (questionId != null) await VoteAnswer.create({ voteId, questionId, personId: person.id });
       }
     }
+
+    Cache.getInstance().clear("votes:*");
 
     // обновляем канал "votes"
     const responseUpdate = new ResponseUpdate(this.exchange);

@@ -211,6 +211,8 @@ export async function saveProfile({ surname, name, midname, telegram, flat, acce
       });
     }
 
+    Cache.getInstance().clear(`user:${this.authToken.id}`);
+
     respond(null, { status: "OK", person, resident });
   } catch (error) {
     console.error(error);

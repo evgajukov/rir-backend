@@ -231,6 +231,7 @@ function saveProfile({ surname, name, midname, telegram, flat, access }, respond
                     data: JSON.stringify({ inviteId: inviteDb.id, event: "update" })
                 });
             }
+            cache_1.default.getInstance().clear(`user:${this.authToken.id}`);
             respond(null, { status: "OK", person, resident });
         }
         catch (error) {

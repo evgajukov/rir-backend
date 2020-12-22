@@ -1,6 +1,7 @@
 import Response from "../response";
 import { Flat, Person, Resident, Role, User } from "../../models";
 import { DEFAULT_ACCESS } from "../../models/person/person.model";
+import Cache from "../../lib/cache";
 
 export default class UserResponse extends Response {
 
@@ -38,9 +39,14 @@ export default class UserResponse extends Response {
   }
 
   static async info(userId: number) {
+    const cacheData = await Cache.getInstance().get(`user:${userId}`);
+    if (cacheData != null) return JSON.parse(cacheData);
+    
     const user = await User.findByPk(userId);
     if (user == null) return null;
+
     const token = await UserResponse.create(user);
+    Cache.getInstance().set(`user:${userId}`, JSON.stringify(token));
     return token;
   }
 

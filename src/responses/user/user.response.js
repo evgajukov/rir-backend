@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const response_1 = require("../response");
 const models_1 = require("../../models");
 const person_model_1 = require("../../models/person/person.model");
+const cache_1 = require("../../lib/cache");
 class UserResponse extends response_1.default {
     constructor(model) {
         super(model.id);
@@ -39,10 +40,14 @@ class UserResponse extends response_1.default {
     }
     static info(userId) {
         return __awaiter(this, void 0, void 0, function* () {
+            const cacheData = yield cache_1.default.getInstance().get(`user:${userId}`);
+            if (cacheData != null)
+                return JSON.parse(cacheData);
             const user = yield models_1.User.findByPk(userId);
             if (user == null)
                 return null;
             const token = yield UserResponse.create(user);
+            cache_1.default.getInstance().set(`user:${userId}`, JSON.stringify(token));
             return token;
         });
     }

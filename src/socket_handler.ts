@@ -9,6 +9,8 @@ import * as im from "./actions/im";
 
 import * as responses from "./responses";
 
+import timelogger from "./lib/timelogger";
+
 export default function handleSocket(socket) {
   socket.on("subscribe", channel => seedData(channel, socket));
 
@@ -60,7 +62,8 @@ async function seedData(channel, socket) : Promise<void> {
 
   let response = respChannel.response;
   if (response && typeof response.seed === "function") {
-    publishData(socket, channel, await response.seed(respChannel.action, normalizeParams(params), socket));
+    const rows = await timelogger(response.seed, channel)(respChannel.action, normalizeParams(params), socket);
+    publishData(socket, channel, rows);
   }
 }
 

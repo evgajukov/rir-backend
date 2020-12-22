@@ -17,6 +17,7 @@ const vote = require("./actions/vote");
 const notification = require("./actions/notification");
 const im = require("./actions/im");
 const responses = require("./responses");
+const timelogger_1 = require("./lib/timelogger");
 function handleSocket(socket) {
     socket.on("subscribe", channel => seedData(channel, socket));
     const { Session } = db_1.default.models;
@@ -64,7 +65,8 @@ function seedData(channel, socket) {
         }
         let response = respChannel.response;
         if (response && typeof response.seed === "function") {
-            publishData(socket, channel, yield response.seed(respChannel.action, normalizeParams(params), socket));
+            const rows = yield timelogger_1.default(response.seed, channel)(respChannel.action, normalizeParams(params), socket);
+            publishData(socket, channel, rows);
         }
     });
 }

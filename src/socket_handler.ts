@@ -1,6 +1,5 @@
 import db from "./db";
 
-import * as ping from "./actions/ping";
 import * as user from "./actions/user";
 import * as flat from "./actions/flat";
 import * as vote from "./actions/vote";
@@ -19,7 +18,6 @@ export default function handleSocket(socket) {
   socket.on("deauthenticate", (Session as any).onLogout.bind(socket));
   socket.on("disconnect", (Session as any).onLogout.bind(socket));
 
-  bindActions(socket, "test", ping);
   bindActions(socket, "user", user);
   bindActions(socket, "flat", flat);
   bindActions(socket, "vote", vote);

@@ -10,7 +10,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const db_1 = require("./db");
-const ping = require("./actions/ping");
 const user = require("./actions/user");
 const flat = require("./actions/flat");
 const vote = require("./actions/vote");
@@ -24,7 +23,6 @@ function handleSocket(socket) {
     socket.on("authenticate", Session.onLogin.bind(socket));
     socket.on("deauthenticate", Session.onLogout.bind(socket));
     socket.on("disconnect", Session.onLogout.bind(socket));
-    bindActions(socket, "test", ping);
     bindActions(socket, "user", user);
     bindActions(socket, "flat", flat);
     bindActions(socket, "vote", vote);

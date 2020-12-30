@@ -5,6 +5,7 @@ import * as flat from "./actions/flat";
 import * as vote from "./actions/vote";
 import * as notification from "./actions/notification";
 import * as im from "./actions/im";
+import * as version from "./actions/version";
 
 import * as responses from "./responses";
 
@@ -23,6 +24,7 @@ export default function handleSocket(socket) {
   bindActions(socket, "vote", vote);
   bindActions(socket, "notification", notification);
   bindActions(socket, "im", im);
+  bindActions(socket, "version", version);
 }
 
 function bindActions(socket, namespace, actions) {

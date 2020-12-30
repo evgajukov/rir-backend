@@ -29,6 +29,7 @@ import IMChannelPerson from "./im/im.channel.person.model";
 import IMMessageShow from "./im/im.message.show.model";
 
 import NotificationToken from "./notification/notification.token.model";
+import Version from "./version/version.model";
 
 import sequelize from "../db";
 
@@ -40,5 +41,5 @@ export {
   FAQCategory, FAQItem,
   Vote, VoteQuestion, VoteAnswer, VotePerson,
   IMMessage, IMChannel, IMChannelPerson, IMMessageShow,
-  NotificationToken,
+  NotificationToken, Version,
 };

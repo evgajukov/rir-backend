@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.NotificationToken = exports.IMMessageShow = exports.IMChannelPerson = exports.IMChannel = exports.IMMessage = exports.VotePerson = exports.VoteAnswer = exports.VoteQuestion = exports.Vote = exports.FAQItem = exports.FAQCategory = exports.Document = exports.Instruction = exports.Post = exports.Invite = exports.Resident = exports.Flat = exports.Person = exports.Role = exports.User = exports.Session = exports.EventLog = exports.Event = exports.sequelize = void 0;
+exports.Version = exports.NotificationToken = exports.IMMessageShow = exports.IMChannelPerson = exports.IMChannel = exports.IMMessage = exports.VotePerson = exports.VoteAnswer = exports.VoteQuestion = exports.Vote = exports.FAQItem = exports.FAQCategory = exports.Document = exports.Instruction = exports.Post = exports.Invite = exports.Resident = exports.Flat = exports.Person = exports.Role = exports.User = exports.Session = exports.EventLog = exports.Event = exports.sequelize = void 0;
 const event_model_1 = require("./event/event.model");
 exports.Event = event_model_1.default;
 const logger_model_1 = require("./event/logger.model");
@@ -47,5 +47,7 @@ const im_message_show_model_1 = require("./im/im.message.show.model");
 exports.IMMessageShow = im_message_show_model_1.default;
 const notification_token_model_1 = require("./notification/notification.token.model");
 exports.NotificationToken = notification_token_model_1.default;
+const version_model_1 = require("./version/version.model");
+exports.Version = version_model_1.default;
 const db_1 = require("../db");
 exports.sequelize = db_1.default;

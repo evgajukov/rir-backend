@@ -15,6 +15,29 @@ class IMMessageResponse extends response_1.default {
     constructor(model) {
         super(model.id);
         this.createdAt = model.createdAt.getTime();
+        if (model.personId != null) {
+            this.person = {
+                id: model.personId
+            };
+            const access = model.person.access;
+            if (access.name.level == "all") {
+                if (access.name.format == "all") {
+                    this.person.surname = model.person.surname;
+                    this.person.name = model.person.name;
+                    this.person.midname = model.person.midname;
+                }
+                else if (access.name.format == "name") {
+                    this.person.name = model.person.name;
+                }
+            }
+            const flat = model.person.residents[0].flat;
+            this.person.flat = {
+                id: flat.id,
+                number: flat.number,
+                section: flat.section,
+                floor: flat.floor
+            };
+        }
         this.channel = {
             id: model.channel.id,
             title: model.channel.title
@@ -26,7 +49,7 @@ class IMMessageResponse extends response_1.default {
     }
     static get(messageId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const message = yield models_1.IMMessage.findByPk(messageId, { include: [{ model: models_1.IMChannel }] });
+            const message = yield models_1.IMMessage.findByPk(messageId, { include: IMMessageResponse.include() });
             if (message == null)
                 return null;
             return IMMessageResponse.create(message);
@@ -41,7 +64,7 @@ class IMMessageResponse extends response_1.default {
             const personChannel = yield models_1.IMChannelPerson.findOne({ where: { channelId, personId: person.id } });
             if (personChannel == null)
                 return [];
-            const messages = yield models_1.IMMessage.findAll({ where: { channelId }, include: [{ model: models_1.IMChannel }] });
+            const messages = yield models_1.IMMessage.findAll({ where: { channelId }, include: IMMessageResponse.include() });
             if (messages == null || messages.length == 0)
                 return [];
             return messages.map(message => IMMessageResponse.create(message));
@@ -53,6 +76,20 @@ class IMMessageResponse extends response_1.default {
                 return [];
             return yield IMMessageResponse.list(params[0], socket.authToken.id);
         });
+    }
+    static include() {
+        return [
+            { model: models_1.IMChannel },
+            {
+                model: models_1.Person,
+                include: [
+                    {
+                        model: models_1.Resident,
+                        include: [{ model: models_1.Flat }]
+                    }
+                ]
+            }
+        ];
     }
 }
 exports.default = IMMessageResponse;

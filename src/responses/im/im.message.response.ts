@@ -74,7 +74,7 @@ export default class IMMessageResponse extends Response {
     const personChannel = await IMChannelPerson.findOne({ where: { channelId, personId: person.id } });
     if (personChannel == null) return [];
 
-    const messages = await IMMessage.findAll({ where: { channelId }, include: IMMessageResponse.include()});
+    const messages = await IMMessage.findAll({ where: { channelId }, include: IMMessageResponse.include(), order: [["id", "asc"]] });
     if (messages == null || messages.length == 0) return [];
     return messages.map(message => IMMessageResponse.create(message));
   }

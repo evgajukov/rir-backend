@@ -64,7 +64,7 @@ class IMMessageResponse extends response_1.default {
             const personChannel = yield models_1.IMChannelPerson.findOne({ where: { channelId, personId: person.id } });
             if (personChannel == null)
                 return [];
-            const messages = yield models_1.IMMessage.findAll({ where: { channelId }, include: IMMessageResponse.include() });
+            const messages = yield models_1.IMMessage.findAll({ where: { channelId }, include: IMMessageResponse.include(), order: [["id", "asc"]] });
             if (messages == null || messages.length == 0)
                 return [];
             return messages.map(message => IMMessageResponse.create(message));

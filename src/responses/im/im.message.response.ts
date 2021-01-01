@@ -1,4 +1,4 @@
-import { IMChannel, IMMessage, Person } from "../../models";
+import { IMChannel, IMChannelPerson, IMMessage, Person } from "../../models";
 import { tIMMessageBody } from "../../models/im/im.message.model";
 import Response from "../response";
 
@@ -34,7 +34,11 @@ export default class IMMessageResponse extends Response {
   static async list(channelId: number, userId: number) {
     const person = await Person.findOne({ where: { userId } });
     if (person == null) return [];
-    const messages = await IMMessage.findAll({ where: { channelId, personId: person.id }, include: [{ model: IMChannel }] });
+    // проверяем, что пользователь подписан на канал
+    const personChannel = await IMChannelPerson.findOne({ where: { channelId, personId: person.id } });
+    if (personChannel == null) return [];
+
+    const messages = await IMMessage.findAll({ where: { channelId }, include: [{ model: IMChannel }] });
     if (messages == null || messages.length == 0) return [];
     return messages.map(message => IMMessageResponse.create(message));
   }

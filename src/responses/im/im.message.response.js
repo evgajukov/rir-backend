@@ -37,7 +37,11 @@ class IMMessageResponse extends response_1.default {
             const person = yield models_1.Person.findOne({ where: { userId } });
             if (person == null)
                 return [];
-            const messages = yield models_1.IMMessage.findAll({ where: { channelId, personId: person.id }, include: [{ model: models_1.IMChannel }] });
+            // проверяем, что пользователь подписан на канал
+            const personChannel = yield models_1.IMChannelPerson.findOne({ where: { channelId, personId: person.id } });
+            if (personChannel == null)
+                return [];
+            const messages = yield models_1.IMMessage.findAll({ where: { channelId }, include: [{ model: models_1.IMChannel }] });
             if (messages == null || messages.length == 0)
                 return [];
             return messages.map(message => IMMessageResponse.create(message));

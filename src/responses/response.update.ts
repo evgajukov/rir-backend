@@ -86,9 +86,9 @@ export default class ResponseUpdate {
   private async updateIMMessage(eventData) {
     const message = await IMMessageResponse.get(eventData.data.messageId);
     // нужно обновить каналы всех пользователей этого чата
-    const channelPersons = await IMChannelPerson.findAll({ where: { channelId: message.channel.id }, include: [{ model: Person }] });
+    const channelPersons = await IMChannelPerson.findAll({ where: { channelId: message.channel.id }, include: [{ model: Person }], order: [["id", "asc"]] });
     for (let channelPerson of channelPersons) {
-      await this.publish(`imMessages.${channelPerson.channelId}.${channelPerson.person.userId}`, message, eventData.data.event);
+      this.publish(`imMessages.${channelPerson.channelId}.${channelPerson.person.userId}`, message, eventData.data.event);
     }
   }
 

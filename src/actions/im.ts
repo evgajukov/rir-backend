@@ -17,7 +17,7 @@ export async function save({ channelId, body }, respond) {
 
     // обновляем канал с группами чатов и конкретную группу
     const responseUpdate = new ResponseUpdate(this.exchange);
-    await responseUpdate.update({
+    responseUpdate.update({
       userId: this.authToken.id,
       createAt: new Date(),
       type: "IM.SAVE",

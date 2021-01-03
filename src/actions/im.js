@@ -28,7 +28,7 @@ function save({ channelId, body }, respond) {
             yield models_1.IMMessageShow.create({ personId: person.id, messageId: message.id });
             // обновляем канал с группами чатов и конкретную группу
             const responseUpdate = new response_update_1.default(this.exchange);
-            yield responseUpdate.update({
+            responseUpdate.update({
                 userId: this.authToken.id,
                 createAt: new Date(),
                 type: "IM.SAVE",

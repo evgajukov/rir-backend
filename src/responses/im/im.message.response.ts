@@ -76,7 +76,7 @@ export default class IMMessageResponse extends Response {
 
     const messages = await IMMessage.findAll({ where: { channelId }, include: IMMessageResponse.include(), order: [["id", "desc"]], limit, offset });
     if (messages == null || messages.length == 0) return [];
-    return messages.map(message => IMMessageResponse.create(message));
+    return messages.map(message => IMMessageResponse.create(message)).reverse();
   }
 
   static async seed(action, params, socket) {

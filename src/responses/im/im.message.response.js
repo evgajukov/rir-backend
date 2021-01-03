@@ -67,7 +67,7 @@ class IMMessageResponse extends response_1.default {
             const messages = yield models_1.IMMessage.findAll({ where: { channelId }, include: IMMessageResponse.include(), order: [["id", "desc"]], limit, offset });
             if (messages == null || messages.length == 0)
                 return [];
-            return messages.map(message => IMMessageResponse.create(message));
+            return messages.map(message => IMMessageResponse.create(message)).reverse();
         });
     }
     static seed(action, params, socket) {

@@ -8,7 +8,8 @@ export default class IMChannelResponse extends Response {
   lastMessage: {
     createdAt: number,
     body: tIMMessageBody,
-  }
+  };
+  count: number; // общее количество сообщений в канале
 
   constructor(model: IMChannel) {
     super(model.id);
@@ -21,6 +22,7 @@ export default class IMChannelResponse extends Response {
         createdAt: lastMessage.createdAt.getTime(),
         body: lastMessage.body
       };
+      this.count = messages.length;
     }
   }
 

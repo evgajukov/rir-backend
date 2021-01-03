@@ -23,6 +23,7 @@ class IMChannelResponse extends response_1.default {
                 createdAt: lastMessage.createdAt.getTime(),
                 body: lastMessage.body
             };
+            this.count = messages.length;
         }
     }
     static create(model) {

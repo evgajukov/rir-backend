@@ -1,4 +1,5 @@
 import { IMChannelPerson, IMMessage, IMMessageShow, Person } from "../models";
+import { IMMessageResponse } from "../responses";
 import ResponseUpdate from "../responses/response.update";
 import errors from "./errors";
 
@@ -53,6 +54,23 @@ export async function shown({ messageId }, respond) {
     });
 
     respond(null, { status: "OK" });
+  } catch (error) {
+    console.error(error);
+    respond(errors.methods.check(errors, error.message));
+  }
+}
+
+export async function load({ channelId, limit, offset }, respond) {
+  console.log(">>>>> actions/im.load");
+  try {
+    if (!this.authToken) throw new Error(errors.user["004"].code);
+    const person = await Person.findOne({ where: { userId: this.authToken.id } });
+
+    const channelPerson = await IMChannelPerson.findOne({ where: { channelId, personId: person.id } });
+    if (channelPerson == null) throw new Error(errors.im["001"].code);
+
+    const messages = await IMMessageResponse.list(channelId, this.authToken.id, limit, offset);
+    respond(null, messages);
   } catch (error) {
     console.error(error);
     respond(errors.methods.check(errors, error.message));

@@ -9,8 +9,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.shown = exports.save = void 0;
+exports.load = exports.shown = exports.save = void 0;
 const models_1 = require("../models");
+const responses_1 = require("../responses");
 const response_update_1 = require("../responses/response.update");
 const errors_1 = require("./errors");
 function save({ channelId, body }, respond) {
@@ -72,3 +73,23 @@ function shown({ messageId }, respond) {
     });
 }
 exports.shown = shown;
+function load({ channelId, limit, offset }, respond) {
+    return __awaiter(this, void 0, void 0, function* () {
+        console.log(">>>>> actions/im.load");
+        try {
+            if (!this.authToken)
+                throw new Error(errors_1.default.user["004"].code);
+            const person = yield models_1.Person.findOne({ where: { userId: this.authToken.id } });
+            const channelPerson = yield models_1.IMChannelPerson.findOne({ where: { channelId, personId: person.id } });
+            if (channelPerson == null)
+                throw new Error(errors_1.default.im["001"].code);
+            const messages = yield responses_1.IMMessageResponse.list(channelId, this.authToken.id, limit, offset);
+            respond(null, messages);
+        }
+        catch (error) {
+            console.error(error);
+            respond(errors_1.default.methods.check(errors_1.default, error.message));
+        }
+    });
+}
+exports.load = load;

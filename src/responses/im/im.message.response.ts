@@ -67,14 +67,14 @@ export default class IMMessageResponse extends Response {
     return IMMessageResponse.create(message);
   }
 
-  static async list(channelId: number, userId: number) {
+  static async list(channelId: number, userId: number, limit: number = 20, offset: number = 0) {
     const person = await Person.findOne({ where: { userId } });
     if (person == null) return [];
     // проверяем, что пользователь подписан на канал
     const personChannel = await IMChannelPerson.findOne({ where: { channelId, personId: person.id } });
     if (personChannel == null) return [];
 
-    const messages = await IMMessage.findAll({ where: { channelId }, include: IMMessageResponse.include(), order: [["id", "desc"]], limit: 20 });
+    const messages = await IMMessage.findAll({ where: { channelId }, include: IMMessageResponse.include(), order: [["id", "desc"]], limit, offset });
     if (messages == null || messages.length == 0) return [];
     return messages.map(message => IMMessageResponse.create(message));
   }

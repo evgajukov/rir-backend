@@ -1,0 +1,56 @@
+version: '3.1'
+
+services:
+  db:
+    image: postgres:12.4
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: webadmin
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: dom24x7
+    volumes:
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql
+      - ./db/roles.sql:/docker-entrypoint-initdb.d/02_roles.sql
+      - ./db/users.sql:/docker-entrypoint-initdb.d/03_users.sql
+      - ./db/persons.sql:/docker-entrypoint-initdb.d/04_persons.sql
+      - ./db/flats.sql:/docker-entrypoint-initdb.d/05_flats.sql
+      - ./db/events.sql:/docker-entrypoint-initdb.d/06_events.sql
+      - ./db/events_log.sql:/docker-entrypoint-initdb.d/07_events_log.sql
+      - ./db/faqCategories.sql:/docker-entrypoint-initdb.d/08_faqCategories.sql
+      - ./db/faq.sql:/docker-entrypoint-initdb.d/09_faq.sql
+      - ./db/imChannels.sql:/docker-entrypoint-initdb.d/10_imChannels.sql
+      - ./db/imChannelPersons.sql:/docker-entrypoint-initdb.d/11_imChannelPersons.sql
+      - ./db/imMessages.sql:/docker-entrypoint-initdb.d/12_imMessages.sql
+      - ./db/documents.sql:/docker-entrypoint-initdb.d/13_documents.sql
+      - ./db/instructions.sql:/docker-entrypoint-initdb.d/14_instructions.sql
+      - ./db/invites.sql:/docker-entrypoint-initdb.d/15_invites.sql
+      - ./db/notificationTokens.sql:/docker-entrypoint-initdb.d/16_notificationTokens.sql
+      - ./db/posts.sql:/docker-entrypoint-initdb.d/17_posts.sql
+      - ./db/residents.sql:/docker-entrypoint-initdb.d/18_residents.sql
+      - ./db/versions.sql:/docker-entrypoint-initdb.d/19_versions.sql
+      - ./db/votes.sql:/docker-entrypoint-initdb.d/20_votes.sql
+      - ./db/votePersons.sql:/docker-entrypoint-initdb.d/21_votePersons.sql
+      - ./db/voteQuestions.sql:/docker-entrypoint-initdb.d/22_voteQuestions.sql
+      - ./db/voteAnswers.sql:/docker-entrypoint-initdb.d/23_voteAnswers.sql
+      - ./db/goadmin.sql:/docker-entrypoint-initdb.d/goadmin.sql
+#
+#  redis:
+#    image: redis:6.0
+#    ports:
+#      - "6379:6379"
+#  backend:
+#    image: backend:1.0
+#    command: sh -c "sleep 60; npm run start"
+#    restart: always
+#    ports:
+#      - "8000:8000"
+#    environment:
+#      NODE_ENV: development
+#    depends_on:
+#      - db
+#      - redis
+#    links:
+#      - db
+#      - redis

@@ -85,7 +85,11 @@ export default class IMChannelResponse extends Response {
       include: [{ model: IMChannel, include: IMChannelResponse.include() }]
     });
     if (channelsPersons == null || channelsPersons.length == 0) return [];
-    return channelsPersons.map(item => IMChannelResponse.create(item.channel));
+    return channelsPersons.map(item => IMChannelResponse.create(item.channel)).sort((ch1: IMChannelResponse, ch2: IMChannelResponse): number => {
+      if (ch1.lastMessage.createdAt > ch2.lastMessage.createdAt) return -1;
+      if (ch1.lastMessage.createdAt < ch2.lastMessage.createdAt) return 1;
+      return 0;
+    });
   }
 
   static async seed(action, params, socket) {

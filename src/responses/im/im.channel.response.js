@@ -75,7 +75,13 @@ class IMChannelResponse extends response_1.default {
             });
             if (channelsPersons == null || channelsPersons.length == 0)
                 return [];
-            return channelsPersons.map(item => IMChannelResponse.create(item.channel));
+            return channelsPersons.map(item => IMChannelResponse.create(item.channel)).sort((ch1, ch2) => {
+                if (ch1.lastMessage.createdAt > ch2.lastMessage.createdAt)
+                    return -1;
+                if (ch1.lastMessage.createdAt < ch2.lastMessage.createdAt)
+                    return 1;
+                return 0;
+            });
         });
     }
     static seed(action, params, socket) {

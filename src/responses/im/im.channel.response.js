@@ -21,7 +21,28 @@ class IMChannelResponse extends response_1.default {
             const lastMessage = messages[messages.length - 1];
             this.lastMessage = {
                 createdAt: lastMessage.createdAt.getTime(),
+                person: {
+                    id: lastMessage.personId
+                },
                 body: lastMessage.body
+            };
+            const access = lastMessage.person.access;
+            if (access.name.level == "all") {
+                if (access.name.format == "all") {
+                    this.lastMessage.person.surname = lastMessage.person.surname;
+                    this.lastMessage.person.name = lastMessage.person.name;
+                    this.lastMessage.person.midname = lastMessage.person.midname;
+                }
+                else if (access.name.format == "name") {
+                    this.lastMessage.person.name = lastMessage.person.name;
+                }
+            }
+            const flat = lastMessage.person.residents[0].flat;
+            this.lastMessage.person.flat = {
+                id: flat.id,
+                number: flat.number,
+                section: flat.section,
+                floor: flat.floor
             };
             this.count = messages.length;
         }
@@ -31,7 +52,7 @@ class IMChannelResponse extends response_1.default {
     }
     static get(channelId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const channel = yield models_1.IMChannel.findByPk(channelId, { include: [{ model: im_message_model_1.default }] });
+            const channel = yield models_1.IMChannel.findByPk(channelId, { include: IMChannelResponse.include() });
             if (channel == null)
                 return null;
             return IMChannelResponse.create(channel);
@@ -44,7 +65,7 @@ class IMChannelResponse extends response_1.default {
                 return [];
             const channelsPersons = yield models_1.IMChannelPerson.findAll({
                 where: { personId: person.id },
-                include: [{ model: models_1.IMChannel, include: [{ model: im_message_model_1.default }] }]
+                include: [{ model: models_1.IMChannel, include: IMChannelResponse.include() }]
             });
             if (channelsPersons == null || channelsPersons.length == 0)
                 return [];
@@ -57,6 +78,24 @@ class IMChannelResponse extends response_1.default {
                 return [];
             return yield IMChannelResponse.list(socket.authToken.id);
         });
+    }
+    static include() {
+        return [
+            {
+                model: im_message_model_1.default,
+                include: [
+                    {
+                        model: models_1.Person,
+                        include: [
+                            {
+                                model: models_1.Resident,
+                                include: [{ model: models_1.Flat }]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ];
     }
 }
 exports.default = IMChannelResponse;

@@ -77,9 +77,9 @@ class IMChannelResponse extends response_1.default {
                 return [];
             return channelsPersons.map(item => IMChannelResponse.create(item.channel)).sort((ch1, ch2) => {
                 if (ch1.lastMessage.createdAt > ch2.lastMessage.createdAt)
-                    return -1;
-                if (ch1.lastMessage.createdAt < ch2.lastMessage.createdAt)
                     return 1;
+                if (ch1.lastMessage.createdAt < ch2.lastMessage.createdAt)
+                    return -1;
                 return 0;
             });
         });

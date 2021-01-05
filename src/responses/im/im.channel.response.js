@@ -21,29 +21,29 @@ class IMChannelResponse extends response_1.default {
             const lastMessage = messages[messages.length - 1];
             this.lastMessage = {
                 createdAt: lastMessage.createdAt.getTime(),
-                person: {
-                    id: lastMessage.personId
-                },
                 body: lastMessage.body
             };
-            const access = lastMessage.person.access;
-            if (access.name.level == "all") {
-                if (access.name.format == "all") {
-                    this.lastMessage.person.surname = lastMessage.person.surname;
-                    this.lastMessage.person.name = lastMessage.person.name;
-                    this.lastMessage.person.midname = lastMessage.person.midname;
+            if (lastMessage.personId != null) {
+                this.lastMessage.person = { id: lastMessage.personId };
+                const access = lastMessage.person.access;
+                if (access.name.level == "all") {
+                    if (access.name.format == "all") {
+                        this.lastMessage.person.surname = lastMessage.person.surname;
+                        this.lastMessage.person.name = lastMessage.person.name;
+                        this.lastMessage.person.midname = lastMessage.person.midname;
+                    }
+                    else if (access.name.format == "name") {
+                        this.lastMessage.person.name = lastMessage.person.name;
+                    }
                 }
-                else if (access.name.format == "name") {
-                    this.lastMessage.person.name = lastMessage.person.name;
-                }
+                const flat = lastMessage.person.residents[0].flat;
+                this.lastMessage.person.flat = {
+                    id: flat.id,
+                    number: flat.number,
+                    section: flat.section,
+                    floor: flat.floor
+                };
             }
-            const flat = lastMessage.person.residents[0].flat;
-            this.lastMessage.person.flat = {
-                id: flat.id,
-                number: flat.number,
-                section: flat.section,
-                floor: flat.floor
-            };
             this.count = messages.length;
         }
     }

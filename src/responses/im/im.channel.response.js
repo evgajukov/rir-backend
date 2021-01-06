@@ -18,7 +18,8 @@ class IMChannelResponse extends response_1.default {
         this.title = model.title;
         const messages = model.messages;
         if (messages != null && messages.length != 0) {
-            const lastMessage = messages.filter(msg => !msg.deleted).sort((msg1, msg2) => {
+            const notDeletedMessages = messages.filter(msg => !msg.deleted);
+            const lastMessage = notDeletedMessages.sort((msg1, msg2) => {
                 if (msg1.id > msg2.id)
                     return -1;
                 if (msg1.id < msg2.id)
@@ -50,7 +51,7 @@ class IMChannelResponse extends response_1.default {
                     floor: flat.floor
                 };
             }
-            this.count = messages.length;
+            this.count = notDeletedMessages.length;
         }
     }
     static create(model) {

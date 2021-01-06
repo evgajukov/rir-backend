@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.load = exports.shown = exports.save = void 0;
+exports.load = exports.del = exports.shown = exports.save = void 0;
 const models_1 = require("../models");
 const responses_1 = require("../responses");
 const response_update_1 = require("../responses/response.update");
@@ -73,6 +73,36 @@ function shown({ messageId }, respond) {
     });
 }
 exports.shown = shown;
+function del({ messageId }, respond) {
+    return __awaiter(this, void 0, void 0, function* () {
+        console.log(">>>>> actions/im.del");
+        try {
+            if (!this.authToken)
+                throw new Error(errors_1.default.user["004"].code);
+            const person = yield models_1.Person.findOne({ where: { userId: this.authToken.id } });
+            const message = yield models_1.IMMessage.findOne({ where: { id: messageId, personId: person.id } });
+            if (message == null)
+                throw new Error(errors_1.default.im["002"].code);
+            message.deleted = true;
+            yield message.save();
+            // обновляем канал с группами чатов и конкретную группу
+            const responseUpdate = new response_update_1.default(this.exchange);
+            yield responseUpdate.update({
+                userId: this.authToken.id,
+                createAt: new Date(),
+                type: "IM.MSG.DEL",
+                status: "SUCCESS",
+                data: JSON.stringify({ channelId: message.channelId, messageId, event: "destroy" })
+            });
+            respond(null, { status: "OK" });
+        }
+        catch (error) {
+            console.error(error);
+            respond(errors_1.default.methods.check(errors_1.default, error.message));
+        }
+    });
+}
+exports.del = del;
 function load({ channelId, limit, offset }, respond) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log(">>>>> actions/im.load");

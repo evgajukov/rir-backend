@@ -29,7 +29,7 @@ export default class IMChannelResponse extends Response {
     
     const messages = model.messages;
     if (messages != null && messages.length != 0) {
-      const lastMessage = messages.sort((msg1: IMMessage, msg2: IMMessage): number => {
+      const lastMessage = messages.filter(msg => !msg.deleted).sort((msg1: IMMessage, msg2: IMMessage): number => {
         if (msg1.id > msg2.id) return -1;
         if (msg1.id < msg2.id) return 1;
         return 0;

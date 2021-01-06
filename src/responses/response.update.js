@@ -38,6 +38,7 @@ class ResponseUpdate {
                         break;
                     case "IM.SAVE":
                     case "IM.SHOWN":
+                    case "IM.MSG.DEL":
                         yield this.updateIMMessage(eventData);
                         yield this.updateIMCategory(eventData);
                         break;

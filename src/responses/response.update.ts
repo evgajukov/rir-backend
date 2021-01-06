@@ -35,6 +35,7 @@ export default class ResponseUpdate {
           break;
         case "IM.SAVE":
         case "IM.SHOWN":
+        case "IM.MSG.DEL":
           await this.updateIMMessage(eventData);
           await this.updateIMCategory(eventData);
           break;

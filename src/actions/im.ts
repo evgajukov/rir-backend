@@ -60,6 +60,35 @@ export async function shown({ messageId }, respond) {
   }
 }
 
+export async function del ({ messageId }, respond) {
+  console.log(">>>>> actions/im.del");
+  try {
+    if (!this.authToken) throw new Error(errors.user["004"].code);
+    const person = await Person.findOne({ where: { userId: this.authToken.id } });
+
+    const message = await IMMessage.findOne({ where: { id: messageId, personId: person.id } });
+    if (message == null) throw new Error(errors.im["002"].code);
+
+    message.deleted = true;
+    await message.save();
+
+    // обновляем канал с группами чатов и конкретную группу
+    const responseUpdate = new ResponseUpdate(this.exchange);
+    await responseUpdate.update({
+      userId: this.authToken.id,
+      createAt: new Date(),
+      type: "IM.MSG.DEL",
+      status: "SUCCESS",
+      data: JSON.stringify({ channelId: message.channelId, messageId, event: "destroy" })
+    });
+
+    respond(null, { status: "OK" });
+  } catch (error) {
+    console.error(error);
+    respond(errors.methods.check(errors, error.message));
+  }
+}
+
 export async function load({ channelId, limit, offset }, respond) {
   console.log(">>>>> actions/im.load");
   try {

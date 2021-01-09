@@ -15,6 +15,7 @@ class IMMessageResponse extends response_1.default {
     constructor(model) {
         super(model.id);
         this.createdAt = model.createdAt.getTime();
+        this.updatedAt = model.updatedAt.getTime();
         if (model.personId != null) {
             this.person = {
                 id: model.personId

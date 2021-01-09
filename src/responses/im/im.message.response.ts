@@ -5,6 +5,7 @@ import Response from "../response";
 export default class IMMessageResponse extends Response {
 
   createdAt: number;
+  updatedAt: number;
   person: {
     id: number,
     surname?: string,
@@ -26,6 +27,7 @@ export default class IMMessageResponse extends Response {
   constructor(model: IMMessage) {
     super(model.id);
     this.createdAt = model.createdAt.getTime();
+    this.updatedAt = model.updatedAt.getTime();
     if (model.personId != null) {
       this.person = {
         id: model.personId

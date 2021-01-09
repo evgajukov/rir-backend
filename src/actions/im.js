@@ -32,6 +32,9 @@ function save({ messageId, channelId, body }, respond) {
             }
             else {
                 // редактируем сообщение
+                message = yield models_1.IMMessage.findOne({ where: { id: messageId, personId: person.id } });
+                if (message == null)
+                    throw new Error(errors_1.default.im["002"].code);
                 message.body = body;
                 yield message.save();
             }

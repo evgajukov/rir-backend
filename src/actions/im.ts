@@ -19,6 +19,8 @@ export async function save({ messageId, channelId, body }, respond) {
       await IMMessageShow.create({ personId: person.id, messageId: message.id });
     } else {
       // редактируем сообщение
+      message = await IMMessage.findOne({ where: { id: messageId, personId: person.id } });
+      if (message == null) throw new Error(errors.im["002"].code);
       message.body = body;
       await message.save();
     }

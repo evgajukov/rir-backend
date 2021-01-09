@@ -14,7 +14,7 @@ const models_1 = require("../models");
 const responses_1 = require("../responses");
 const response_update_1 = require("../responses/response.update");
 const errors_1 = require("./errors");
-function save({ channelId, body }, respond) {
+function save({ messageId, channelId, body }, respond) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log(">>>>> actions/im.save");
         try {
@@ -24,8 +24,17 @@ function save({ channelId, body }, respond) {
             const channelPerson = yield models_1.IMChannelPerson.findOne({ where: { channelId, personId: person.id } });
             if (channelPerson == null)
                 throw new Error(errors_1.default.im["001"].code);
-            const message = yield models_1.IMMessage.create({ personId: person.id, channelId, body });
-            yield models_1.IMMessageShow.create({ personId: person.id, messageId: message.id });
+            let message = null;
+            if (messageId == null) {
+                // создаем новое сообщение
+                message = yield models_1.IMMessage.create({ personId: person.id, channelId, body });
+                yield models_1.IMMessageShow.create({ personId: person.id, messageId: message.id });
+            }
+            else {
+                // редактируем сообщение
+                message.body = body;
+                yield message.save();
+            }
             // обновляем канал с группами чатов и конкретную группу
             const responseUpdate = new response_update_1.default(this.exchange);
             responseUpdate.update({

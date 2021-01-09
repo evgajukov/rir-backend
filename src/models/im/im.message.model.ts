@@ -1,8 +1,12 @@
 import { BelongsTo, Column, DataType, Default, ForeignKey, HasMany, Model, Table } from "sequelize-typescript";
 import { IMChannel, IMMessageShow, Person } from "..";
 
+export type tIMHistoryItem = { createdAt: number, text: string };
+export type tIMAnswerMessage = { id: number, createdAt: number, text: string };
 export type tIMMessageBody = {
-  text: string
+  text: string,
+  history?: tIMHistoryItem[],
+  aMessage?: tIMAnswerMessage
 };
 
 @Table({

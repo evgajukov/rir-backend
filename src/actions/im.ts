@@ -3,7 +3,7 @@ import { IMMessageResponse } from "../responses";
 import ResponseUpdate from "../responses/response.update";
 import errors from "./errors";
 
-export async function save({ channelId, body }, respond) {
+export async function save({ messageId, channelId, body }, respond) {
   console.log(">>>>> actions/im.save");
   try {
     if (!this.authToken) throw new Error(errors.user["004"].code);
@@ -12,8 +12,16 @@ export async function save({ channelId, body }, respond) {
     const channelPerson = await IMChannelPerson.findOne({ where: { channelId, personId: person.id } });
     if (channelPerson == null) throw new Error(errors.im["001"].code);
 
-    const message = await IMMessage.create({ personId: person.id, channelId, body });
-    await IMMessageShow.create({ personId: person.id, messageId: message.id });
+    let message: IMMessage = null;
+    if (messageId == null) {
+      // создаем новое сообщение
+      message = await IMMessage.create({ personId: person.id, channelId, body });
+      await IMMessageShow.create({ personId: person.id, messageId: message.id });
+    } else {
+      // редактируем сообщение
+      message.body = body;
+      await message.save();
+    }
 
     // обновляем канал с группами чатов и конкретную группу
     const responseUpdate = new ResponseUpdate(this.exchange);

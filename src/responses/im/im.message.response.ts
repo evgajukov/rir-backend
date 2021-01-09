@@ -59,14 +59,18 @@ export default class IMMessageResponse extends Response {
     this.body = model.body;
   }
 
-  static create(model: IMMessage) {
-    return new IMMessageResponse(model);
+  static async create(model: IMMessage) {
+    let message = new IMMessageResponse(model);
+    if (message.body.aMessage != null) {
+      message.body.aMessage = await IMMessageResponse.get(message.body.aMessage.id);
+    }
+    return message;
   }
 
   static async get(messageId: number) {
     const message = await IMMessage.findByPk(messageId, { include: IMMessageResponse.include() });
     if (message == null) return null;
-    return IMMessageResponse.create(message);
+    return await IMMessageResponse.create(message);
   }
 
   static async list(channelId: number, userId: number, limit: number = 20, offset: number = 0) {
@@ -78,7 +82,13 @@ export default class IMMessageResponse extends Response {
 
     const messages = await IMMessage.findAll({ where: { channelId, deleted: false }, include: IMMessageResponse.include(), order: [["id", "desc"]], limit, offset });
     if (messages == null || messages.length == 0) return [];
-    return messages.map(message => IMMessageResponse.create(message)).reverse();
+    
+    let list: IMMessageResponse[] = [];
+    for (let message of messages) {
+      const item = await IMMessageResponse.create(message);
+      list.unshift(item);
+    }
+    return list;
   }
 
   static async seed(action, params, socket) {

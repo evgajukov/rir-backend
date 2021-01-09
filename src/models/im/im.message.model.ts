@@ -6,7 +6,7 @@ export type tIMAnswerMessage = { id: number, createdAt: number, text: string };
 export type tIMMessageBody = {
   text: string,
   history?: tIMHistoryItem[],
-  aMessage?: tIMAnswerMessage
+  aMessage?: tIMAnswerMessage | any
 };
 
 @Table({

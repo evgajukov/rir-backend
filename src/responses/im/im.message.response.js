@@ -46,14 +46,20 @@ class IMMessageResponse extends response_1.default {
         this.body = model.body;
     }
     static create(model) {
-        return new IMMessageResponse(model);
+        return __awaiter(this, void 0, void 0, function* () {
+            let message = new IMMessageResponse(model);
+            if (message.body.aMessage != null) {
+                message.body.aMessage = yield IMMessageResponse.get(message.body.aMessage.id);
+            }
+            return message;
+        });
     }
     static get(messageId) {
         return __awaiter(this, void 0, void 0, function* () {
             const message = yield models_1.IMMessage.findByPk(messageId, { include: IMMessageResponse.include() });
             if (message == null)
                 return null;
-            return IMMessageResponse.create(message);
+            return yield IMMessageResponse.create(message);
         });
     }
     static list(channelId, userId, limit = 20, offset = 0) {
@@ -68,7 +74,12 @@ class IMMessageResponse extends response_1.default {
             const messages = yield models_1.IMMessage.findAll({ where: { channelId, deleted: false }, include: IMMessageResponse.include(), order: [["id", "desc"]], limit, offset });
             if (messages == null || messages.length == 0)
                 return [];
-            return messages.map(message => IMMessageResponse.create(message)).reverse();
+            let list = [];
+            for (let message of messages) {
+                const item = yield IMMessageResponse.create(message);
+                list.unshift(item);
+            }
+            return list;
         });
     }
     static seed(action, params, socket) {

@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.load = exports.del = exports.shown = exports.save = void 0;
+const push_1 = require("../lib/push");
 const models_1 = require("../models");
 const responses_1 = require("../responses");
 const response_update_1 = require("../responses/response.update");
@@ -29,6 +30,17 @@ function save({ messageId, channelId, body }, respond) {
                 // создаем новое сообщение
                 message = yield models_1.IMMessage.create({ personId: person.id, channelId, body });
                 yield models_1.IMMessageShow.create({ personId: person.id, messageId: message.id });
+                // отправляем нотификации всем, подписанным на группу
+                const channel = yield models_1.IMChannel.findByPk(channelId);
+                const persons = yield models_1.IMChannelPerson.findAll({ where: { channelId }, include: [{ model: models_1.Person }] });
+                const userIds = persons.map(item => item.person.userId);
+                const tokens = yield models_1.NotificationToken.findAll({ where: { userId: userIds } });
+                if (tokens != null) {
+                    for (let item of tokens) {
+                        // FIXME: не отправлять пользователю, который создал сообщение
+                        push_1.default.send({ body: `Новое сообщение в чате "${channel.title}"`, uri: `/im/${channelId}`, to: item.token });
+                    }
+                }
             }
             else {
                 // редактируем сообщение

@@ -1,4 +1,5 @@
-import { IMChannelPerson, IMMessage, IMMessageShow, Person } from "../models";
+import Push from "../lib/push";
+import { IMChannel, IMChannelPerson, IMMessage, IMMessageShow, NotificationToken, Person } from "../models";
 import { IMMessageResponse } from "../responses";
 import ResponseUpdate from "../responses/response.update";
 import errors from "./errors";
@@ -17,6 +18,18 @@ export async function save({ messageId, channelId, body }, respond) {
       // создаем новое сообщение
       message = await IMMessage.create({ personId: person.id, channelId, body });
       await IMMessageShow.create({ personId: person.id, messageId: message.id });
+
+      // отправляем нотификации всем, подписанным на группу
+      const channel = await IMChannel.findByPk(channelId);
+      const persons = await IMChannelPerson.findAll({ where: { channelId }, include: [{ model: Person }] });
+      const userIds = persons.map(item => item.person.userId);
+      const tokens = await NotificationToken.findAll({ where: { userId: userIds } });
+      if (tokens != null) {
+        for (let item of tokens) {
+          // FIXME: не отправлять пользователю, который создал сообщение
+          Push.send({ body: `Новое сообщение в чате "${channel.title}"`, uri: `/im/${channelId}`, to: item.token });
+        }
+      }
     } else {
       // редактируем сообщение
       message = await IMMessage.findOne({ where: { id: messageId, personId: person.id } });

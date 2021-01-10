@@ -63,11 +63,13 @@ class IMMessageResponse extends response_1.default {
             return yield IMMessageResponse.create(message);
         });
     }
-    static list(channelId, userId, limit = 20, offset = 0) {
+    static list(channelId, userId, limit = 20, offset = 0, withCache = true) {
         return __awaiter(this, void 0, void 0, function* () {
-            const cacheData = yield cache_1.default.getInstance().get(`imMessages:${channelId}:${userId}`);
-            if (cacheData != null)
-                return JSON.parse(cacheData);
+            if (withCache) {
+                const cacheData = yield cache_1.default.getInstance().get(`imMessages:${channelId}:${userId}`);
+                if (cacheData != null)
+                    return JSON.parse(cacheData);
+            }
             const person = yield models_1.Person.findOne({ where: { userId } });
             if (person == null)
                 return [];
@@ -83,7 +85,8 @@ class IMMessageResponse extends response_1.default {
                 const item = yield IMMessageResponse.create(message);
                 list.unshift(item);
             }
-            cache_1.default.getInstance().set(`imMessages:${channelId}:${userId}`, JSON.stringify(list));
+            if (withCache)
+                cache_1.default.getInstance().set(`imMessages:${channelId}:${userId}`, JSON.stringify(list));
             return list;
         });
     }

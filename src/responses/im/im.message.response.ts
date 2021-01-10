@@ -74,9 +74,11 @@ export default class IMMessageResponse extends Response {
     return await IMMessageResponse.create(message);
   }
 
-  static async list(channelId: number, userId: number, limit: number = 20, offset: number = 0) {
-    const cacheData = await Cache.getInstance().get(`imMessages:${channelId}:${userId}`);
-    if (cacheData != null) return JSON.parse(cacheData);
+  static async list(channelId: number, userId: number, limit: number = 20, offset: number = 0, withCache: boolean = true) {
+    if (withCache) {
+      const cacheData = await Cache.getInstance().get(`imMessages:${channelId}:${userId}`);
+      if (cacheData != null) return JSON.parse(cacheData);
+    }
     
     const person = await Person.findOne({ where: { userId } });
     if (person == null) return [];
@@ -93,7 +95,7 @@ export default class IMMessageResponse extends Response {
       list.unshift(item);
     }
 
-    Cache.getInstance().set(`imMessages:${channelId}:${userId}`, JSON.stringify(list));
+    if (withCache) Cache.getInstance().set(`imMessages:${channelId}:${userId}`, JSON.stringify(list));
     return list;
   }
 

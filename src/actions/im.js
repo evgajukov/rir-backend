@@ -142,7 +142,7 @@ function load({ channelId, limit, offset }, respond) {
             const channelPerson = yield models_1.IMChannelPerson.findOne({ where: { channelId, personId: person.id } });
             if (channelPerson == null)
                 throw new Error(errors_1.default.im["001"].code);
-            const messages = yield responses_1.IMMessageResponse.list(channelId, this.authToken.id, limit, offset);
+            const messages = yield responses_1.IMMessageResponse.list(channelId, this.authToken.id, limit, offset, false);
             respond(null, messages);
         }
         catch (error) {

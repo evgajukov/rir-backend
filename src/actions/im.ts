@@ -128,7 +128,7 @@ export async function load({ channelId, limit, offset }, respond) {
     const channelPerson = await IMChannelPerson.findOne({ where: { channelId, personId: person.id } });
     if (channelPerson == null) throw new Error(errors.im["001"].code);
 
-    const messages = await IMMessageResponse.list(channelId, this.authToken.id, limit, offset);
+    const messages = await IMMessageResponse.list(channelId, this.authToken.id, limit, offset, false);
     respond(null, messages);
   } catch (error) {
     console.error(error);

@@ -1,3 +1,4 @@
+import Cache from "../lib/cache";
 import Push from "../lib/push";
 import { IMChannel, IMChannelPerson, IMMessage, IMMessageShow, NotificationToken, Person } from "../models";
 import { IMMessageResponse } from "../responses";
@@ -39,6 +40,8 @@ export async function save({ messageId, channelId, body }, respond) {
       message.body = body;
       await message.save();
     }
+
+    Cache.getInstance().clear(`imMessages:${channelId}:*`);
 
     // обновляем канал с группами чатов и конкретную группу
     const responseUpdate = new ResponseUpdate(this.exchange);
@@ -96,6 +99,8 @@ export async function del ({ messageId }, respond) {
 
     message.deleted = true;
     await message.save();
+
+    Cache.getInstance().clear(`imMessages:${message.channelId}:*`);
 
     // обновляем канал с группами чатов и конкретную группу
     const responseUpdate = new ResponseUpdate(this.exchange);

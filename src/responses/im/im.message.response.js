@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const cache_1 = require("../../lib/cache");
 const models_1 = require("../../models");
 const response_1 = require("../response");
 class IMMessageResponse extends response_1.default {
@@ -64,6 +65,9 @@ class IMMessageResponse extends response_1.default {
     }
     static list(channelId, userId, limit = 20, offset = 0) {
         return __awaiter(this, void 0, void 0, function* () {
+            const cacheData = yield cache_1.default.getInstance().get(`imMessages:${channelId}:${userId}`);
+            if (cacheData != null)
+                return JSON.parse(cacheData);
             const person = yield models_1.Person.findOne({ where: { userId } });
             if (person == null)
                 return [];
@@ -79,6 +83,7 @@ class IMMessageResponse extends response_1.default {
                 const item = yield IMMessageResponse.create(message);
                 list.unshift(item);
             }
+            cache_1.default.getInstance().set(`imMessages:${channelId}:${userId}`, JSON.stringify(list));
             return list;
         });
     }

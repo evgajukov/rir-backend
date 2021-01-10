@@ -1,3 +1,4 @@
+import Cache from "../../lib/cache";
 import { Flat, IMChannel, IMChannelPerson, IMMessage, Person, Resident } from "../../models";
 import { tIMMessageBody } from "../../models/im/im.message.model";
 import Response from "../response";
@@ -74,6 +75,9 @@ export default class IMMessageResponse extends Response {
   }
 
   static async list(channelId: number, userId: number, limit: number = 20, offset: number = 0) {
+    const cacheData = await Cache.getInstance().get(`imMessages:${channelId}:${userId}`);
+    if (cacheData != null) return JSON.parse(cacheData);
+    
     const person = await Person.findOne({ where: { userId } });
     if (person == null) return [];
     // проверяем, что пользователь подписан на канал
@@ -88,6 +92,8 @@ export default class IMMessageResponse extends Response {
       const item = await IMMessageResponse.create(message);
       list.unshift(item);
     }
+
+    Cache.getInstance().set(`imMessages:${channelId}:${userId}`, JSON.stringify(list));
     return list;
   }
 

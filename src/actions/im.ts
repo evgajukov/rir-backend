@@ -41,7 +41,9 @@ export async function save({ messageId, channelId, body }, respond) {
       await message.save();
     }
 
-    Cache.getInstance().clear(`imMessages:${channelId}:*`);
+    try {
+      Cache.getInstance().clear(`imMessages:${channelId}:*`);
+    } catch (error) {}
 
     // обновляем канал с группами чатов и конкретную группу
     const responseUpdate = new ResponseUpdate(this.exchange);
@@ -100,7 +102,9 @@ export async function del ({ messageId }, respond) {
     message.deleted = true;
     await message.save();
 
-    Cache.getInstance().clear(`imMessages:${message.channelId}:*`);
+    try {
+      Cache.getInstance().clear(`imMessages:${message.channelId}:*`);
+    } catch (error) {}
 
     // обновляем канал с группами чатов и конкретную группу
     const responseUpdate = new ResponseUpdate(this.exchange);

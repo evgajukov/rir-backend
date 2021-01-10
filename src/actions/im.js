@@ -37,8 +37,10 @@ function save({ messageId, channelId, body }, respond) {
                 const tokens = yield models_1.NotificationToken.findAll({ where: { userId: userIds } });
                 if (tokens != null) {
                     for (let item of tokens) {
-                        // FIXME: не отправлять пользователю, который создал сообщение
-                        push_1.default.send({ body: `Новое сообщение в чате "${channel.title}"`, uri: `/im/${channelId}`, to: item.token });
+                        // не отправлять пользователю, который создал сообщение
+                        if (item.userId != this.authToken.id) {
+                            push_1.default.send({ body: `Новое сообщение в чате "${channel.title}"`, uri: `/im/${channelId}`, to: item.token });
+                        }
                     }
                 }
             }

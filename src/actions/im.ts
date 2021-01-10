@@ -26,8 +26,10 @@ export async function save({ messageId, channelId, body }, respond) {
       const tokens = await NotificationToken.findAll({ where: { userId: userIds } });
       if (tokens != null) {
         for (let item of tokens) {
-          // FIXME: не отправлять пользователю, который создал сообщение
-          Push.send({ body: `Новое сообщение в чате "${channel.title}"`, uri: `/im/${channelId}`, to: item.token });
+          // не отправлять пользователю, который создал сообщение
+          if (item.userId != this.authToken.id) {
+            Push.send({ body: `Новое сообщение в чате "${channel.title}"`, uri: `/im/${channelId}`, to: item.token });
+          }
         }
       }
     } else {

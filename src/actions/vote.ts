@@ -41,7 +41,7 @@ export async function save({ title, questions, anonymous, multi, type }, respond
       residents = await Resident.findAll({ where: { flatId: flats.map(flat => flat.id) } });
     }
     for (let resident of residents) {
-      await VotePerson.create({ voteId: vote.id, personId: resident.personId });
+      VotePerson.create({ voteId: vote.id, personId: resident.personId });
       // если необходимо отправляем нотификации пользователям, но только не создателю
       if (resident.person.userId != this.authToken.id) {
         const token = await NotificationToken.findOne({ where: { userId: resident.person.userId } }); // FIXME: у пользователя может быть несколько устройств
@@ -53,7 +53,7 @@ export async function save({ title, questions, anonymous, multi, type }, respond
 
     // обновляем канал "votes"
     const responseUpdate = new ResponseUpdate(this.exchange);
-    await responseUpdate.update({
+    responseUpdate.update({
       userId: this.authToken.id,
       createAt: new Date(),
       type: "VOTE.SAVE",
@@ -87,7 +87,7 @@ export async function answer({ voteId, answers }, respond) {
 
     // обновляем канал "votes"
     const responseUpdate = new ResponseUpdate(this.exchange);
-    await responseUpdate.update({
+    responseUpdate.update({
       userId: this.authToken.id,
       createAt: new Date(),
       type: "VOTE.ANSWER.SAVE",

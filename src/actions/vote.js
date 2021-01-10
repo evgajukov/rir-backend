@@ -53,7 +53,7 @@ function save({ title, questions, anonymous, multi, type }, respond) {
                 residents = yield models_1.Resident.findAll({ where: { flatId: flats.map(flat => flat.id) } });
             }
             for (let resident of residents) {
-                yield models_1.VotePerson.create({ voteId: vote.id, personId: resident.personId });
+                models_1.VotePerson.create({ voteId: vote.id, personId: resident.personId });
                 // если необходимо отправляем нотификации пользователям, но только не создателю
                 if (resident.person.userId != this.authToken.id) {
                     const token = yield models_1.NotificationToken.findOne({ where: { userId: resident.person.userId } }); // FIXME: у пользователя может быть несколько устройств
@@ -64,7 +64,7 @@ function save({ title, questions, anonymous, multi, type }, respond) {
             cache_1.default.getInstance().clear("votes:*");
             // обновляем канал "votes"
             const responseUpdate = new response_update_1.default(this.exchange);
-            yield responseUpdate.update({
+            responseUpdate.update({
                 userId: this.authToken.id,
                 createAt: new Date(),
                 type: "VOTE.SAVE",
@@ -100,7 +100,7 @@ function answer({ voteId, answers }, respond) {
             cache_1.default.getInstance().clear("votes:*");
             // обновляем канал "votes"
             const responseUpdate = new response_update_1.default(this.exchange);
-            yield responseUpdate.update({
+            responseUpdate.update({
                 userId: this.authToken.id,
                 createAt: new Date(),
                 type: "VOTE.ANSWER.SAVE",

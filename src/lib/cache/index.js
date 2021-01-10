@@ -37,10 +37,15 @@ class Cache {
     }
     clear(pattern = "*") {
         return __awaiter(this, void 0, void 0, function* () {
-            const keysAsync = util_1.promisify(this.client.keys).bind(this.client);
-            const keys = yield keysAsync(pattern);
-            if (keys.length != 0)
-                this.client.del(keys);
+            try {
+                const keysAsync = util_1.promisify(this.client.keys).bind(this.client);
+                const keys = yield keysAsync(pattern);
+                if (keys.length != 0)
+                    this.client.del(keys);
+            }
+            catch (error) {
+                console.error(error.message);
+            }
         });
     }
 }

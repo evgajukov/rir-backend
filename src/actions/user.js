@@ -98,7 +98,7 @@ function invite(params, respond) {
             inviteDb = yield models_1.Invite.create({ userId: this.authToken.id, code });
             // обновляем канал "invites"
             const responseUpdate = new response_update_1.default(this.exchange);
-            yield responseUpdate.update({
+            responseUpdate.update({
                 userId: this.authToken.id,
                 createAt: new Date(),
                 type: "INVITE.SAVE",
@@ -149,8 +149,7 @@ function saveProfile({ surname, name, midname, telegram, flat, access }, respond
                                 // голосование на весь дом
                                 const votePerson = yield models_1.VotePerson.findOne({ where: { voteId: vote.id, personId: person.id } });
                                 if (votePerson == null) {
-                                    yield models_1.VotePerson.create({ voteId: vote.id, personId: person.id });
-                                    cache_1.default.getInstance().clear("votes:*");
+                                    models_1.VotePerson.create({ voteId: vote.id, personId: person.id });
                                 }
                             }
                             else {
@@ -161,8 +160,7 @@ function saveProfile({ surname, name, midname, telegram, flat, access }, respond
                                         if (resident.flat.floor == vote.floor) {
                                             const votePerson = yield models_1.VotePerson.findOne({ where: { voteId: vote.id, personId: person.id } });
                                             if (votePerson == null) {
-                                                yield models_1.VotePerson.create({ voteId: vote.id, personId: person.id });
-                                                cache_1.default.getInstance().clear("votes:*");
+                                                models_1.VotePerson.create({ voteId: vote.id, personId: person.id });
                                             }
                                         }
                                     }
@@ -170,13 +168,13 @@ function saveProfile({ surname, name, midname, telegram, flat, access }, respond
                                         // голосование на подъезд
                                         const votePerson = yield models_1.VotePerson.findOne({ where: { voteId: vote.id, personId: person.id } });
                                         if (votePerson == null) {
-                                            yield models_1.VotePerson.create({ voteId: vote.id, personId: person.id });
-                                            cache_1.default.getInstance().clear("votes:*");
+                                            models_1.VotePerson.create({ voteId: vote.id, personId: person.id });
                                         }
                                     }
                                 }
                             }
                         }
+                        cache_1.default.getInstance().clear("votes:*");
                     }
                 }
                 catch (error) {
@@ -188,16 +186,16 @@ function saveProfile({ surname, name, midname, telegram, flat, access }, respond
                     const flatTxt = `кв. ${flatDb.number}, этаж ${flatDb.floor}, подъезд ${flatDb.section}`;
                     // в общедомовой
                     let channel = yield models_1.IMChannel.findOne({ where: { house: true } });
-                    yield models_1.IMChannelPerson.create({ channelId: channel.id, personId: person.id });
-                    yield models_1.IMMessage.create({ channelId: channel.id, body: { text: `Сосед(ка) из ${flatTxt} вступил(а) в группу` } });
+                    models_1.IMChannelPerson.create({ channelId: channel.id, personId: person.id });
+                    models_1.IMMessage.create({ channelId: channel.id, body: { text: `Сосед(ка) из ${flatTxt} вступил(а) в группу` } });
                     // в чат секции
                     channel = yield models_1.IMChannel.findOne({ where: { section: flatDb.section, floor: null } });
-                    yield models_1.IMChannelPerson.create({ channelId: channel.id, personId: person.id });
-                    yield models_1.IMMessage.create({ channelId: channel.id, body: { text: `Сосед(ка) из ${flatTxt} вступил(а) в группу` } });
+                    models_1.IMChannelPerson.create({ channelId: channel.id, personId: person.id });
+                    models_1.IMMessage.create({ channelId: channel.id, body: { text: `Сосед(ка) из ${flatTxt} вступил(а) в группу` } });
                     // в чат этажа
                     channel = yield models_1.IMChannel.findOne({ where: { section: flatDb.section, floor: flatDb.floor } });
-                    yield models_1.IMChannelPerson.create({ channelId: channel.id, personId: person.id });
-                    yield models_1.IMMessage.create({ channelId: channel.id, body: { text: `Сосед(ка) из ${flatTxt} вступил(а) в группу` } });
+                    models_1.IMChannelPerson.create({ channelId: channel.id, personId: person.id });
+                    models_1.IMMessage.create({ channelId: channel.id, body: { text: `Сосед(ка) из ${flatTxt} вступил(а) в группу` } });
                 }
                 catch (error) {
                     console.error(error.message);
@@ -213,7 +211,7 @@ function saveProfile({ surname, name, midname, telegram, flat, access }, respond
                 push_1.default.send({ body: post.body, uri: post.url, all: true });
                 // обновляем канал "posts"
                 const responseUpdate = new response_update_1.default(this.exchange);
-                yield responseUpdate.update({
+                responseUpdate.update({
                     userId: this.authToken.id,
                     createAt: new Date(),
                     type: "POST.SAVE",
@@ -223,7 +221,7 @@ function saveProfile({ surname, name, midname, telegram, flat, access }, respond
                 resident = yield models_1.Resident.findOne({ where: { personId: person.id }, include: [{ model: models_1.Flat }] });
                 // обновляем канал "invites"
                 const inviteDb = yield models_1.Invite.findOne({ where: { newUserId: this.authToken.id } });
-                yield responseUpdate.update({
+                responseUpdate.update({
                     userId: this.authToken.id,
                     createAt: new Date(),
                     type: "INVITE.SAVE",

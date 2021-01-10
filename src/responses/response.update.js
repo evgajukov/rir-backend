@@ -52,19 +52,19 @@ class ResponseUpdate {
     updateUser(eventData) {
         return __awaiter(this, void 0, void 0, function* () {
             const data = yield _1.UserResponse.info(eventData.userId);
-            yield this.publish(`user.${eventData.userId}`, data, "update");
+            this.publish(`user.${eventData.userId}`, data, "update");
         });
     }
     updatePostSave(eventData) {
         return __awaiter(this, void 0, void 0, function* () {
             const post = yield _1.PostResponse.get(eventData.data.postId);
-            yield this.publish("posts", post, eventData.data.event);
+            this.publish("posts", post, eventData.data.event);
         });
     }
     updateInviteSave(eventData) {
         return __awaiter(this, void 0, void 0, function* () {
             const invite = yield _1.InviteResponse.get(eventData.data.inviteId);
-            yield this.publish(`invites.${eventData.userId}`, invite, eventData.data.event);
+            this.publish(`invites.${eventData.userId}`, invite, eventData.data.event);
         });
     }
     updateVoteSave(eventData) {
@@ -76,7 +76,7 @@ class ResponseUpdate {
                 include: [{ model: models_1.Person }]
             });
             for (let votePerson of votePersons) {
-                yield this.publish(`votes.${votePerson.person.userId}`, vote, eventData.data.event);
+                this.publish(`votes.${votePerson.person.userId}`, vote, eventData.data.event);
             }
         });
     }
@@ -89,7 +89,7 @@ class ResponseUpdate {
                 include: [{ model: models_1.Person }]
             });
             for (let votePerson of votePersons) {
-                yield this.publish(`votes.${votePerson.person.userId}`, vote, eventData.data.event);
+                this.publish(`votes.${votePerson.person.userId}`, vote, eventData.data.event);
             }
         });
     }
@@ -109,7 +109,7 @@ class ResponseUpdate {
             // нужно обновить каналы всех пользователей этого чата
             const channelPersons = yield models_1.IMChannelPerson.findAll({ where: { channelId: channel.id }, include: [{ model: models_1.Person }] });
             for (let channelPerson of channelPersons) {
-                yield this.publish(`imChannels.${channelPerson.person.userId}`, channel, eventData.data.event);
+                this.publish(`imChannels.${channelPerson.person.userId}`, channel, eventData.data.event);
             }
         });
     }

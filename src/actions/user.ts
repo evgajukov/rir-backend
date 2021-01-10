@@ -74,7 +74,7 @@ export async function invite(params, respond) {
 
     // обновляем канал "invites"
     const responseUpdate = new ResponseUpdate(this.exchange);
-    await responseUpdate.update({
+    responseUpdate.update({
       userId: this.authToken.id,
       createAt: new Date(),
       type: "INVITE.SAVE",
@@ -124,8 +124,7 @@ export async function saveProfile({ surname, name, midname, telegram, flat, acce
               // голосование на весь дом
               const votePerson = await VotePerson.findOne({ where: { voteId: vote.id, personId: person.id } });
               if (votePerson == null) {
-                await VotePerson.create({ voteId: vote.id, personId: person.id });
-                Cache.getInstance().clear("votes:*");
+                VotePerson.create({ voteId: vote.id, personId: person.id });
               }
             } else {
               // голосование на подъезд, либо этаж
@@ -135,21 +134,20 @@ export async function saveProfile({ surname, name, midname, telegram, flat, acce
                   if (resident.flat.floor == vote.floor) {
                     const votePerson = await VotePerson.findOne({ where: { voteId: vote.id, personId: person.id } });
                     if (votePerson == null) {
-                      await VotePerson.create({ voteId: vote.id, personId: person.id });
-                      Cache.getInstance().clear("votes:*");
+                      VotePerson.create({ voteId: vote.id, personId: person.id });
                     }
                   }
                 } else {
                   // голосование на подъезд
                   const votePerson = await VotePerson.findOne({ where: { voteId: vote.id, personId: person.id } });
                   if (votePerson == null) {
-                    await VotePerson.create({ voteId: vote.id, personId: person.id });
-                    Cache.getInstance().clear("votes:*");
+                    VotePerson.create({ voteId: vote.id, personId: person.id });
                   }
                 }
               }
             }
           }
+          Cache.getInstance().clear("votes:*");
         }
       } catch (error) {
         console.error(error.message);
@@ -162,18 +160,18 @@ export async function saveProfile({ surname, name, midname, telegram, flat, acce
 
         // в общедомовой
         let channel = await IMChannel.findOne({ where: { house: true } });
-        await IMChannelPerson.create({ channelId: channel.id, personId: person.id });
-        await IMMessage.create({ channelId: channel.id, body: { text: `Сосед(ка) из ${flatTxt} вступил(а) в группу` } });
+        IMChannelPerson.create({ channelId: channel.id, personId: person.id });
+        IMMessage.create({ channelId: channel.id, body: { text: `Сосед(ка) из ${flatTxt} вступил(а) в группу` } });
 
         // в чат секции
         channel = await IMChannel.findOne({ where: { section: flatDb.section, floor: null } });
-        await IMChannelPerson.create({ channelId: channel.id, personId: person.id });
-        await IMMessage.create({ channelId: channel.id, body: { text: `Сосед(ка) из ${flatTxt} вступил(а) в группу` } });
+        IMChannelPerson.create({ channelId: channel.id, personId: person.id });
+        IMMessage.create({ channelId: channel.id, body: { text: `Сосед(ка) из ${flatTxt} вступил(а) в группу` } });
 
         // в чат этажа
         channel = await IMChannel.findOne({ where: { section: flatDb.section, floor: flatDb.floor } });
-        await IMChannelPerson.create({ channelId: channel.id, personId: person.id });
-        await IMMessage.create({ channelId: channel.id, body: { text: `Сосед(ка) из ${flatTxt} вступил(а) в группу` } });
+        IMChannelPerson.create({ channelId: channel.id, personId: person.id });
+        IMMessage.create({ channelId: channel.id, body: { text: `Сосед(ка) из ${flatTxt} вступил(а) в группу` } });
       } catch (error) {
         console.error(error.message);
       }
@@ -190,7 +188,7 @@ export async function saveProfile({ surname, name, midname, telegram, flat, acce
       
       // обновляем канал "posts"
       const responseUpdate = new ResponseUpdate(this.exchange);
-      await responseUpdate.update({
+      responseUpdate.update({
         userId: this.authToken.id,
         createAt: new Date(),
         type: "POST.SAVE",
@@ -202,7 +200,7 @@ export async function saveProfile({ surname, name, midname, telegram, flat, acce
 
       // обновляем канал "invites"
       const inviteDb = await Invite.findOne({ where: { newUserId: this.authToken.id } });
-      await responseUpdate.update({
+      responseUpdate.update({
         userId: this.authToken.id,
         createAt: new Date(),
         type: "INVITE.SAVE",

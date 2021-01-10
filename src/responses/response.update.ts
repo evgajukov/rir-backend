@@ -47,17 +47,17 @@ export default class ResponseUpdate {
 
   private async updateUser(eventData) {
     const data = await UserResponse.info(eventData.userId);
-    await this.publish(`user.${eventData.userId}`, data, "update");
+    this.publish(`user.${eventData.userId}`, data, "update");
   }
 
   private async updatePostSave(eventData) {
     const post = await PostResponse.get(eventData.data.postId);
-    await this.publish("posts", post, eventData.data.event);
+    this.publish("posts", post, eventData.data.event);
   }
 
   private async updateInviteSave(eventData) {
     const invite = await InviteResponse.get(eventData.data.inviteId);
-    await this.publish(`invites.${eventData.userId}`, invite, eventData.data.event);
+    this.publish(`invites.${eventData.userId}`, invite, eventData.data.event);
   }
 
   private async updateVoteSave(eventData) {
@@ -68,7 +68,7 @@ export default class ResponseUpdate {
       include: [{ model: Person }]
     });
     for (let votePerson of votePersons) {
-      await this.publish(`votes.${votePerson.person.userId}`, vote, eventData.data.event);
+      this.publish(`votes.${votePerson.person.userId}`, vote, eventData.data.event);
     }
   }
 
@@ -80,7 +80,7 @@ export default class ResponseUpdate {
       include: [{ model: Person }]
     });
     for (let votePerson of votePersons) {
-      await this.publish(`votes.${votePerson.person.userId}`, vote, eventData.data.event);
+      this.publish(`votes.${votePerson.person.userId}`, vote, eventData.data.event);
     }
   }
 
@@ -98,7 +98,7 @@ export default class ResponseUpdate {
     // нужно обновить каналы всех пользователей этого чата
     const channelPersons = await IMChannelPerson.findAll({ where: { channelId: channel.id }, include: [{ model: Person }] });
     for (let channelPerson of channelPersons) {
-      await this.publish(`imChannels.${channelPerson.person.userId}`, channel, eventData.data.event);
+      this.publish(`imChannels.${channelPerson.person.userId}`, channel, eventData.data.event);
     }
   }
 

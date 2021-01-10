@@ -31,8 +31,12 @@ export default class Cache {
   }
 
   async clear(pattern: string = "*") {
-    const keysAsync = promisify(this.client.keys).bind(this.client);
-    const keys = await keysAsync(pattern);
-    if (keys.length != 0) this.client.del(keys);
+    try {
+      const keysAsync = promisify(this.client.keys).bind(this.client);
+      const keys = await keysAsync(pattern);
+      if (keys.length != 0) this.client.del(keys);
+    } catch (error) {
+      console.error(error.message);
+    }
   }
 }

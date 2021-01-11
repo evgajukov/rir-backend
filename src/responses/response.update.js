@@ -10,7 +10,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const _1 = require(".");
-const models_1 = require("../models");
 class ResponseUpdate {
     constructor(exchange) {
         this.exchange = exchange;
@@ -31,10 +30,8 @@ class ResponseUpdate {
                         yield this.updateInviteSave(eventData);
                         break;
                     case "VOTE.SAVE":
-                        yield this.updateVoteSave(eventData);
-                        break;
                     case "VOTE.ANSWER.SAVE":
-                        yield this.updateVoteAnswerSave(eventData);
+                        yield this.updateVote(eventData);
                         break;
                     case "IM.SAVE":
                     case "IM.SHOWN":
@@ -67,30 +64,11 @@ class ResponseUpdate {
             this.publish(`invites.${eventData.userId}`, invite, eventData.data.event);
         });
     }
-    updateVoteSave(eventData) {
+    updateVote(eventData) {
         return __awaiter(this, void 0, void 0, function* () {
-            const vote = yield _1.VoteResponse.get(eventData.data.voteId);
-            // нужно обновить каналы всех пользователей, кому доступно голосование
-            const votePersons = yield models_1.VotePerson.findAll({
-                where: { voteId: eventData.data.voteId },
-                include: [{ model: models_1.Person }]
-            });
-            for (let votePerson of votePersons) {
-                this.publish(`votes.${votePerson.person.userId}`, vote, eventData.data.event);
-            }
-        });
-    }
-    updateVoteAnswerSave(eventData) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const vote = yield _1.VoteResponse.get(eventData.data.voteId);
-            // нужно обновить каналы всех пользователей, кому доступно голосование
-            const votePersons = yield models_1.VotePerson.findAll({
-                where: { voteId: eventData.data.voteId },
-                include: [{ model: models_1.Person }]
-            });
-            for (let votePerson of votePersons) {
-                this.publish(`votes.${votePerson.person.userId}`, vote, eventData.data.event);
-            }
+            const voteId = eventData.data.voteId;
+            const vote = yield _1.VoteResponse.get(voteId);
+            this.publish(`vote.${voteId}`, vote, eventData.data.event);
         });
     }
     updateIMMessage(eventData) {

@@ -1,6 +1,5 @@
 import { IMChannelResponse, IMMessageResponse, InviteResponse, PostResponse, UserResponse, VoteResponse } from ".";
 import * as _ from "lodash";
-import { Person, VotePerson } from "../models";
 
 export type tPublishEvent = "create" | "update" | "destroy" | "ready";
 
@@ -28,10 +27,8 @@ export default class ResponseUpdate {
           await this.updateInviteSave(eventData);
           break;
         case "VOTE.SAVE":
-          await this.updateVoteSave(eventData);
-          break;
         case "VOTE.ANSWER.SAVE":
-          await this.updateVoteAnswerSave(eventData);
+          await this.updateVote(eventData);
           break;
         case "IM.SAVE":
         case "IM.SHOWN":
@@ -60,28 +57,10 @@ export default class ResponseUpdate {
     this.publish(`invites.${eventData.userId}`, invite, eventData.data.event);
   }
 
-  private async updateVoteSave(eventData) {
-    const vote = await VoteResponse.get(eventData.data.voteId);
-    // нужно обновить каналы всех пользователей, кому доступно голосование
-    const votePersons = await VotePerson.findAll({
-      where: { voteId: eventData.data.voteId },
-      include: [{ model: Person }]
-    });
-    for (let votePerson of votePersons) {
-      this.publish(`votes.${votePerson.person.userId}`, vote, eventData.data.event);
-    }
-  }
-
-  private async updateVoteAnswerSave(eventData) {
-    const vote = await VoteResponse.get(eventData.data.voteId);
-    // нужно обновить каналы всех пользователей, кому доступно голосование
-    const votePersons = await VotePerson.findAll({
-      where: { voteId: eventData.data.voteId },
-      include: [{ model: Person }]
-    });
-    for (let votePerson of votePersons) {
-      this.publish(`votes.${votePerson.person.userId}`, vote, eventData.data.event);
-    }
+  private async updateVote(eventData) {
+    const voteId = eventData.data.voteId;
+    const vote = await VoteResponse.get(voteId);
+    this.publish(`vote.${voteId}`, vote, eventData.data.event);
   }
 
   private async updateIMMessage(eventData) {

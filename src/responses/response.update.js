@@ -40,7 +40,7 @@ class ResponseUpdate {
                     case "IM.SHOWN":
                     case "IM.MSG.DEL":
                         yield this.updateIMMessage(eventData);
-                        yield this.updateIMCategory(eventData);
+                        yield this.updateIMChannel(eventData);
                         break;
                 }
             }
@@ -99,14 +99,11 @@ class ResponseUpdate {
             this.publish(`imMessages.${message.channel.id}`, message, eventData.data.event);
         });
     }
-    updateIMCategory(eventData) {
+    updateIMChannel(eventData) {
         return __awaiter(this, void 0, void 0, function* () {
-            const channel = yield _1.IMChannelResponse.get(eventData.data.channelId);
-            // нужно обновить каналы всех пользователей этого чата
-            const channelPersons = yield models_1.IMChannelPerson.findAll({ where: { channelId: channel.id }, include: [{ model: models_1.Person }] });
-            for (let channelPerson of channelPersons) {
-                this.publish(`imChannels.${channelPerson.person.userId}`, channel, eventData.data.event);
-            }
+            const channelId = eventData.data.channelId;
+            const channel = yield _1.IMChannelResponse.get(channelId);
+            this.publish(`imChannel.${channelId}`, channel, eventData.data.event);
         });
     }
     /**

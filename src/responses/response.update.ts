@@ -1,6 +1,6 @@
 import { IMChannelResponse, IMMessageResponse, InviteResponse, PostResponse, UserResponse, VoteResponse } from ".";
 import * as _ from "lodash";
-import { IMChannelPerson, Person, VotePerson } from "../models";
+import { Person, VotePerson } from "../models";
 
 export type tPublishEvent = "create" | "update" | "destroy" | "ready";
 
@@ -37,7 +37,7 @@ export default class ResponseUpdate {
         case "IM.SHOWN":
         case "IM.MSG.DEL":
           await this.updateIMMessage(eventData);
-          await this.updateIMCategory(eventData);
+          await this.updateIMChannel(eventData);
           break;
       }
     } catch (error) {
@@ -89,13 +89,10 @@ export default class ResponseUpdate {
     this.publish(`imMessages.${message.channel.id}`, message, eventData.data.event);
   }
 
-  private async updateIMCategory(eventData) {
-    const channel = await IMChannelResponse.get(eventData.data.channelId);
-    // нужно обновить каналы всех пользователей этого чата
-    const channelPersons = await IMChannelPerson.findAll({ where: { channelId: channel.id }, include: [{ model: Person }] });
-    for (let channelPerson of channelPersons) {
-      this.publish(`imChannels.${channelPerson.person.userId}`, channel, eventData.data.event);
-    }
+  private async updateIMChannel(eventData) {
+    const channelId = eventData.data.channelId;
+    const channel = await IMChannelResponse.get(channelId);
+    this.publish(`imChannel.${channelId}`, channel, eventData.data.event);
   }
 
   /**

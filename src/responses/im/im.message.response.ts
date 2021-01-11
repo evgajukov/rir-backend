@@ -76,7 +76,7 @@ export default class IMMessageResponse extends Response {
 
   static async list(channelId: number, userId: number, limit: number = 20, offset: number = 0, withCache: boolean = true) {
     if (withCache) {
-      const cacheData = await Cache.getInstance().get(`imMessages:${channelId}:${userId}`);
+      const cacheData = await Cache.getInstance().get(`imMessages:${channelId}`);
       if (cacheData != null) return JSON.parse(cacheData);
     }
     
@@ -95,7 +95,7 @@ export default class IMMessageResponse extends Response {
       list.unshift(item);
     }
 
-    if (withCache) Cache.getInstance().set(`imMessages:${channelId}:${userId}`, JSON.stringify(list));
+    if (withCache) Cache.getInstance().set(`imMessages:${channelId}`, JSON.stringify(list));
     return list;
   }
 

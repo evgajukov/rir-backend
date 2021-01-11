@@ -188,17 +188,17 @@ function saveProfile({ surname, name, midname, telegram, flat, access }, respond
                     let channel = yield models_1.IMChannel.findOne({ where: { house: true } });
                     models_1.IMChannelPerson.create({ channelId: channel.id, personId: person.id });
                     models_1.IMMessage.create({ channelId: channel.id, body: { text: `Сосед(ка) из ${flatTxt} вступил(а) в группу` } });
-                    cache_1.default.getInstance().clear(`imMessages:${channel.id}:*`);
+                    cache_1.default.getInstance().clear(`imMessages:${channel.id}`);
                     // в чат секции
                     channel = yield models_1.IMChannel.findOne({ where: { section: flatDb.section, floor: null } });
                     models_1.IMChannelPerson.create({ channelId: channel.id, personId: person.id });
                     models_1.IMMessage.create({ channelId: channel.id, body: { text: `Сосед(ка) из ${flatTxt} вступил(а) в группу` } });
-                    cache_1.default.getInstance().clear(`imMessages:${channel.id}:*`);
+                    cache_1.default.getInstance().clear(`imMessages:${channel.id}`);
                     // в чат этажа
                     channel = yield models_1.IMChannel.findOne({ where: { section: flatDb.section, floor: flatDb.floor } });
                     models_1.IMChannelPerson.create({ channelId: channel.id, personId: person.id });
                     models_1.IMMessage.create({ channelId: channel.id, body: { text: `Сосед(ка) из ${flatTxt} вступил(а) в группу` } });
-                    cache_1.default.getInstance().clear(`imMessages:${channel.id}:*`);
+                    cache_1.default.getInstance().clear(`imMessages:${channel.id}`);
                 }
                 catch (error) {
                     console.error(error.message);

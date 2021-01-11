@@ -58,7 +58,7 @@ const channels = {
     response: VoteResponse
   },
   imMessages: {
-    action: "LIST", // imMessages.channelId.userId
+    action: "LIST", // imMessages.channelId
     response: IMMessageResponse
   },
   imChannels: {

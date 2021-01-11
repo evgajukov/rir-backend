@@ -53,7 +53,7 @@ function save({ messageId, channelId, body }, respond) {
                 message.body = body;
                 yield message.save();
             }
-            cache_1.default.getInstance().clear(`imMessages:${channelId}:*`);
+            cache_1.default.getInstance().clear(`imMessages:${channelId}`);
             // обновляем канал с группами чатов и конкретную группу
             const responseUpdate = new response_update_1.default(this.exchange);
             responseUpdate.update({
@@ -113,7 +113,7 @@ function del({ messageId }, respond) {
                 throw new Error(errors_1.default.im["002"].code);
             message.deleted = true;
             yield message.save();
-            cache_1.default.getInstance().clear(`imMessages:${message.channelId}:*`);
+            cache_1.default.getInstance().clear(`imMessages:${message.channelId}`);
             // обновляем канал с группами чатов и конкретную группу
             const responseUpdate = new response_update_1.default(this.exchange);
             yield responseUpdate.update({

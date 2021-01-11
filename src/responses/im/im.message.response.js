@@ -66,7 +66,7 @@ class IMMessageResponse extends response_1.default {
     static list(channelId, userId, limit = 20, offset = 0, withCache = true) {
         return __awaiter(this, void 0, void 0, function* () {
             if (withCache) {
-                const cacheData = yield cache_1.default.getInstance().get(`imMessages:${channelId}:${userId}`);
+                const cacheData = yield cache_1.default.getInstance().get(`imMessages:${channelId}`);
                 if (cacheData != null)
                     return JSON.parse(cacheData);
             }
@@ -86,7 +86,7 @@ class IMMessageResponse extends response_1.default {
                 list.unshift(item);
             }
             if (withCache)
-                cache_1.default.getInstance().set(`imMessages:${channelId}:${userId}`, JSON.stringify(list));
+                cache_1.default.getInstance().set(`imMessages:${channelId}`, JSON.stringify(list));
             return list;
         });
     }

@@ -162,19 +162,19 @@ export async function saveProfile({ surname, name, midname, telegram, flat, acce
         let channel = await IMChannel.findOne({ where: { house: true } });
         IMChannelPerson.create({ channelId: channel.id, personId: person.id });
         IMMessage.create({ channelId: channel.id, body: { text: `Сосед(ка) из ${flatTxt} вступил(а) в группу` } });
-        Cache.getInstance().clear(`imMessages:${channel.id}:*`);
+        Cache.getInstance().clear(`imMessages:${channel.id}`);
 
         // в чат секции
         channel = await IMChannel.findOne({ where: { section: flatDb.section, floor: null } });
         IMChannelPerson.create({ channelId: channel.id, personId: person.id });
         IMMessage.create({ channelId: channel.id, body: { text: `Сосед(ка) из ${flatTxt} вступил(а) в группу` } });
-        Cache.getInstance().clear(`imMessages:${channel.id}:*`);
+        Cache.getInstance().clear(`imMessages:${channel.id}`);
 
         // в чат этажа
         channel = await IMChannel.findOne({ where: { section: flatDb.section, floor: flatDb.floor } });
         IMChannelPerson.create({ channelId: channel.id, personId: person.id });
         IMMessage.create({ channelId: channel.id, body: { text: `Сосед(ка) из ${flatTxt} вступил(а) в группу` } });
-        Cache.getInstance().clear(`imMessages:${channel.id}:*`);
+        Cache.getInstance().clear(`imMessages:${channel.id}`);
       } catch (error) {
         console.error(error.message);
       }

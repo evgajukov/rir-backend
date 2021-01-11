@@ -14,18 +14,21 @@ const __1 = require("..");
 let Flat = class Flat extends sequelize_typescript_1.Model {
 };
 __decorate([
+    sequelize_typescript_1.Unique,
     sequelize_typescript_1.Column({
         comment: "Номер квартиры"
     }),
     __metadata("design:type", Number)
 ], Flat.prototype, "number", void 0);
 __decorate([
+    sequelize_typescript_1.Index,
     sequelize_typescript_1.Column({
         comment: "Секция / подъезд"
     }),
     __metadata("design:type", Number)
 ], Flat.prototype, "section", void 0);
 __decorate([
+    sequelize_typescript_1.Index,
     sequelize_typescript_1.Column({
         comment: "Этаж"
     }),

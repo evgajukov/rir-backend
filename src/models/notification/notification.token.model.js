@@ -14,6 +14,7 @@ const __1 = require("..");
 let NotificationToken = class NotificationToken extends sequelize_typescript_1.Model {
 };
 __decorate([
+    sequelize_typescript_1.Index,
     sequelize_typescript_1.ForeignKey(() => __1.User),
     sequelize_typescript_1.Column,
     __metadata("design:type", Number)
@@ -23,6 +24,7 @@ __decorate([
     __metadata("design:type", __1.User)
 ], NotificationToken.prototype, "user", void 0);
 __decorate([
+    sequelize_typescript_1.Unique,
     sequelize_typescript_1.Column,
     __metadata("design:type", String)
 ], NotificationToken.prototype, "token", void 0);

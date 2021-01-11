@@ -1,4 +1,4 @@
-import { Column, DataType, HasMany, Model, Table } from "sequelize-typescript";
+import { Column, DataType, HasMany, Index, Model, Table, Unique } from "sequelize-typescript";
 import { Resident } from "..";
 
 @Table({
@@ -7,16 +7,19 @@ import { Resident } from "..";
 })
 export default class Flat extends Model<Flat> {
 
+  @Unique
   @Column({
     comment: "Номер квартиры"
   })
   number: number;
 
+  @Index
   @Column({
     comment: "Секция / подъезд"
   })
   section: number;
 
+  @Index
   @Column({
     comment: "Этаж"
   })

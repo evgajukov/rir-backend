@@ -1,4 +1,4 @@
-import { BelongsTo, Column, Default, ForeignKey, Model, Table } from "sequelize-typescript";
+import { BelongsTo, Column, Default, ForeignKey, Index, Model, Table } from "sequelize-typescript";
 import { Flat, Person } from "..";
 
 @Table({
@@ -7,6 +7,7 @@ import { Flat, Person } from "..";
 })
 export default class Resident extends Model<Resident> {
 
+  @Index
   @ForeignKey(() => Person)
   @Column
   personId: number;
@@ -14,6 +15,7 @@ export default class Resident extends Model<Resident> {
   @BelongsTo(() => Person)
   person: Person;
 
+  @Index
   @ForeignKey(() => Flat)
   @Column
   flatId: number;

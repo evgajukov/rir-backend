@@ -20,6 +20,7 @@ exports.DEFAULT_ACCESS = {
 let Person = class Person extends sequelize_typescript_1.Model {
 };
 __decorate([
+    sequelize_typescript_1.Unique,
     sequelize_typescript_1.ForeignKey(() => __1.User),
     sequelize_typescript_1.Column,
     __metadata("design:type", Number)

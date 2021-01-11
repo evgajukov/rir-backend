@@ -1,4 +1,4 @@
-import { BelongsTo, Column, Default, ForeignKey, Model, Table } from "sequelize-typescript";
+import { BelongsTo, Column, Default, ForeignKey, Index, Model, Table, Unique } from "sequelize-typescript";
 import { User } from "..";
 
 @Table({
@@ -7,6 +7,7 @@ import { User } from "..";
 })
 export default class Invite extends Model<Invite> {
 
+  @Index
   @ForeignKey(() => User)
   @Column
   userId: number;
@@ -14,13 +15,16 @@ export default class Invite extends Model<Invite> {
   @BelongsTo(() => User)
   user: User;
 
+  @Unique
   @Column
   code: string;
 
+  @Index
   @Default(false)
   @Column
   used: boolean
 
+  @Unique
   @ForeignKey(() => User)
   @Column
   newUserId: number;

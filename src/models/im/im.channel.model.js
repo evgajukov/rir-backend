@@ -18,6 +18,7 @@ __decorate([
     __metadata("design:type", String)
 ], IMChannel.prototype, "title", void 0);
 __decorate([
+    sequelize_typescript_1.Index,
     sequelize_typescript_1.Default(false),
     sequelize_typescript_1.Column({
         comment: "Признак, что канал для всего дома"
@@ -25,12 +26,14 @@ __decorate([
     __metadata("design:type", Boolean)
 ], IMChannel.prototype, "house", void 0);
 __decorate([
+    sequelize_typescript_1.Index,
     sequelize_typescript_1.Column({
         comment: "Если указана секция, то канал на конкретную секция, либо этаж конкретной секции, если еще и этаж указан"
     }),
     __metadata("design:type", Number)
 ], IMChannel.prototype, "section", void 0);
 __decorate([
+    sequelize_typescript_1.Index,
     sequelize_typescript_1.Column({
         comment: "Указывается совместно с параметром секции. Если указан, то канал по конкретному этажу в секции"
     }),

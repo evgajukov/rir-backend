@@ -14,6 +14,7 @@ const __1 = require("..");
 let IMMessage = class IMMessage extends sequelize_typescript_1.Model {
 };
 __decorate([
+    sequelize_typescript_1.Index,
     sequelize_typescript_1.ForeignKey(() => __1.Person),
     sequelize_typescript_1.Column,
     __metadata("design:type", Number)
@@ -23,6 +24,7 @@ __decorate([
     __metadata("design:type", __1.Person)
 ], IMMessage.prototype, "person", void 0);
 __decorate([
+    sequelize_typescript_1.Index,
     sequelize_typescript_1.ForeignKey(() => __1.IMChannel),
     sequelize_typescript_1.Column,
     __metadata("design:type", Number)
@@ -38,6 +40,7 @@ __decorate([
     __metadata("design:type", Object)
 ], IMMessage.prototype, "body", void 0);
 __decorate([
+    sequelize_typescript_1.Index,
     sequelize_typescript_1.Default(false),
     sequelize_typescript_1.Column,
     __metadata("design:type", Boolean)

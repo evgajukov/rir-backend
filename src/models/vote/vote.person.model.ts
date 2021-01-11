@@ -1,4 +1,4 @@
-import { BelongsTo, Column, ForeignKey, Model, Table } from "sequelize-typescript";
+import { BelongsTo, Column, ForeignKey, Index, Model, Table } from "sequelize-typescript";
 import { Person, Vote } from "..";
 
 @Table({
@@ -7,6 +7,7 @@ import { Person, Vote } from "..";
 })
 export default class VotePerson extends Model<VotePerson> {
 
+  @Index
   @ForeignKey(() => Vote)
   @Column
   voteId: number;
@@ -14,6 +15,7 @@ export default class VotePerson extends Model<VotePerson> {
   @BelongsTo(() => Vote)
   vote: Vote;
 
+  @Index
   @ForeignKey(() => Person)
   @Column
   personId: number;

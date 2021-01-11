@@ -1,4 +1,4 @@
-import { BelongsTo, Column, ForeignKey, Model, Table } from "sequelize-typescript";
+import { BelongsTo, Column, ForeignKey, Index, Model, Table, Unique } from "sequelize-typescript";
 import { User } from "..";
 
 @Table({
@@ -7,6 +7,7 @@ import { User } from "..";
 })
 export default class NotificationToken extends Model<NotificationToken> {
 
+  @Index
   @ForeignKey(() => User)
   @Column
   userId: number;
@@ -14,6 +15,7 @@ export default class NotificationToken extends Model<NotificationToken> {
   @BelongsTo(() => User)
   user: User;
 
+  @Unique
   @Column
   token: string;
 }

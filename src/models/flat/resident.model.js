@@ -14,6 +14,7 @@ const __1 = require("..");
 let Resident = class Resident extends sequelize_typescript_1.Model {
 };
 __decorate([
+    sequelize_typescript_1.Index,
     sequelize_typescript_1.ForeignKey(() => __1.Person),
     sequelize_typescript_1.Column,
     __metadata("design:type", Number)
@@ -23,6 +24,7 @@ __decorate([
     __metadata("design:type", __1.Person)
 ], Resident.prototype, "person", void 0);
 __decorate([
+    sequelize_typescript_1.Index,
     sequelize_typescript_1.ForeignKey(() => __1.Flat),
     sequelize_typescript_1.Column,
     __metadata("design:type", Number)

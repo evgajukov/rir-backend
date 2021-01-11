@@ -1,4 +1,4 @@
-import { Table, Model, ForeignKey, Column, BelongsTo, Default, DataType, HasMany } from "sequelize-typescript";
+import { Table, Model, ForeignKey, Column, BelongsTo, Default, DataType, HasMany, Unique } from "sequelize-typescript";
 import { IMChannelPerson, IMMessage, IMMessageShow, Resident, User, VoteAnswer, VotePerson } from "..";
 
 export type tAccessLevel = "all" | "friends" | "nothing";
@@ -22,6 +22,7 @@ export const DEFAULT_ACCESS: iAccess = {
 })
 export default class Person extends Model<Person> {
 
+  @Unique
   @ForeignKey(() => User)
   @Column
   userId: number;

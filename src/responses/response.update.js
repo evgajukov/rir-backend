@@ -96,11 +96,12 @@ class ResponseUpdate {
     updateIMMessage(eventData) {
         return __awaiter(this, void 0, void 0, function* () {
             const message = yield _1.IMMessageResponse.get(eventData.data.messageId);
+            this.publish(`imMessages.${message.channel.id}`, message, eventData.data.event);
             // нужно обновить каналы всех пользователей этого чата
-            const channelPersons = yield models_1.IMChannelPerson.findAll({ where: { channelId: message.channel.id }, include: [{ model: models_1.Person }], order: [["id", "asc"]] });
-            for (let channelPerson of channelPersons) {
-                this.publish(`imMessages.${channelPerson.channelId}.${channelPerson.person.userId}`, message, eventData.data.event);
-            }
+            // const channelPersons = await IMChannelPerson.findAll({ where: { channelId: message.channel.id }, include: [{ model: Person }], order: [["id", "asc"]] });
+            // for (let channelPerson of channelPersons) {
+            //   this.publish(`imMessages.${channelPerson.channelId}.${channelPerson.person.userId}`, message, eventData.data.event);
+            // }
         });
     }
     updateIMCategory(eventData) {

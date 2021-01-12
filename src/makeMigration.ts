@@ -29,7 +29,7 @@ import {
       IMMessage, IMChannel, IMChannelPerson, IMMessageShow,
       NotificationToken, Version],
     // operatorsAliases: false,
-    logging: true
+    logging: false
   };
   const sequelize = new Sequelize(option);
 

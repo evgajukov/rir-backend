@@ -51,13 +51,14 @@ var Sequelize = require('sequelize');
 
 var info = {
     "revision": 1,
-    "name": "noname",
+    "name": "first-migration",
     "created": "2021-01-12T12:15:45.407Z",
-    "comment": ""
+    "comment": "Первая миграция"
 };
 
 var migrationCommands = [
 
+    // createTable roles
     {
         fn: "createTable",
         params: [
@@ -84,10 +85,13 @@ var migrationCommands = [
                     "type": Sequelize.DATE
                 }
             },
-            {}
+            {
+                "comment": "Справочник ролей пользователей"
+            }
         ]
     },
 
+    // createTable flats
     {
         fn: "createTable",
         params: [
@@ -129,10 +133,13 @@ var migrationCommands = [
                     "type": Sequelize.DATE
                 }
             },
-            {}
+            {
+                "comment": "Список доступных в доме квартир"
+            }
         ]
     },
 
+    // createTable posts
     {
         fn: "createTable",
         params: [
@@ -167,10 +174,13 @@ var migrationCommands = [
                     "type": Sequelize.DATE
                 }
             },
-            {}
+            {
+                "comment": "Новости"
+            }
         ]
     },
 
+    // createTable instructions
     {
         fn: "createTable",
         params: [
@@ -201,10 +211,13 @@ var migrationCommands = [
                     "type": Sequelize.DATE
                 }
             },
-            {}
+            {
+                "comment": "Список инструкций"
+            }
         ]
     },
 
+    // createTable documents
     {
         fn: "createTable",
         params: [
@@ -234,10 +247,13 @@ var migrationCommands = [
                     "type": Sequelize.DATE
                 }
             },
-            {}
+            {
+                "comment": "Список документов"
+            }
         ]
     },
 
+    // createTable faqCategories
     {
         fn: "createTable",
         params: [
@@ -265,10 +281,13 @@ var migrationCommands = [
                     "type": Sequelize.DATE
                 }
             },
-            {}
+            {
+                "comment": "Категории вопросов для FAQ"
+            }
         ]
     },
 
+    // createTable imChannels
     {
         fn: "createTable",
         params: [
@@ -285,6 +304,7 @@ var migrationCommands = [
                 },
                 "house": {
                     "comment": "Признак, что канал для всего дома",
+                    "defaultValue": false,
                     "type": Sequelize.BOOLEAN
                 },
                 "section": {
@@ -304,10 +324,13 @@ var migrationCommands = [
                     "type": Sequelize.DATE
                 }
             },
-            {}
+            {
+                "comment": "Группы и каналы в чатах"
+            }
         ]
     },
 
+    // createTable versions
     {
         fn: "createTable",
         params: [
@@ -334,10 +357,13 @@ var migrationCommands = [
                     "type": Sequelize.DATE
                 }
             },
-            {}
+            {
+                "comment": "Актуальные версии приложения"
+            }
         ]
     },
 
+    // createTable users
     {
         fn: "createTable",
         params: [
@@ -358,6 +384,7 @@ var migrationCommands = [
                     "type": Sequelize.STRING
                 },
                 "banned": {
+                    "defaultValue": false,
                     "type": Sequelize.BOOLEAN
                 },
                 "roleId": {
@@ -383,6 +410,7 @@ var migrationCommands = [
         ]
     },
 
+    // createTable events
     {
         fn: "createTable",
         params: [
@@ -414,6 +442,7 @@ var migrationCommands = [
                 },
                 "priority": {
                     "allowNull": false,
+                    "defaultValue": "MEDIUM",
                     "type": Sequelize.STRING
                 },
                 "data": {
@@ -432,6 +461,7 @@ var migrationCommands = [
         ]
     },
 
+    // createTable event_log
     {
         fn: "createTable",
         params: [
@@ -470,6 +500,7 @@ var migrationCommands = [
         ]
     },
 
+    // createTable sessions
     {
         fn: "createTable",
         params: [
@@ -524,6 +555,7 @@ var migrationCommands = [
         ]
     },
 
+    // createTable persons
     {
         fn: "createTable",
         params: [
@@ -559,6 +591,7 @@ var migrationCommands = [
                     "type": Sequelize.DATE
                 },
                 "sex": {
+                    "defaultValue": "U",
                     "type": Sequelize.STRING
                 },
                 "biography": {
@@ -581,10 +614,13 @@ var migrationCommands = [
                     "type": Sequelize.DATE
                 }
             },
-            {}
+            {
+                "comment": "Профили пользователей"
+            }
         ]
     },
 
+    // createTable residents
     {
         fn: "createTable",
         params: [
@@ -617,6 +653,7 @@ var migrationCommands = [
                     "type": Sequelize.INTEGER
                 },
                 "isOwner": {
+                    "defaultValue": false,
                     "type": Sequelize.BOOLEAN
                 },
                 "createdAt": {
@@ -628,10 +665,13 @@ var migrationCommands = [
                     "type": Sequelize.DATE
                 }
             },
-            {}
+            {
+                "comment": "Связка пользователей с квартирави, которые у них в собственности, либо они в них живут"
+            }
         ]
     },
 
+    // createTable invites
     {
         fn: "createTable",
         params: [
@@ -658,6 +698,7 @@ var migrationCommands = [
                     "type": Sequelize.STRING
                 },
                 "used": {
+                    "defaultValue": false,
                     "type": Sequelize.BOOLEAN
                 },
                 "newUserId": {
@@ -677,6 +718,7 @@ var migrationCommands = [
         ]
     },
 
+    // createTable faq
     {
         fn: "createTable",
         params: [
@@ -717,6 +759,7 @@ var migrationCommands = [
         ]
     },
 
+    // createTable votes
     {
         fn: "createTable",
         params: [
@@ -733,18 +776,22 @@ var migrationCommands = [
                 },
                 "multi": {
                     "comment": "Признак, что можно выбирать сразу несколько вариантов",
+                    "defaultValue": false,
                     "type": Sequelize.BOOLEAN
                 },
                 "anonymous": {
                     "comment": "Признак, что голосование анонимное",
+                    "defaultValue": false,
                     "type": Sequelize.BOOLEAN
                 },
                 "closed": {
                     "comment": "Признак, что голосование закрыто",
+                    "defaultValue": false,
                     "type": Sequelize.BOOLEAN
                 },
                 "house": {
                     "comment": "Признак, что голосование на весь дом",
+                    "defaultValue": false,
                     "type": Sequelize.BOOLEAN
                 },
                 "section": {
@@ -774,10 +821,13 @@ var migrationCommands = [
                     "type": Sequelize.DATE
                 }
             },
-            {}
+            {
+                "comment": "Список голосований"
+            }
         ]
     },
 
+    // createTable voteQuestions
     {
         fn: "createTable",
         params: [
@@ -811,10 +861,13 @@ var migrationCommands = [
                     "type": Sequelize.DATE
                 }
             },
-            {}
+            {
+                "comment": "Список вопросов для голосования"
+            }
         ]
     },
 
+    // createTable voteAnswers
     {
         fn: "createTable",
         params: [
@@ -865,10 +918,13 @@ var migrationCommands = [
                     "type": Sequelize.DATE
                 }
             },
-            {}
+            {
+                "comment": "Список ответов по голосованию"
+            }
         ]
     },
 
+    // createTable votePersons
     {
         fn: "createTable",
         params: [
@@ -909,10 +965,13 @@ var migrationCommands = [
                     "type": Sequelize.DATE
                 }
             },
-            {}
+            {
+                "comment": "Список пользователей, которые имеют доступ к голосованию"
+            }
         ]
     },
 
+    // createTable imMessages
     {
         fn: "createTable",
         params: [
@@ -948,6 +1007,7 @@ var migrationCommands = [
                     "type": Sequelize.JSON
                 },
                 "deleted": {
+                    "defaultValue": false,
                     "type": Sequelize.BOOLEAN
                 },
                 "createdAt": {
@@ -959,10 +1019,13 @@ var migrationCommands = [
                     "type": Sequelize.DATE
                 }
             },
-            {}
+            {
+                "comment": "Сообщения в чате"
+            }
         ]
     },
 
+    // createTable imChannelPersons
     {
         fn: "createTable",
         params: [
@@ -1003,10 +1066,13 @@ var migrationCommands = [
                     "type": Sequelize.DATE
                 }
             },
-            {}
+            {
+                "comment": "Участники группового чата"
+            }
         ]
     },
 
+    // createTable imMessageShowPersons
     {
         fn: "createTable",
         params: [
@@ -1047,10 +1113,13 @@ var migrationCommands = [
                     "type": Sequelize.DATE
                 }
             },
-            {}
+            {
+                "comment": "Сообщения, которые пользователь просмотрел"
+            }
         ]
     },
 
+    // createTable notificationTokens
     {
         fn: "createTable",
         params: [
@@ -1085,10 +1154,13 @@ var migrationCommands = [
                     "type": Sequelize.DATE
                 }
             },
-            {}
+            {
+                "comment": "Токены пользователей для отображения нотификаций"
+            }
         ]
     },
 
+    // addIndex flats floor
     {
         fn: "addIndex",
         params: [
@@ -1102,6 +1174,7 @@ var migrationCommands = [
         ]
     },
 
+    // addIndex flats section
     {
         fn: "addIndex",
         params: [
@@ -1115,6 +1188,7 @@ var migrationCommands = [
         ]
     },
 
+    // addIndex residents flatId
     {
         fn: "addIndex",
         params: [
@@ -1128,6 +1202,7 @@ var migrationCommands = [
         ]
     },
 
+    // addIndex residents personId
     {
         fn: "addIndex",
         params: [
@@ -1141,6 +1216,7 @@ var migrationCommands = [
         ]
     },
 
+    // addIndex invites used
     {
         fn: "addIndex",
         params: [
@@ -1154,6 +1230,7 @@ var migrationCommands = [
         ]
     },
 
+    // addIndex invites userId
     {
         fn: "addIndex",
         params: [
@@ -1167,6 +1244,7 @@ var migrationCommands = [
         ]
     },
 
+    // addIndex votePersons personId
     {
         fn: "addIndex",
         params: [
@@ -1180,6 +1258,7 @@ var migrationCommands = [
         ]
     },
 
+    // addIndex votePersons voteId
     {
         fn: "addIndex",
         params: [
@@ -1193,6 +1272,7 @@ var migrationCommands = [
         ]
     },
 
+    // addIndex imMessages deleted
     {
         fn: "addIndex",
         params: [
@@ -1206,6 +1286,7 @@ var migrationCommands = [
         ]
     },
 
+    // addIndex imMessages channelId
     {
         fn: "addIndex",
         params: [
@@ -1219,6 +1300,7 @@ var migrationCommands = [
         ]
     },
 
+    // addIndex imMessages personId
     {
         fn: "addIndex",
         params: [
@@ -1232,6 +1314,7 @@ var migrationCommands = [
         ]
     },
 
+    // addIndex imChannels floor
     {
         fn: "addIndex",
         params: [
@@ -1245,6 +1328,7 @@ var migrationCommands = [
         ]
     },
 
+    // addIndex imChannels section
     {
         fn: "addIndex",
         params: [
@@ -1258,6 +1342,7 @@ var migrationCommands = [
         ]
     },
 
+    // addIndex imChannels house
     {
         fn: "addIndex",
         params: [
@@ -1271,6 +1356,7 @@ var migrationCommands = [
         ]
     },
 
+    // addIndex imChannelPersons personId
     {
         fn: "addIndex",
         params: [
@@ -1284,6 +1370,7 @@ var migrationCommands = [
         ]
     },
 
+    // addIndex imChannelPersons channelId
     {
         fn: "addIndex",
         params: [
@@ -1297,6 +1384,7 @@ var migrationCommands = [
         ]
     },
 
+    // addIndex notificationTokens userId
     {
         fn: "addIndex",
         params: [

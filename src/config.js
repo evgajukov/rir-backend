@@ -4,7 +4,7 @@ const ENV_NAME = {
     DEV: "development",
     PROD: "production"
 };
-const DEFAULT_ENV_NAME = ENV_NAME.PROD;
+const DEFAULT_ENV_NAME = ENV_NAME.DEV;
 const env = process.env.NODE_ENV || DEFAULT_ENV_NAME;
 const db = require("./db/credentials")[env];
 const plogicId = env == DEFAULT_ENV_NAME ? "srv00" : process.env.PLOGIC_ID;

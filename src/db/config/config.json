@@ -2,8 +2,8 @@
   "development": {
     "dialect": "postgres",
     "username": "webadmin",
-    "password": "CFXgia86875",
-    "host": "185.15.211.123",
+    "password": "RERhks15096",
+    "host": "185.15.211.111",
     "port": 5432,
     "database": "dom24x7"
   },

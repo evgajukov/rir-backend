@@ -1,4 +1,4 @@
-import { Sequelize } from 'sequelize-typescript';
+import { Sequelize } from "sequelize-typescript";
 import config from "./config";
 import * as cls from "continuation-local-storage";
 import * as clsBluebird from "cls-bluebird";
@@ -21,6 +21,6 @@ const option = {
   logging: false
 };
 
-export const sequelize =  new Sequelize(option);
+export const sequelize = new Sequelize(option);
 
 export default sequelize;

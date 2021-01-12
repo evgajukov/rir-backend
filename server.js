@@ -19,7 +19,7 @@ var SocketCluster = require('socketcluster');
 var workerControllerPath = argv.wc || process.env.SOCKETCLUSTER_WORKER_CONTROLLER;
 var brokerControllerPath = argv.bc || process.env.SOCKETCLUSTER_BROKER_CONTROLLER;
 var workerClusterControllerPath = argv.wcc || process.env.SOCKETCLUSTER_WORKERCLUSTER_CONTROLLER;
-var environment = process.env.ENV || 'dev';
+var environment = process.env.NODE_ENV || 'development';
 
 var options = {
   workers: Number(argv.w) || Number(process.env.SOCKETCLUSTER_WORKERS) || 1,
@@ -27,7 +27,7 @@ var options = {
   port: Number(argv.p) || Number(process.env.SOCKETCLUSTER_PORT) || 8000,
   // You can switch to 'sc-uws' for improved performance.
   wsEngine: process.env.SOCKETCLUSTER_WS_ENGINE || 'ws',
-  appName: argv.n || process.env.SOCKETCLUSTER_APP_NAME || "medcrm",
+  appName: argv.n || process.env.SOCKETCLUSTER_APP_NAME || "dom24x7",
   workerController: workerControllerPath || path.join(__dirname, 'worker.js'),
   brokerController: brokerControllerPath || path.join(__dirname, 'broker.js'),
   workerClusterController: workerClusterControllerPath || null,
@@ -70,7 +70,7 @@ var start = function () {
     console.log('   >> WorkerCluster PID:', workerClusterInfo.pid);
   });
 
-  if (socketCluster.options.environment === 'dev') {
+  if (socketCluster.options.environment === 'development') {
     // This will cause SC workers to reboot when code changes anywhere in the app directory.
     // The second options argument here is passed directly to chokidar.
     // See https://github.com/paulmillr/chokidar#api for details.

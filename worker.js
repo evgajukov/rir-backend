@@ -21,10 +21,10 @@ class Worker extends SCWorker {
     let httpServer = this.httpServer;
     let scServer = this.scServer;
 
-    if (environment === 'dev') {
+    if (environment === 'development') {
       // Log every HTTP request. See https://github.com/expressjs/morgan for other
       // available formats.
-      app.use(morgan('dev'));
+      app.use(morgan('development'));
     }
     app.use(serveStatic(path.resolve(__dirname, 'public')));
 

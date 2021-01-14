@@ -1,4 +1,4 @@
-import { BelongsTo, Column, ForeignKey, Index, Model, Table } from "sequelize-typescript";
+import { BelongsTo, Column, Default, ForeignKey, Index, Model, Table } from "sequelize-typescript";
 import { IMChannel, Person } from "..";
 
 @Table({
@@ -22,4 +22,8 @@ export default class IMChannelPerson extends Model<IMChannelPerson> {
 
   @BelongsTo(() => Person)
   person: Person;
+
+  @Default(false)
+  @Column
+  mute: boolean;
 }

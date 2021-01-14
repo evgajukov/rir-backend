@@ -33,7 +33,7 @@ function save({ messageId, channelId, body }, respond) {
                 yield models_1.IMMessageShow.create({ personId: person.id, messageId: message.id });
                 // отправляем нотификации всем, подписанным на группу
                 const channel = yield models_1.IMChannel.findByPk(channelId);
-                const persons = yield models_1.IMChannelPerson.findAll({ where: { channelId }, include: [{ model: models_1.Person }] });
+                const persons = yield models_1.IMChannelPerson.findAll({ where: { channelId, mute: false }, include: [{ model: models_1.Person }] });
                 const userIds = persons.map(item => item.person.userId);
                 const tokens = yield models_1.NotificationToken.findAll({ where: { userId: userIds } });
                 if (tokens != null) {

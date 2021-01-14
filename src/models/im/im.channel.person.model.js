@@ -33,6 +33,11 @@ __decorate([
     sequelize_typescript_1.BelongsTo(() => __1.Person),
     __metadata("design:type", __1.Person)
 ], IMChannelPerson.prototype, "person", void 0);
+__decorate([
+    sequelize_typescript_1.Default(false),
+    sequelize_typescript_1.Column,
+    __metadata("design:type", Boolean)
+], IMChannelPerson.prototype, "mute", void 0);
 IMChannelPerson = __decorate([
     sequelize_typescript_1.Table({
         tableName: "imChannelPersons",

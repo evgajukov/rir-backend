@@ -22,7 +22,7 @@ export async function save({ messageId, channelId, body }, respond) {
 
       // отправляем нотификации всем, подписанным на группу
       const channel = await IMChannel.findByPk(channelId);
-      const persons = await IMChannelPerson.findAll({ where: { channelId }, include: [{ model: Person }] });
+      const persons = await IMChannelPerson.findAll({ where: { channelId, mute: false }, include: [{ model: Person }] });
       const userIds = persons.map(item => item.person.userId);
       const tokens = await NotificationToken.findAll({ where: { userId: userIds } });
       if (tokens != null) {

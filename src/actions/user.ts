@@ -153,6 +153,8 @@ export async function saveProfile({ surname, name, midname, telegram, flat, acce
         console.error(error.message);
       }
 
+      const responseUpdate = new ResponseUpdate(this.exchange);
+
       // добавляем пользователя в чаты
       try {
         const flatDb = await Flat.findByPk(flat);
@@ -163,18 +165,42 @@ export async function saveProfile({ surname, name, midname, telegram, flat, acce
         IMChannelPerson.create({ channelId: channel.id, personId: person.id });
         IMMessage.create({ channelId: channel.id, body: { text: `Сосед(ка) из ${flatTxt} вступил(а) в группу` } });
         Cache.getInstance().clear(`imMessages:${channel.id}`);
+        // обновляем канал "imChannel"
+        responseUpdate.update({
+          userId: this.authToken.id,
+          createAt: new Date(),
+          type: "IM.CHANNEL.UPDATE",
+          status: "SUCCESS",
+          data: JSON.stringify({ channelId: channel.id, event: "update" })
+        });
 
         // в чат секции
         channel = await IMChannel.findOne({ where: { section: flatDb.section, floor: null } });
         IMChannelPerson.create({ channelId: channel.id, personId: person.id });
         IMMessage.create({ channelId: channel.id, body: { text: `Сосед(ка) из ${flatTxt} вступил(а) в группу` } });
         Cache.getInstance().clear(`imMessages:${channel.id}`);
+        // обновляем канал "imChannel"
+        responseUpdate.update({
+          userId: this.authToken.id,
+          createAt: new Date(),
+          type: "IM.CHANNEL.UPDATE",
+          status: "SUCCESS",
+          data: JSON.stringify({ channelId: channel.id, event: "update" })
+        });
 
         // в чат этажа
         channel = await IMChannel.findOne({ where: { section: flatDb.section, floor: flatDb.floor } });
         IMChannelPerson.create({ channelId: channel.id, personId: person.id });
         IMMessage.create({ channelId: channel.id, body: { text: `Сосед(ка) из ${flatTxt} вступил(а) в группу` } });
         Cache.getInstance().clear(`imMessages:${channel.id}`);
+        // обновляем канал "imChannel"
+        responseUpdate.update({
+          userId: this.authToken.id,
+          createAt: new Date(),
+          type: "IM.CHANNEL.UPDATE",
+          status: "SUCCESS",
+          data: JSON.stringify({ channelId: channel.id, event: "update" })
+        });
       } catch (error) {
         console.error(error.message);
       }
@@ -190,7 +216,6 @@ export async function saveProfile({ surname, name, midname, telegram, flat, acce
       Push.send({ body: post.body, uri: post.url, all: true });
       
       // обновляем канал "posts"
-      const responseUpdate = new ResponseUpdate(this.exchange);
       responseUpdate.update({
         userId: this.authToken.id,
         createAt: new Date(),

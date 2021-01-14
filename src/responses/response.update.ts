@@ -36,6 +36,9 @@ export default class ResponseUpdate {
           await this.updateIMMessage(eventData);
           await this.updateIMChannel(eventData);
           break;
+        case "IM.CHANNEL.UPDATE":
+          await this.updateIMChannel(eventData);
+          break;
       }
     } catch (error) {
       console.error(error);

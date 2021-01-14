@@ -13,6 +13,7 @@ const sequelize_typescript_1 = require("sequelize-typescript");
 let Document = class Document extends sequelize_typescript_1.Model {
 };
 __decorate([
+    sequelize_typescript_1.AllowNull(false),
     sequelize_typescript_1.Column,
     __metadata("design:type", String)
 ], Document.prototype, "title", void 0);
@@ -21,6 +22,7 @@ __decorate([
     __metadata("design:type", String)
 ], Document.prototype, "annotation", void 0);
 __decorate([
+    sequelize_typescript_1.AllowNull(false),
     sequelize_typescript_1.Column,
     __metadata("design:type", String)
 ], Document.prototype, "url", void 0);

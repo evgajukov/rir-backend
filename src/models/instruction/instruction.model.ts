@@ -1,4 +1,4 @@
-import { Column, DataType, Model, Table } from "sequelize-typescript";
+import { AllowNull, Column, DataType, Model, Table } from "sequelize-typescript";
 
 export interface iInstructionItem {
   id: number;
@@ -13,6 +13,7 @@ export interface iInstructionItem {
 })
 export default class Instruction extends Model<Instruction> {
 
+  @AllowNull(false)
   @Column
   title: string;
 

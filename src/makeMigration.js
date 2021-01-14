@@ -30,7 +30,7 @@ const models_1 = require("./models");
             models_1.IMMessage, models_1.IMChannel, models_1.IMChannelPerson, models_1.IMMessageShow,
             models_1.NotificationToken, models_1.Version],
         // operatorsAliases: false,
-        logging: true
+        logging: false
     };
     const sequelize = new sequelize_typescript_1.Sequelize(option);
     const queryInterface = sequelize.getQueryInterface();

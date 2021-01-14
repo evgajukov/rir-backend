@@ -13,6 +13,7 @@ const sequelize_typescript_1 = require("sequelize-typescript");
 let Instruction = class Instruction extends sequelize_typescript_1.Model {
 };
 __decorate([
+    sequelize_typescript_1.AllowNull(false),
     sequelize_typescript_1.Column,
     __metadata("design:type", String)
 ], Instruction.prototype, "title", void 0);

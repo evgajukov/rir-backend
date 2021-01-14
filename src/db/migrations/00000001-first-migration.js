@@ -193,6 +193,7 @@ var migrationCommands = [
                     "type": Sequelize.INTEGER
                 },
                 "title": {
+                    "allowNull": false,
                     "type": Sequelize.STRING
                 },
                 "subtitle": {
@@ -230,12 +231,14 @@ var migrationCommands = [
                     "type": Sequelize.INTEGER
                 },
                 "title": {
+                    "allowNull": false,
                     "type": Sequelize.STRING
                 },
                 "annotation": {
                     "type": Sequelize.STRING
                 },
                 "url": {
+                    "allowNull": false,
                     "type": Sequelize.STRING
                 },
                 "createdAt": {
@@ -714,7 +717,9 @@ var migrationCommands = [
                     "type": Sequelize.DATE
                 }
             },
-            {}
+            {
+                "comment": "Список приглашений"
+            }
         ]
     },
 

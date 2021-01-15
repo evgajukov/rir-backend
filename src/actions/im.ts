@@ -170,3 +170,32 @@ export async function setMute({ channelId, mute }, respond) {
     respond(errors.methods.check(errors, error.message));
   }
 }
+
+export async function createPrivateChannel({ personId }, respond) {
+  console.log(">>>>> actions/im.createPrivateChannel");
+  try {
+    if (!this.authToken) throw new Error(errors.user["004"].code);
+    const person = await Person.findOne({ where: { userId: this.authToken.id } });
+
+    if (person.id == personId) throw new Error(errors.im["003"].code);
+
+    const channel = await IMChannel.create({ private: true });
+    IMChannelPerson.create({ channelId: channel.id, personId: person.id });
+    IMChannelPerson.create({ channelId: channel.id, personId });
+
+    // обновляем канал "imChannel"
+    const responseUpdate = new ResponseUpdate(this.exchange);
+    responseUpdate.update({
+      userId: this.authToken.id,
+      createAt: new Date(),
+      type: "IM.CHANNEL.UPDATE",
+      status: "SUCCESS",
+      data: JSON.stringify({ channelId: channel.id, event: "create" })
+    });
+
+    respond(null, { status: "OK" });
+  } catch (error) {
+    console.error(error);
+    respond(errors.methods.check(errors, error.message));
+  }
+}

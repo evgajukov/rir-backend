@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.setMute = exports.getMute = exports.load = exports.del = exports.shown = exports.save = void 0;
+exports.createPrivateChannel = exports.setMute = exports.getMute = exports.load = exports.del = exports.shown = exports.save = void 0;
 const cache_1 = require("../lib/cache");
 const push_1 = require("../lib/push");
 const models_1 = require("../models");
@@ -192,3 +192,33 @@ function setMute({ channelId, mute }, respond) {
     });
 }
 exports.setMute = setMute;
+function createPrivateChannel({ personId }, respond) {
+    return __awaiter(this, void 0, void 0, function* () {
+        console.log(">>>>> actions/im.createPrivateChannel");
+        try {
+            if (!this.authToken)
+                throw new Error(errors_1.default.user["004"].code);
+            const person = yield models_1.Person.findOne({ where: { userId: this.authToken.id } });
+            if (person.id == personId)
+                throw new Error(errors_1.default.im["003"].code);
+            const channel = yield models_1.IMChannel.create({ private: true });
+            models_1.IMChannelPerson.create({ channelId: channel.id, personId: person.id });
+            models_1.IMChannelPerson.create({ channelId: channel.id, personId });
+            // обновляем канал "imChannel"
+            const responseUpdate = new response_update_1.default(this.exchange);
+            responseUpdate.update({
+                userId: this.authToken.id,
+                createAt: new Date(),
+                type: "IM.CHANNEL.UPDATE",
+                status: "SUCCESS",
+                data: JSON.stringify({ channelId: channel.id, event: "create" })
+            });
+            respond(null, { status: "OK" });
+        }
+        catch (error) {
+            console.error(error);
+            respond(errors_1.default.methods.check(errors_1.default, error.message));
+        }
+    });
+}
+exports.createPrivateChannel = createPrivateChannel;

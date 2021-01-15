@@ -5,6 +5,7 @@ import Response from "../response";
 export default class IMChannelResponse extends Response {
 
   title: string;
+  private: boolean;
   lastMessage: {
     createdAt: number,
     person?: {
@@ -26,6 +27,7 @@ export default class IMChannelResponse extends Response {
   constructor(model: IMChannel) {
     super(model.id);
     this.title = model.title;
+    this.private = model.private;
     
     const messages = model.messages;
     if (messages != null && messages.length != 0) {

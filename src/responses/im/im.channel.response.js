@@ -16,6 +16,7 @@ class IMChannelResponse extends response_1.default {
     constructor(model) {
         super(model.id);
         this.title = model.title;
+        this.private = model.private;
         const messages = model.messages;
         if (messages != null && messages.length != 0) {
             const notDeletedMessages = messages.filter(msg => !msg.deleted);

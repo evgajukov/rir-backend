@@ -153,7 +153,7 @@ export async function getMute({ channelId }, respond) {
 }
 
 export async function setMute({ channelId, mute }, respond) {
-  console.log(">>>>> actions/im.getMute");
+  console.log(">>>>> actions/im.setMute");
   try {
     if (!this.authToken) throw new Error(errors.user["004"].code);
     const person = await Person.findOne({ where: { userId: this.authToken.id } });

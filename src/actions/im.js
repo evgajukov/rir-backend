@@ -173,7 +173,7 @@ function getMute({ channelId }, respond) {
 exports.getMute = getMute;
 function setMute({ channelId, mute }, respond) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log(">>>>> actions/im.getMute");
+        console.log(">>>>> actions/im.setMute");
         try {
             if (!this.authToken)
                 throw new Error(errors_1.default.user["004"].code);

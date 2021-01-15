@@ -135,3 +135,38 @@ export async function load({ channelId, limit, offset }, respond) {
     respond(errors.methods.check(errors, error.message));
   }
 }
+
+export async function getMute({ channelId }, respond) {
+  console.log(">>>>> actions/im.getMute");
+  try {
+    if (!this.authToken) throw new Error(errors.user["004"].code);
+    const person = await Person.findOne({ where: { userId: this.authToken.id } });
+
+    const channelPerson = await IMChannelPerson.findOne({ where: { channelId, personId: person.id } });
+    if (channelPerson == null) throw new Error(errors.im["001"].code);
+
+    respond(null, { mute: channelPerson.mute });
+  } catch (error) {
+    console.error(error);
+    respond(errors.methods.check(errors, error.message));
+  }
+}
+
+export async function setMute({ channelId, mute }, respond) {
+  console.log(">>>>> actions/im.getMute");
+  try {
+    if (!this.authToken) throw new Error(errors.user["004"].code);
+    const person = await Person.findOne({ where: { userId: this.authToken.id } });
+
+    const channelPerson = await IMChannelPerson.findOne({ where: { channelId, personId: person.id } });
+    if (channelPerson == null) throw new Error(errors.im["001"].code);
+
+    channelPerson.mute = mute;
+    channelPerson.save();
+
+    respond(null, { mute: channelPerson.mute });
+  } catch (error) {
+    console.error(error);
+    respond(errors.methods.check(errors, error.message));
+  }
+}

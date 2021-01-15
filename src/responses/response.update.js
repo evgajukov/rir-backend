@@ -39,6 +39,9 @@ class ResponseUpdate {
                         yield this.updateIMMessage(eventData);
                         yield this.updateIMChannel(eventData);
                         break;
+                    case "IM.CHANNEL.UPDATE":
+                        yield this.updateIMChannel(eventData);
+                        break;
                 }
             }
             catch (error) {

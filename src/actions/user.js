@@ -180,6 +180,7 @@ function saveProfile({ surname, name, midname, telegram, flat, access }, respond
                 catch (error) {
                     console.error(error.message);
                 }
+                const responseUpdate = new response_update_1.default(this.exchange);
                 // добавляем пользователя в чаты
                 try {
                     const flatDb = yield models_1.Flat.findByPk(flat);
@@ -189,16 +190,40 @@ function saveProfile({ surname, name, midname, telegram, flat, access }, respond
                     models_1.IMChannelPerson.create({ channelId: channel.id, personId: person.id });
                     models_1.IMMessage.create({ channelId: channel.id, body: { text: `Сосед(ка) из ${flatTxt} вступил(а) в группу` } });
                     cache_1.default.getInstance().clear(`imMessages:${channel.id}`);
+                    // обновляем канал "imChannel"
+                    responseUpdate.update({
+                        userId: this.authToken.id,
+                        createAt: new Date(),
+                        type: "IM.CHANNEL.UPDATE",
+                        status: "SUCCESS",
+                        data: JSON.stringify({ channelId: channel.id, event: "update" })
+                    });
                     // в чат секции
                     channel = yield models_1.IMChannel.findOne({ where: { section: flatDb.section, floor: null } });
                     models_1.IMChannelPerson.create({ channelId: channel.id, personId: person.id });
                     models_1.IMMessage.create({ channelId: channel.id, body: { text: `Сосед(ка) из ${flatTxt} вступил(а) в группу` } });
                     cache_1.default.getInstance().clear(`imMessages:${channel.id}`);
+                    // обновляем канал "imChannel"
+                    responseUpdate.update({
+                        userId: this.authToken.id,
+                        createAt: new Date(),
+                        type: "IM.CHANNEL.UPDATE",
+                        status: "SUCCESS",
+                        data: JSON.stringify({ channelId: channel.id, event: "update" })
+                    });
                     // в чат этажа
                     channel = yield models_1.IMChannel.findOne({ where: { section: flatDb.section, floor: flatDb.floor } });
                     models_1.IMChannelPerson.create({ channelId: channel.id, personId: person.id });
                     models_1.IMMessage.create({ channelId: channel.id, body: { text: `Сосед(ка) из ${flatTxt} вступил(а) в группу` } });
                     cache_1.default.getInstance().clear(`imMessages:${channel.id}`);
+                    // обновляем канал "imChannel"
+                    responseUpdate.update({
+                        userId: this.authToken.id,
+                        createAt: new Date(),
+                        type: "IM.CHANNEL.UPDATE",
+                        status: "SUCCESS",
+                        data: JSON.stringify({ channelId: channel.id, event: "update" })
+                    });
                 }
                 catch (error) {
                     console.error(error.message);
@@ -213,7 +238,6 @@ function saveProfile({ surname, name, midname, telegram, flat, access }, respond
                 // отправляем нотификацию всем соседям
                 push_1.default.send({ body: post.body, uri: post.url, all: true });
                 // обновляем канал "posts"
-                const responseUpdate = new response_update_1.default(this.exchange);
                 responseUpdate.update({
                     userId: this.authToken.id,
                     createAt: new Date(),

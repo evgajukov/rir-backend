@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.load = exports.del = exports.shown = exports.save = void 0;
+exports.setMute = exports.getMute = exports.load = exports.del = exports.shown = exports.save = void 0;
 const cache_1 = require("../lib/cache");
 const push_1 = require("../lib/push");
 const models_1 = require("../models");
@@ -152,3 +152,43 @@ function load({ channelId, limit, offset }, respond) {
     });
 }
 exports.load = load;
+function getMute({ channelId }, respond) {
+    return __awaiter(this, void 0, void 0, function* () {
+        console.log(">>>>> actions/im.getMute");
+        try {
+            if (!this.authToken)
+                throw new Error(errors_1.default.user["004"].code);
+            const person = yield models_1.Person.findOne({ where: { userId: this.authToken.id } });
+            const channelPerson = yield models_1.IMChannelPerson.findOne({ where: { channelId, personId: person.id } });
+            if (channelPerson == null)
+                throw new Error(errors_1.default.im["001"].code);
+            respond(null, { mute: channelPerson.mute });
+        }
+        catch (error) {
+            console.error(error);
+            respond(errors_1.default.methods.check(errors_1.default, error.message));
+        }
+    });
+}
+exports.getMute = getMute;
+function setMute({ channelId, mute }, respond) {
+    return __awaiter(this, void 0, void 0, function* () {
+        console.log(">>>>> actions/im.getMute");
+        try {
+            if (!this.authToken)
+                throw new Error(errors_1.default.user["004"].code);
+            const person = yield models_1.Person.findOne({ where: { userId: this.authToken.id } });
+            const channelPerson = yield models_1.IMChannelPerson.findOne({ where: { channelId, personId: person.id } });
+            if (channelPerson == null)
+                throw new Error(errors_1.default.im["001"].code);
+            channelPerson.mute = mute;
+            channelPerson.save();
+            respond(null, { mute: channelPerson.mute });
+        }
+        catch (error) {
+            console.error(error);
+            respond(errors_1.default.methods.check(errors_1.default, error.message));
+        }
+    });
+}
+exports.setMute = setMute;

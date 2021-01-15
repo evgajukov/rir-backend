@@ -40,6 +40,13 @@ __decorate([
     __metadata("design:type", Number)
 ], IMChannel.prototype, "floor", void 0);
 __decorate([
+    sequelize_typescript_1.Default(false),
+    sequelize_typescript_1.Column({
+        comment: "Признак, что это приватный канал для двух пользователей"
+    }),
+    __metadata("design:type", Boolean)
+], IMChannel.prototype, "private", void 0);
+__decorate([
     sequelize_typescript_1.HasMany(() => __1.IMMessage),
     __metadata("design:type", Array)
 ], IMChannel.prototype, "messages", void 0);

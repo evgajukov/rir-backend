@@ -29,6 +29,12 @@ export default class IMChannel extends Model<IMChannel> {
   })
   floor: number;
 
+  @Default(false)
+  @Column({
+    comment: "Признак, что это приватный канал для двух пользователей"
+  })
+  private: boolean;
+
   @HasMany(() => IMMessage)
   messages: IMMessage[];
 

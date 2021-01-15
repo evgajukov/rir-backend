@@ -16,6 +16,7 @@ const vote = require("./actions/vote");
 const notification = require("./actions/notification");
 const im = require("./actions/im");
 const version = require("./actions/version");
+const admin = require("./actions/admin");
 const responses = require("./responses");
 const timelogger_1 = require("./lib/timelogger");
 function handleSocket(socket) {
@@ -30,6 +31,7 @@ function handleSocket(socket) {
     bindActions(socket, "notification", notification);
     bindActions(socket, "im", im);
     bindActions(socket, "version", version);
+    bindActions(socket, "admin", admin);
 }
 exports.default = handleSocket;
 function bindActions(socket, namespace, actions) {

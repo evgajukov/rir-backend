@@ -201,19 +201,39 @@ function createPrivateChannel({ personId }, respond) {
             const person = yield models_1.Person.findOne({ where: { userId: this.authToken.id } });
             if (person.id == personId)
                 throw new Error(errors_1.default.im["003"].code);
-            const channel = yield models_1.IMChannel.create({ private: true });
-            models_1.IMChannelPerson.create({ channelId: channel.id, personId: person.id });
-            models_1.IMChannelPerson.create({ channelId: channel.id, personId });
-            // обновляем канал "imChannel"
-            const responseUpdate = new response_update_1.default(this.exchange);
-            responseUpdate.update({
-                userId: this.authToken.id,
-                createAt: new Date(),
-                type: "IM.CHANNEL.UPDATE",
-                status: "SUCCESS",
-                data: JSON.stringify({ channelId: channel.id, event: "create" })
+            // в начале нужно проверить, что уже имеется приватный канал, а не сразу создавать его
+            const getPrivateChannel = (personIds) => __awaiter(this, void 0, void 0, function* () {
+                const channels = yield models_1.IMChannel.findAll({ where: { private: true }, include: [{ model: models_1.IMChannelPerson }] });
+                for (let channel of channels) {
+                    if (channel.persons.length == personIds.length) {
+                        // количество участников совпадает, и нужно проверить, что участники именно те, что нужно
+                        let status = true;
+                        for (let channelPerson of channel.persons) {
+                            if (personIds.indexOf(channelPerson.personId) == -1)
+                                status = false;
+                        }
+                        if (status)
+                            return channel;
+                    }
+                }
+                return null;
             });
-            respond(null, { status: "OK" });
+            let channel = yield getPrivateChannel([person.id, personId]);
+            if (channel == null) {
+                channel = yield models_1.IMChannel.create({ private: true });
+                models_1.IMChannelPerson.create({ channelId: channel.id, personId: person.id });
+                models_1.IMChannelPerson.create({ channelId: channel.id, personId });
+                // обновляем канал "imChannel"
+                const responseUpdate = new response_update_1.default(this.exchange);
+                responseUpdate.update({
+                    userId: this.authToken.id,
+                    createAt: new Date(),
+                    type: "IM.CHANNEL.UPDATE",
+                    status: "SUCCESS",
+                    data: JSON.stringify({ channelId: channel.id, event: "create" })
+                });
+            }
+            respond(null, { status: "OK", channelId: channel.id });
         }
         catch (error) {
             console.error(error);

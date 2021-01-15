@@ -179,21 +179,39 @@ export async function createPrivateChannel({ personId }, respond) {
 
     if (person.id == personId) throw new Error(errors.im["003"].code);
 
-    const channel = await IMChannel.create({ private: true });
-    IMChannelPerson.create({ channelId: channel.id, personId: person.id });
-    IMChannelPerson.create({ channelId: channel.id, personId });
+    // в начале нужно проверить, что уже имеется приватный канал, а не сразу создавать его
+    const getPrivateChannel = async (personIds: number[]): Promise<IMChannel> => {
+      const channels = await IMChannel.findAll({ where: { private: true }, include: [{ model: IMChannelPerson }] });
+      for (let channel of channels) {
+        if (channel.persons.length == personIds.length) {
+          // количество участников совпадает, и нужно проверить, что участники именно те, что нужно
+          let status = true;
+          for (let channelPerson of channel.persons) {
+            if (personIds.indexOf(channelPerson.personId) == -1) status = false;
+          }
+          if (status) return channel;
+        }
+      }
+      return null;
+    };
+    let channel: IMChannel = await getPrivateChannel([person.id, personId]);
+    if (channel == null) {
+      channel = await IMChannel.create({ private: true });
+      IMChannelPerson.create({ channelId: channel.id, personId: person.id });
+      IMChannelPerson.create({ channelId: channel.id, personId });
 
-    // обновляем канал "imChannel"
-    const responseUpdate = new ResponseUpdate(this.exchange);
-    responseUpdate.update({
-      userId: this.authToken.id,
-      createAt: new Date(),
-      type: "IM.CHANNEL.UPDATE",
-      status: "SUCCESS",
-      data: JSON.stringify({ channelId: channel.id, event: "create" })
-    });
+      // обновляем канал "imChannel"
+      const responseUpdate = new ResponseUpdate(this.exchange);
+      responseUpdate.update({
+        userId: this.authToken.id,
+        createAt: new Date(),
+        type: "IM.CHANNEL.UPDATE",
+        status: "SUCCESS",
+        data: JSON.stringify({ channelId: channel.id, event: "create" })
+      });
+    }
 
-    respond(null, { status: "OK" });
+    respond(null, { status: "OK", channelId: channel.id });
   } catch (error) {
     console.error(error);
     respond(errors.methods.check(errors, error.message));

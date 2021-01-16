@@ -109,7 +109,7 @@ class IMChannelResponse extends response_1.default {
                 include: [
                     {
                         model: models_1.Person,
-                        inclide: [
+                        include: [
                             {
                                 model: models_1.Resident,
                                 include: [{ model: models_1.Flat }]

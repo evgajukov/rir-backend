@@ -87,6 +87,8 @@ class IMChannelResponse extends response_1.default {
                 list.push(response);
             }
             return list.sort((ch1, ch2) => {
+                if (ch1.lastMessage == null || ch2.lastMessage == null)
+                    return 0;
                 if (ch1.lastMessage.createdAt > ch2.lastMessage.createdAt)
                     return 1;
                 if (ch1.lastMessage.createdAt < ch2.lastMessage.createdAt)

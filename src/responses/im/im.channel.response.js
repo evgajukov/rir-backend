@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const models_1 = require("../../models");
 const im_message_model_1 = require("../../models/im/im.message.model");
 const response_1 = require("../response");
+const im_person_type_1 = require("./im.person.type");
 class IMChannelResponse extends response_1.default {
     constructor(model) {
         super(model.id);
@@ -54,6 +55,10 @@ class IMChannelResponse extends response_1.default {
                 };
             }
             this.count = notDeletedMessages.length;
+        }
+        if (this.private) {
+            // передаем данные об участниках приватного чата
+            this.persons = model.persons.map(channelPerson => im_person_type_1.getPerson(channelPerson.person));
         }
     }
     static create(model) {
@@ -98,6 +103,20 @@ class IMChannelResponse extends response_1.default {
         return [
             {
                 model: im_message_model_1.default,
+                include: [
+                    {
+                        model: models_1.Person,
+                        include: [
+                            {
+                                model: models_1.Resident,
+                                include: [{ model: models_1.Flat }]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                model: models_1.IMChannelPerson,
                 include: [
                     {
                         model: models_1.Person,

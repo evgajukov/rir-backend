@@ -2,23 +2,13 @@ import Cache from "../../lib/cache";
 import { Flat, IMChannel, IMChannelPerson, IMMessage, Person, Resident } from "../../models";
 import { tIMMessageBody } from "../../models/im/im.message.model";
 import Response from "../response";
+import { tPerson, getPerson } from "./im.person.type";
 
 export default class IMMessageResponse extends Response {
 
   createdAt: number;
   updatedAt: number;
-  person: {
-    id: number,
-    surname?: string,
-    name?: string,
-    midname?: string,
-    flat?: {
-      id: number,
-      number: number,
-      section: number,
-      floor: number
-    }
-  };
+  person: tPerson
   channel: {
     id: number,
     title: string,
@@ -29,30 +19,7 @@ export default class IMMessageResponse extends Response {
     super(model.id);
     this.createdAt = model.createdAt.getTime();
     this.updatedAt = model.updatedAt.getTime();
-    if (model.personId != null) {
-      this.person = {
-        id: model.personId
-      };
-      
-      const access = model.person.access;
-      if (access.name.level == "all") {
-        if (access.name.format == "all") {
-          this.person.surname = model.person.surname;
-          this.person.name = model.person.name;
-          this.person.midname = model.person.midname;
-        } else if (access.name.format == "name") {
-          this.person.name = model.person.name;
-        }
-      }
-
-      const flat = model.person.residents[0].flat;
-      this.person.flat = {
-        id: flat.id,
-        number: flat.number,
-        section: flat.section,
-        floor: flat.floor
-      };
-    }
+    if (model.personId != null) this.person = getPerson(model.person);
     this.channel = {
       id: model.channel.id,
       title: model.channel.title

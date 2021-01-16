@@ -1,6 +1,7 @@
 import { Flat, IMChannel, IMChannelPerson, Person, Resident } from "../../models";
 import IMMessage, { tIMMessageBody } from "../../models/im/im.message.model";
 import Response from "../response";
+import { getPerson, tPerson } from "./im.person.type";
 
 export default class IMChannelResponse extends Response {
 
@@ -23,6 +24,7 @@ export default class IMChannelResponse extends Response {
     body: tIMMessageBody,
   };
   count: number; // общее количество сообщений в канале
+  persons: tPerson[];
 
   constructor(model: IMChannel) {
     super(model.id);
@@ -68,6 +70,11 @@ export default class IMChannelResponse extends Response {
 
       this.count = notDeletedMessages.length;
     }
+
+    if (this.private) {
+      // передаем данные об участниках приватного чата
+      this.persons = model.persons.map(channelPerson => getPerson(channelPerson.person));
+    }
   }
 
   static create(model: IMChannel) {
@@ -105,6 +112,20 @@ export default class IMChannelResponse extends Response {
     return [
       {
         model: IMMessage,
+        include: [
+          {
+            model: Person,
+            include: [
+              {
+                model: Resident,
+                include: [{ model: Flat }]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        model: IMChannelPerson,
         include: [
           {
             model: Person,

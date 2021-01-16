@@ -33,36 +33,34 @@ class IMChannelResponse extends response_1.default {
                 createdAt: lastMessage.createdAt.getTime(),
                 body: lastMessage.body
             };
-            if (lastMessage.personId != null) {
-                this.lastMessage.person = { id: lastMessage.personId };
-                const access = lastMessage.person.access;
-                if (access.name.level == "all") {
-                    if (access.name.format == "all") {
-                        this.lastMessage.person.surname = lastMessage.person.surname;
-                        this.lastMessage.person.name = lastMessage.person.name;
-                        this.lastMessage.person.midname = lastMessage.person.midname;
-                    }
-                    else if (access.name.format == "name") {
-                        this.lastMessage.person.name = lastMessage.person.name;
-                    }
-                }
-                const flat = lastMessage.person.residents[0].flat;
-                this.lastMessage.person.flat = {
-                    id: flat.id,
-                    number: flat.number,
-                    section: flat.section,
-                    floor: flat.floor
-                };
-            }
+            if (lastMessage.personId != null)
+                this.lastMessage.person = im_person_type_1.getPerson(lastMessage.person);
             this.count = notDeletedMessages.length;
-        }
-        if (this.private) {
-            // передаем данные об участниках приватного чата
-            this.persons = model.persons.map(channelPerson => im_person_type_1.getPerson(channelPerson.person));
         }
     }
     static create(model) {
-        return new IMChannelResponse(model);
+        return __awaiter(this, void 0, void 0, function* () {
+            let response = new IMChannelResponse(model);
+            if (response.private) {
+                // передаем данные об участниках приватного чата
+                const channelsPersons = yield models_1.IMChannelPerson.findAll({
+                    where: { channelId: model.id },
+                    include: [
+                        {
+                            model: models_1.Person,
+                            include: [
+                                {
+                                    model: models_1.Resident,
+                                    include: [{ model: models_1.Flat }]
+                                }
+                            ]
+                        }
+                    ]
+                });
+                response.persons = channelsPersons.map(channelPerson => im_person_type_1.getPerson(channelPerson.person));
+            }
+            return response;
+        });
     }
     static get(channelId) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -83,7 +81,12 @@ class IMChannelResponse extends response_1.default {
             });
             if (channelsPersons == null || channelsPersons.length == 0)
                 return [];
-            return channelsPersons.map(item => IMChannelResponse.create(item.channel)).sort((ch1, ch2) => {
+            let list = [];
+            for (let item of channelsPersons) {
+                const response = yield IMChannelResponse.create(item.channel);
+                list.push(response);
+            }
+            return list.sort((ch1, ch2) => {
                 if (ch1.lastMessage.createdAt > ch2.lastMessage.createdAt)
                     return 1;
                 if (ch1.lastMessage.createdAt < ch2.lastMessage.createdAt)
@@ -106,21 +109,7 @@ class IMChannelResponse extends response_1.default {
                 include: [
                     {
                         model: models_1.Person,
-                        include: [
-                            {
-                                model: models_1.Resident,
-                                include: [{ model: models_1.Flat }]
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-                model: models_1.IMChannelPerson,
-                include: [
-                    {
-                        model: models_1.Person,
-                        include: [
+                        inclide: [
                             {
                                 model: models_1.Resident,
                                 include: [{ model: models_1.Flat }]

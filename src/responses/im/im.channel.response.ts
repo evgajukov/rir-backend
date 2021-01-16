@@ -28,6 +28,7 @@ export default class IMChannelResponse extends Response {
     super(model.id);
     this.title = model.title;
     this.private = model.private;
+    this.count = 0;
     
     const messages = model.messages;
     if (messages != null && messages.length != 0) {

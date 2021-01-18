@@ -34,7 +34,7 @@ services:
       - ./db/votePersons.sql:/docker-entrypoint-initdb.d/21_votePersons.sql
       - ./db/voteQuestions.sql:/docker-entrypoint-initdb.d/22_voteQuestions.sql
       - ./db/voteAnswers.sql:/docker-entrypoint-initdb.d/23_voteAnswers.sql
-      - ./db/goadmin.sql:/docker-entrypoint-initdb.d/goadmin.sql
+
 #
 #  redis:
 #    image: redis:6.0

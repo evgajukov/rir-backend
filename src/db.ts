@@ -18,7 +18,13 @@ const option = {
   storage: ":memory:",
   modelPaths: [__dirname + "/**/*.model.ts"],
   // operatorsAliases: false,
-  logging: false
+  logging: false,
+  pool: {
+    max: 5,
+    min: 0,
+    acquire: 30000,
+    idle: 10000
+  }
 };
 
 export const sequelize = new Sequelize(option);

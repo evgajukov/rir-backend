@@ -61,7 +61,7 @@
     "dev": "tsc && babel-node server.js",
     "plogic": "tsc && babel-node ./src/logic/logic.runner.js",
     "init": "tsc && babel-node ./src/init/dom24x7.init.js",
-    "test": "tsc && babel-node ./src/test/notification.test.js",
+    "test": "tsc && babel-node ./src/test/channels.test.js",
     "migration": "tsc && babel-node ./src/makeMigration.js"
   }
 }

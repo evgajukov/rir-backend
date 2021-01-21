@@ -12,8 +12,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const vote_response_1 = require("../responses/vote/vote.response");
 (() => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const items = yield vote_response_1.default.list(1);
+        console.time("channels.test");
+        const items = yield vote_response_1.default.list(1, false);
         console.log(items);
+        console.timeEnd("channels.test");
     }
     catch (error) {
         console.error(error);

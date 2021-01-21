@@ -112,9 +112,13 @@ export default class VoteResponse extends Response {
     return VoteResponse.create(vote);
   }
 
-  static async list(userId: number) {
-    const cacheData = await Cache.getInstance().get(`votes:${userId}`);
-    if (cacheData != null) return JSON.parse(cacheData);
+  static async list(userId: number, withCache: boolean = true) {
+    if (withCache) {
+      console.time("vote.response.cache");
+      const cacheData = await Cache.getInstance().get(`votes:${userId}`);
+      console.timeEnd("vote.response.cache");
+      if (cacheData != null) return JSON.parse(cacheData);
+    }
 
     const person = await Person.findOne({ where: { userId } });
     if (person == null) return [];
@@ -130,7 +134,7 @@ export default class VoteResponse extends Response {
     });
     if (list == null || list.length == 0) return [];
     const result = list.map(item => VoteResponse.create(item.vote));
-    Cache.getInstance().set(`votes:${userId}`, JSON.stringify(result));
+    if (withCache) Cache.getInstance().set(`votes:${userId}`, JSON.stringify(result));
     return result;
   }
 
@@ -141,16 +145,24 @@ export default class VoteResponse extends Response {
 
   private static include() {
     return [
-      { model: VotePerson },
-      { model: VoteQuestion },
+      {
+        model: VotePerson,
+        separate: true,
+      },
+      {
+        model: VoteQuestion,
+        separate: true,
+      },
       {
         model: VoteAnswer,
+        separate: true,
         include: [
           {
             model: Person,
             include: [
               {
                 model: Resident,
+                separate: true,
                 include: [{ model: Flat }]
               }
             ]

@@ -87,11 +87,15 @@ class VoteResponse extends response_1.default {
             return VoteResponse.create(vote);
         });
     }
-    static list(userId) {
+    static list(userId, withCache = true) {
         return __awaiter(this, void 0, void 0, function* () {
-            const cacheData = yield cache_1.default.getInstance().get(`votes:${userId}`);
-            if (cacheData != null)
-                return JSON.parse(cacheData);
+            if (withCache) {
+                console.time("vote.response.cache");
+                const cacheData = yield cache_1.default.getInstance().get(`votes:${userId}`);
+                console.timeEnd("vote.response.cache");
+                if (cacheData != null)
+                    return JSON.parse(cacheData);
+            }
             const person = yield models_1.Person.findOne({ where: { userId } });
             if (person == null)
                 return [];
@@ -107,7 +111,8 @@ class VoteResponse extends response_1.default {
             if (list == null || list.length == 0)
                 return [];
             const result = list.map(item => VoteResponse.create(item.vote));
-            cache_1.default.getInstance().set(`votes:${userId}`, JSON.stringify(result));
+            if (withCache)
+                cache_1.default.getInstance().set(`votes:${userId}`, JSON.stringify(result));
             return result;
         });
     }
@@ -120,16 +125,24 @@ class VoteResponse extends response_1.default {
     }
     static include() {
         return [
-            { model: models_1.VotePerson },
-            { model: models_1.VoteQuestion },
+            {
+                model: models_1.VotePerson,
+                separate: true,
+            },
+            {
+                model: models_1.VoteQuestion,
+                separate: true,
+            },
             {
                 model: models_1.VoteAnswer,
+                separate: true,
                 include: [
                     {
                         model: models_1.Person,
                         include: [
                             {
                                 model: models_1.Resident,
+                                separate: true,
                                 include: [{ model: models_1.Flat }]
                             }
                         ]

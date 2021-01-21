@@ -56,7 +56,6 @@ class InviteResponse extends response_1.default {
                                 include: [
                                     {
                                         model: models_1.Resident,
-                                        separate: true,
                                         include: [{ model: models_1.Flat }]
                                     }
                                 ]

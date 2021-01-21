@@ -12,7 +12,7 @@ export default class Invite extends Model<Invite> {
   @Column
   userId: number;
 
-  @BelongsTo(() => User)
+  @BelongsTo(() => User, "userId")
   user: User;
 
   @Unique
@@ -29,6 +29,6 @@ export default class Invite extends Model<Invite> {
   @Column
   newUserId: number;
 
-  @BelongsTo(() => User)
+  @BelongsTo(() => User, "newUserId")
   newUser: User;
 }

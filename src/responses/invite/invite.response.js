@@ -22,10 +22,10 @@ class InviteResponse extends response_1.default {
         return __awaiter(this, void 0, void 0, function* () {
             let item = new InviteResponse(model);
             if (item.used) {
-                const person = yield models_1.Person.findOne({ where: { userId: model.newUserId } });
+                const person = model.newUser.person;
                 if (person != null) {
                     item.person = { surname: person.surname, name: person.name, midname: person.midname };
-                    const resident = yield models_1.Resident.findOne({ where: { personId: person.id }, include: [{ model: models_1.Flat }] });
+                    const resident = person.residents[0];
                     if (resident != null) {
                         item.flat = { number: resident.flat.number, floor: resident.flat.floor, section: resident.flat.section };
                     }
@@ -46,6 +46,24 @@ class InviteResponse extends response_1.default {
         return __awaiter(this, void 0, void 0, function* () {
             const list = yield models_1.Invite.findAll({
                 where: { userId },
+                include: [
+                    {
+                        model: models_1.User,
+                        as: "newUser",
+                        include: [
+                            {
+                                model: models_1.Person,
+                                include: [
+                                    {
+                                        model: models_1.Resident,
+                                        separate: true,
+                                        include: [{ model: models_1.Flat }]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
                 order: [["id", "desc"]],
                 limit,
             });

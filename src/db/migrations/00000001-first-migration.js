@@ -705,6 +705,12 @@ var migrationCommands = [
           "type": Sequelize.BOOLEAN
         },
         "newUserId": {
+          "onDelete": "CASCADE",
+          "onUpdate": "CASCADE",
+          "references": {
+            "model": "users",
+            "key": "id"
+          },
           "unique": true,
           "type": Sequelize.INTEGER
         },

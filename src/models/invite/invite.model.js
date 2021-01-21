@@ -20,7 +20,7 @@ __decorate([
     __metadata("design:type", Number)
 ], Invite.prototype, "userId", void 0);
 __decorate([
-    sequelize_typescript_1.BelongsTo(() => __1.User),
+    sequelize_typescript_1.BelongsTo(() => __1.User, "userId"),
     __metadata("design:type", __1.User)
 ], Invite.prototype, "user", void 0);
 __decorate([
@@ -41,7 +41,7 @@ __decorate([
     __metadata("design:type", Number)
 ], Invite.prototype, "newUserId", void 0);
 __decorate([
-    sequelize_typescript_1.BelongsTo(() => __1.User),
+    sequelize_typescript_1.BelongsTo(() => __1.User, "newUserId"),
     __metadata("design:type", __1.User)
 ], Invite.prototype, "newUser", void 0);
 Invite = __decorate([

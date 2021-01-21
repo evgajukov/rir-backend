@@ -1,4 +1,4 @@
-import { Flat, Invite, Person, Resident } from "../../models";
+import { Flat, Invite, Person, Resident, User } from "../../models";
 import Response from "../response";
 
 export default class InviteResponse extends Response {
@@ -27,10 +27,10 @@ export default class InviteResponse extends Response {
   static async create(model: Invite) {
     let item = new InviteResponse(model);
     if (item.used) {
-      const person = await Person.findOne({ where: { userId: model.newUserId } });
+      const person = model.newUser.person;
       if (person != null) {
         item.person = { surname: person.surname, name: person.name, midname: person.midname };
-        const resident = await Resident.findOne({ where: { personId: person.id }, include: [{ model: Flat }] });
+        const resident = person.residents[0];
         if (resident != null) {
           item.flat = { number: resident.flat.number, floor: resident.flat.floor, section: resident.flat.section };
         }
@@ -49,6 +49,23 @@ export default class InviteResponse extends Response {
   static async list(userId: number, limit: number = 10) {
     const list = await Invite.findAll({
       where: { userId },
+      include: [
+        {
+          model: User,
+          as: "newUser",
+          include: [
+            {
+              model: Person,
+              include: [
+                {
+                  model: Resident,
+                  include: [{ model: Flat }]
+                }
+              ]
+            }
+          ]
+        }
+      ],
       order: [["id", "desc"]],
       limit,
     });

@@ -9,12 +9,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const vote_response_1 = require("../responses/vote/vote.response");
+const responses_1 = require("../responses");
 (() => __awaiter(void 0, void 0, void 0, function* () {
     try {
         console.time("channels.test");
-        const items = yield vote_response_1.default.list(1, false);
-        console.log(items);
+        const items = yield responses_1.InviteResponse.list(1, 1000);
+        console.log(items[0]);
         console.timeEnd("channels.test");
     }
     catch (error) {

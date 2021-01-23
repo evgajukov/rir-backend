@@ -32,7 +32,11 @@ function run(worker) {
             if (req.socket.authState !== req.socket.AUTHENTICATED)
                 return next();
             const user = yield models_1.User.findByPk(req.socket.authToken.id);
-            return next(user.banned ? new Error("15") : null);
+            if (user.banned)
+                return next(new Error("BANNED"));
+            else if (user.deleted)
+                return next(new Error("DELETED"));
+            return next(null);
         }));
         const queue = new queue_1.default(config_1.default.kue_web.prefix);
         queue.process("EVENT", (job) => __awaiter(this, void 0, void 0, function* () {

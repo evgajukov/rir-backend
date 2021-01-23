@@ -18,7 +18,7 @@ exports.default = {
         },
         "003": {
             code: "USER.003",
-            message: "Не найден пользователь"
+            message: "Пользователь не найден"
         },
         "004": {
             code: "USER.004",

@@ -42,6 +42,8 @@ function auth({ mobile, invite, code }, respond) {
                     throw new Error(errors_1.default.invite["002"].code);
             }
             if (user.banned)
+                throw new Error(errors_1.default.user["002"].code);
+            if (user.deleted)
                 throw new Error(errors_1.default.user["003"].code);
             if (code == null) {
                 // формируем и отправляем одноразовый код авторизации по смс

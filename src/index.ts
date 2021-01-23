@@ -19,7 +19,9 @@ export default async function run(worker) {
     if (includes(allowedEvents, req.event)) return next();
     if (req.socket.authState !== req.socket.AUTHENTICATED) return next();
     const user = await User.findByPk(req.socket.authToken.id);
-    return next(user.banned ? new Error("15") : null);
+    if (user.banned) return next(new Error("BANNED"));
+    else if (user.deleted) return next(new Error("DELETED"));
+    return next(null);
   });
 
   const queue = new Queue(config.kue_web.prefix);

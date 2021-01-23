@@ -19,6 +19,13 @@ function info({ flatNumber }, respond) {
         try {
             if (!this.authToken)
                 throw new Error(errors_1.default.user["004"].code);
+            const user = yield models_1.User.findByPk(this.authToken.id);
+            if (user == null)
+                throw new Error(errors_1.default.user["003"].code);
+            if (user.banned)
+                throw new Error(errors_1.default.user["002"].code);
+            if (user.deleted)
+                throw new Error(errors_1.default.user["003"].code);
             const flat = yield models_1.Flat.findOne({ where: { number: flatNumber } });
             if (flat == null)
                 throw new Error(errors_1.default.flat["001"].code);

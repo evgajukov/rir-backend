@@ -74,6 +74,9 @@ class IMMessageResponse extends response_1.default {
         return __awaiter(this, void 0, void 0, function* () {
             if (socket.authToken == null)
                 return [];
+            const user = yield models_1.User.findByPk(socket.authToken.id);
+            if (user == null || user.banned || user.deleted)
+                return [];
             return yield IMMessageResponse.list(params[0], socket.authToken.id);
         });
     }

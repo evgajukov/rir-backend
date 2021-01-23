@@ -22,6 +22,13 @@ function save({ messageId, channelId, body }, respond) {
         try {
             if (!this.authToken)
                 throw new Error(errors_1.default.user["004"].code);
+            const user = yield models_1.User.findByPk(this.authToken.id);
+            if (user == null)
+                throw new Error(errors_1.default.user["003"].code);
+            if (user.banned)
+                throw new Error(errors_1.default.user["002"].code);
+            if (user.deleted)
+                throw new Error(errors_1.default.user["003"].code);
             const person = yield models_1.Person.findOne({ where: { userId: this.authToken.id } });
             const channelPerson = yield models_1.IMChannelPerson.findOne({ where: { channelId, personId: person.id } });
             if (channelPerson == null)
@@ -78,6 +85,13 @@ function shown({ messageId }, respond) {
         try {
             if (!this.authToken)
                 throw new Error(errors_1.default.user["004"].code);
+            const user = yield models_1.User.findByPk(this.authToken.id);
+            if (user == null)
+                throw new Error(errors_1.default.user["003"].code);
+            if (user.banned)
+                throw new Error(errors_1.default.user["002"].code);
+            if (user.deleted)
+                throw new Error(errors_1.default.user["003"].code);
             const person = yield models_1.Person.findOne({ where: { userId: this.authToken.id } });
             const message = yield models_1.IMMessage.findByPk(messageId);
             if (message == null)
@@ -107,6 +121,13 @@ function del({ messageId }, respond) {
         try {
             if (!this.authToken)
                 throw new Error(errors_1.default.user["004"].code);
+            const user = yield models_1.User.findByPk(this.authToken.id);
+            if (user == null)
+                throw new Error(errors_1.default.user["003"].code);
+            if (user.banned)
+                throw new Error(errors_1.default.user["002"].code);
+            if (user.deleted)
+                throw new Error(errors_1.default.user["003"].code);
             const person = yield models_1.Person.findOne({ where: { userId: this.authToken.id } });
             const message = yield models_1.IMMessage.findOne({ where: { id: messageId, personId: person.id } });
             if (message == null)
@@ -138,6 +159,13 @@ function load({ channelId, limit, offset }, respond) {
         try {
             if (!this.authToken)
                 throw new Error(errors_1.default.user["004"].code);
+            const user = yield models_1.User.findByPk(this.authToken.id);
+            if (user == null)
+                throw new Error(errors_1.default.user["003"].code);
+            if (user.banned)
+                throw new Error(errors_1.default.user["002"].code);
+            if (user.deleted)
+                throw new Error(errors_1.default.user["003"].code);
             const person = yield models_1.Person.findOne({ where: { userId: this.authToken.id } });
             const channelPerson = yield models_1.IMChannelPerson.findOne({ where: { channelId, personId: person.id } });
             if (channelPerson == null)
@@ -158,6 +186,13 @@ function getMute({ channelId }, respond) {
         try {
             if (!this.authToken)
                 throw new Error(errors_1.default.user["004"].code);
+            const user = yield models_1.User.findByPk(this.authToken.id);
+            if (user == null)
+                throw new Error(errors_1.default.user["003"].code);
+            if (user.banned)
+                throw new Error(errors_1.default.user["002"].code);
+            if (user.deleted)
+                throw new Error(errors_1.default.user["003"].code);
             const person = yield models_1.Person.findOne({ where: { userId: this.authToken.id } });
             const channelPerson = yield models_1.IMChannelPerson.findOne({ where: { channelId, personId: person.id } });
             if (channelPerson == null)
@@ -177,6 +212,13 @@ function setMute({ channelId, mute }, respond) {
         try {
             if (!this.authToken)
                 throw new Error(errors_1.default.user["004"].code);
+            const user = yield models_1.User.findByPk(this.authToken.id);
+            if (user == null)
+                throw new Error(errors_1.default.user["003"].code);
+            if (user.banned)
+                throw new Error(errors_1.default.user["002"].code);
+            if (user.deleted)
+                throw new Error(errors_1.default.user["003"].code);
             const person = yield models_1.Person.findOne({ where: { userId: this.authToken.id } });
             const channelPerson = yield models_1.IMChannelPerson.findOne({ where: { channelId, personId: person.id } });
             if (channelPerson == null)
@@ -198,6 +240,13 @@ function createPrivateChannel({ personId }, respond) {
         try {
             if (!this.authToken)
                 throw new Error(errors_1.default.user["004"].code);
+            const user = yield models_1.User.findByPk(this.authToken.id);
+            if (user == null)
+                throw new Error(errors_1.default.user["003"].code);
+            if (user.banned)
+                throw new Error(errors_1.default.user["002"].code);
+            if (user.deleted)
+                throw new Error(errors_1.default.user["003"].code);
             const person = yield models_1.Person.findOne({ where: { userId: this.authToken.id } });
             if (person.id == personId)
                 throw new Error(errors_1.default.im["003"].code);

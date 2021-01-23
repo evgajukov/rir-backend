@@ -65,6 +65,11 @@ export async function invite(params, respond) {
   console.log(">>>>> actions/user.invite");
   try {
     if (!this.authToken) throw new Error(errors.user["004"].code);
+    const user = await User.findByPk(this.authToken.id);
+    if (user == null) throw new Error(errors.user["003"].code);
+    if (user.banned) throw new Error(errors.user["002"].code);
+    if (user.deleted) throw new Error(errors.user["003"].code);
+
     let code = null;
     let inviteDb = null;
     do {
@@ -94,6 +99,10 @@ export async function saveProfile({ surname, name, midname, telegram, flat, acce
   console.log(">>>>> actions/user.saveProfile");
   try {
     if (!this.authToken) throw new Error(errors.user["004"].code);
+    const user = await User.findByPk(this.authToken.id);
+    if (user == null) throw new Error(errors.user["003"].code);
+    if (user.banned) throw new Error(errors.user["002"].code);
+    if (user.deleted) throw new Error(errors.user["003"].code);
     
     const flatDb = await Flat.findByPk(flat);
     if (flatDb == null) throw new Error(errors.flat["001"].code);

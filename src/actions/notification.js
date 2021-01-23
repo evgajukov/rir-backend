@@ -18,6 +18,13 @@ function saveToken({ token }, respond) {
         try {
             if (!this.authToken)
                 throw new Error(errors_1.default.user["004"].code);
+            const user = yield models_1.User.findByPk(this.authToken.id);
+            if (user == null)
+                throw new Error(errors_1.default.user["003"].code);
+            if (user.banned)
+                throw new Error(errors_1.default.user["002"].code);
+            if (user.deleted)
+                throw new Error(errors_1.default.user["003"].code);
             const notifToken = yield models_1.NotificationToken.findOne({ where: { token } });
             if (!notifToken)
                 yield models_1.NotificationToken.create({ userId: this.authToken.id, token });

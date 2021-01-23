@@ -1,5 +1,5 @@
 import Cache from "../../lib/cache";
-import { Flat, IMChannel, IMChannelPerson, IMMessage, Person, Resident } from "../../models";
+import { Flat, IMChannel, IMChannelPerson, IMMessage, Person, Resident, User } from "../../models";
 import { tIMMessageBody } from "../../models/im/im.message.model";
 import Response from "../response";
 import { tPerson, getPerson } from "../type/im.person.type";
@@ -68,6 +68,9 @@ export default class IMMessageResponse extends Response {
 
   static async seed(action, params, socket) {
     if (socket.authToken == null) return [];
+    const user = await User.findByPk(socket.authToken.id);
+    if (user == null || user.banned || user.deleted) return [];
+    
     return await IMMessageResponse.list(params[0], socket.authToken.id);
   }
 

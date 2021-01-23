@@ -52,6 +52,9 @@ export default class UserResponse extends Response {
 
   static async seed(action, params, socket) {
     if (socket.authToken == null) return null;
+    const user = await User.findByPk(socket.authToken.id);
+    if (user == null || user.banned || user.deleted) return null;
+
     return await UserResponse.info(socket.authToken.id);
   }
 }

@@ -6,6 +6,11 @@ export async function info({ flatNumber }, respond) {
   console.log(">>>>> actions/flat.info");
   try {
     if (!this.authToken) throw new Error(errors.user["004"].code);
+    const user = await User.findByPk(this.authToken.id);
+    if (user == null) throw new Error(errors.user["003"].code);
+    if (user.banned) throw new Error(errors.user["002"].code);
+    if (user.deleted) throw new Error(errors.user["003"].code);
+
     const flat = await Flat.findOne({ where: { number: flatNumber } });
     if (flat == null) throw new Error(errors.flat["001"].code);
     const residents = await Resident.findAll({ where: { flatId: flat.id }, include: [{ model: Person, include: [{ model: User }] }] });

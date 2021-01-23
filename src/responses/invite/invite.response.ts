@@ -81,6 +81,9 @@ export default class InviteResponse extends Response {
 
   static async seed(action, params, socket) {
     if (socket.authToken == null) return [];
+    const user = await User.findByPk(socket.authToken.id);
+    if (user == null || user.banned || user.deleted) return [];
+    
     return await InviteResponse.list(socket.authToken.id);
   }
 }

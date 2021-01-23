@@ -1,6 +1,6 @@
 import Cache from "../lib/cache";
 import Push from "../lib/push";
-import { IMChannel, IMChannelPerson, IMMessage, IMMessageShow, NotificationToken, Person } from "../models";
+import { IMChannel, IMChannelPerson, IMMessage, IMMessageShow, NotificationToken, Person, User } from "../models";
 import { IMMessageResponse } from "../responses";
 import ResponseUpdate from "../responses/response.update";
 import errors from "./errors";
@@ -9,6 +9,11 @@ export async function save({ messageId, channelId, body }, respond) {
   console.log(">>>>> actions/im.save");
   try {
     if (!this.authToken) throw new Error(errors.user["004"].code);
+    const user = await User.findByPk(this.authToken.id);
+    if (user == null) throw new Error(errors.user["003"].code);
+    if (user.banned) throw new Error(errors.user["002"].code);
+    if (user.deleted) throw new Error(errors.user["003"].code);
+    
     const person = await Person.findOne({ where: { userId: this.authToken.id } });
 
     const channelPerson = await IMChannelPerson.findOne({ where: { channelId, personId: person.id } });
@@ -64,6 +69,11 @@ export async function shown({ messageId }, respond) {
   console.log(">>>>> actions/im.shown");
   try {
     if (!this.authToken) throw new Error(errors.user["004"].code);
+    const user = await User.findByPk(this.authToken.id);
+    if (user == null) throw new Error(errors.user["003"].code);
+    if (user.banned) throw new Error(errors.user["002"].code);
+    if (user.deleted) throw new Error(errors.user["003"].code);
+
     const person = await Person.findOne({ where: { userId: this.authToken.id } });
 
     const message = await IMMessage.findByPk(messageId);
@@ -92,6 +102,11 @@ export async function del ({ messageId }, respond) {
   console.log(">>>>> actions/im.del");
   try {
     if (!this.authToken) throw new Error(errors.user["004"].code);
+    const user = await User.findByPk(this.authToken.id);
+    if (user == null) throw new Error(errors.user["003"].code);
+    if (user.banned) throw new Error(errors.user["002"].code);
+    if (user.deleted) throw new Error(errors.user["003"].code);
+
     const person = await Person.findOne({ where: { userId: this.authToken.id } });
 
     const message = await IMMessage.findOne({ where: { id: messageId, personId: person.id } });
@@ -123,6 +138,11 @@ export async function load({ channelId, limit, offset }, respond) {
   console.log(">>>>> actions/im.load");
   try {
     if (!this.authToken) throw new Error(errors.user["004"].code);
+    const user = await User.findByPk(this.authToken.id);
+    if (user == null) throw new Error(errors.user["003"].code);
+    if (user.banned) throw new Error(errors.user["002"].code);
+    if (user.deleted) throw new Error(errors.user["003"].code);
+
     const person = await Person.findOne({ where: { userId: this.authToken.id } });
 
     const channelPerson = await IMChannelPerson.findOne({ where: { channelId, personId: person.id } });
@@ -140,6 +160,11 @@ export async function getMute({ channelId }, respond) {
   console.log(">>>>> actions/im.getMute");
   try {
     if (!this.authToken) throw new Error(errors.user["004"].code);
+    const user = await User.findByPk(this.authToken.id);
+    if (user == null) throw new Error(errors.user["003"].code);
+    if (user.banned) throw new Error(errors.user["002"].code);
+    if (user.deleted) throw new Error(errors.user["003"].code);
+
     const person = await Person.findOne({ where: { userId: this.authToken.id } });
 
     const channelPerson = await IMChannelPerson.findOne({ where: { channelId, personId: person.id } });
@@ -156,6 +181,11 @@ export async function setMute({ channelId, mute }, respond) {
   console.log(">>>>> actions/im.setMute");
   try {
     if (!this.authToken) throw new Error(errors.user["004"].code);
+    const user = await User.findByPk(this.authToken.id);
+    if (user == null) throw new Error(errors.user["003"].code);
+    if (user.banned) throw new Error(errors.user["002"].code);
+    if (user.deleted) throw new Error(errors.user["003"].code);
+
     const person = await Person.findOne({ where: { userId: this.authToken.id } });
 
     const channelPerson = await IMChannelPerson.findOne({ where: { channelId, personId: person.id } });
@@ -175,6 +205,11 @@ export async function createPrivateChannel({ personId }, respond) {
   console.log(">>>>> actions/im.createPrivateChannel");
   try {
     if (!this.authToken) throw new Error(errors.user["004"].code);
+    const user = await User.findByPk(this.authToken.id);
+    if (user == null) throw new Error(errors.user["003"].code);
+    if (user.banned) throw new Error(errors.user["002"].code);
+    if (user.deleted) throw new Error(errors.user["003"].code);
+    
     const person = await Person.findOne({ where: { userId: this.authToken.id } });
 
     if (person.id == personId) throw new Error(errors.im["003"].code);

@@ -91,6 +91,13 @@ function invite(params, respond) {
         try {
             if (!this.authToken)
                 throw new Error(errors_1.default.user["004"].code);
+            const user = yield models_1.User.findByPk(this.authToken.id);
+            if (user == null)
+                throw new Error(errors_1.default.user["003"].code);
+            if (user.banned)
+                throw new Error(errors_1.default.user["002"].code);
+            if (user.deleted)
+                throw new Error(errors_1.default.user["003"].code);
             let code = null;
             let inviteDb = null;
             do {
@@ -122,6 +129,13 @@ function saveProfile({ surname, name, midname, telegram, flat, access }, respond
         try {
             if (!this.authToken)
                 throw new Error(errors_1.default.user["004"].code);
+            const user = yield models_1.User.findByPk(this.authToken.id);
+            if (user == null)
+                throw new Error(errors_1.default.user["003"].code);
+            if (user.banned)
+                throw new Error(errors_1.default.user["002"].code);
+            if (user.deleted)
+                throw new Error(errors_1.default.user["003"].code);
             const flatDb = yield models_1.Flat.findByPk(flat);
             if (flatDb == null)
                 throw new Error(errors_1.default.flat["001"].code);

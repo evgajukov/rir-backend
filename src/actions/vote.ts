@@ -1,6 +1,6 @@
 import Cache from "../lib/cache";
 import Push from "../lib/push";
-import { Flat, NotificationToken, Person, Resident, Vote, VoteAnswer, VotePerson, VoteQuestion } from "../models";
+import { Flat, NotificationToken, Person, Resident, User, Vote, VoteAnswer, VotePerson, VoteQuestion } from "../models";
 import ResponseUpdate from "../responses/response.update";
 import errors from "./errors";
 
@@ -8,6 +8,11 @@ export async function save({ title, questions, anonymous, multi, type }, respond
   console.log(">>>>> actions/vote.save");
   try {
     if (!this.authToken) throw new Error(errors.user["004"].code);
+    const user = await User.findByPk(this.authToken.id);
+    if (user == null) throw new Error(errors.user["003"].code);
+    if (user.banned) throw new Error(errors.user["002"].code);
+    if (user.deleted) throw new Error(errors.user["003"].code);
+    
     const person = await Person.findOne({ where: { userId: this.authToken.id } });
     const resident = await Resident.findOne({ where: { personId: person.id }, include: [{ model: Flat }] });
     const flat = resident.flat;
@@ -72,6 +77,11 @@ export async function answer({ voteId, answers }, respond) {
   console.log(">>>>> actions/vote.answer");
   try {
     if (!this.authToken) throw new Error(errors.user["004"].code);
+    const user = await User.findByPk(this.authToken.id);
+    if (user == null) throw new Error(errors.user["003"].code);
+    if (user.banned) throw new Error(errors.user["002"].code);
+    if (user.deleted) throw new Error(errors.user["003"].code);
+    
     const person = await Person.findOne({ where: { userId: this.authToken.id } });
     const votePerson = await VotePerson.findOne({ where: { voteId, personId: person.id } });
     if (votePerson == null) throw new Error(errors.vote["002"].code);

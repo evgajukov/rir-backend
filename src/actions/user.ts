@@ -25,7 +25,7 @@ export async function auth({ mobile, invite, code }, respond) {
     } else {
       if (invite != null) throw new Error(errors.invite["002"].code);
     }
-    if (user.banned) throw new Error(errors.user["002"].code);
+    if (user.banned) throw new Error(errors.user["003"].code);
 
     if (code == null) {
       // формируем и отправляем одноразовый код авторизации по смс

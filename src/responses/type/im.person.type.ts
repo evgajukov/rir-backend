@@ -5,6 +5,7 @@ export type tPerson = {
   surname?: string,
   name?: string,
   midname?: string,
+  deleted?: boolean,
   flat?: {
     id: number,
     number: number,
@@ -38,6 +39,9 @@ export function getPerson(model: Person): tPerson {
       floor: flat.floor
     };
   }
+
+  person.deleted = false;
+  if (model.user != null) person.deleted = model.user.deleted;
 
   return person;
 }

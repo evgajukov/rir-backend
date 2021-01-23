@@ -28,6 +28,7 @@ class FlatResponse extends response_1.default {
                 surname: person.surname,
                 name: person.name,
                 midname: person.midname,
+                deleted: person.deleted
             });
         });
     }
@@ -36,7 +37,7 @@ class FlatResponse extends response_1.default {
     }
     static list() {
         return __awaiter(this, void 0, void 0, function* () {
-            const list = yield models_1.Flat.findAll({ include: [{ model: models_1.Resident, include: [{ model: models_1.Person }] }], order: ["id"] });
+            const list = yield models_1.Flat.findAll({ include: [{ model: models_1.Resident, include: [{ model: models_1.Person, include: [{ model: models_1.User }] }] }], order: ["id"] });
             if (list == null || list.length == 0)
                 return [];
             return list.map(flat => FlatResponse.create(flat));

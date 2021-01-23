@@ -25,6 +25,9 @@ function getPerson(model) {
             floor: flat.floor
         };
     }
+    person.deleted = false;
+    if (model.user != null)
+        person.deleted = model.user.deleted;
     return person;
 }
 exports.getPerson = getPerson;

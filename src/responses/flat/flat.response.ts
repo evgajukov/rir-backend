@@ -1,4 +1,4 @@
-import { Flat, Person, Resident } from "../../models";
+import { Flat, Person, Resident, User } from "../../models";
 import Response from "../response";
 import { getPerson } from "../type/im.person.type";
 
@@ -7,6 +7,7 @@ interface iResident {
   surname: string;
   name: string;
   midname: string;
+  deleted: boolean;
 }
 
 export default class FlatResponse extends Response {
@@ -33,6 +34,7 @@ export default class FlatResponse extends Response {
         surname: person.surname,
         name: person.name,
         midname: person.midname,
+        deleted: person.deleted
       });
     });
   }
@@ -42,7 +44,7 @@ export default class FlatResponse extends Response {
   }
 
   static async list() {
-    const list = await Flat.findAll({ include: [{ model: Resident, include: [{ model: Person }] }], order: ["id"] });
+    const list = await Flat.findAll({ include: [{ model: Resident, include: [{ model: Person, include: [{ model: User }] }] }], order: ["id"] });
     if (list == null || list.length == 0) return [];
     return list.map(flat => FlatResponse.create(flat));
   }

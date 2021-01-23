@@ -20,6 +20,10 @@ export default class User extends Model<User> {
   @Column
   banned: boolean;
 
+  @Default(false)
+  @Column
+  deleted: boolean;
+
   @ForeignKey(() => Role)
   @Column
   roleId: number;

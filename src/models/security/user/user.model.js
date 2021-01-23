@@ -29,6 +29,11 @@ __decorate([
     __metadata("design:type", Boolean)
 ], User.prototype, "banned", void 0);
 __decorate([
+    sequelize_typescript_1.Default(false),
+    sequelize_typescript_1.Column,
+    __metadata("design:type", Boolean)
+], User.prototype, "deleted", void 0);
+__decorate([
     sequelize_typescript_1.ForeignKey(() => __1.Role),
     sequelize_typescript_1.Column,
     __metadata("design:type", Number)

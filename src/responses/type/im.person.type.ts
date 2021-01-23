@@ -29,13 +29,15 @@ export function getPerson(model: Person): tPerson {
     }
   }
 
-  const flat = model.residents[0].flat;
-  person.flat = {
-    id: flat.id,
-    number: flat.number,
-    section: flat.section,
-    floor: flat.floor
-  };
+  if (model.residents != null && model.residents.length > 0) {
+    const flat = model.residents[0].flat;
+    person.flat = {
+      id: flat.id,
+      number: flat.number,
+      section: flat.section,
+      floor: flat.floor
+    };
+  }
 
   return person;
 }

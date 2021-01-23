@@ -1,10 +1,10 @@
-import { InviteResponse } from "../responses";
+import { FlatResponse } from "../responses";
 
 (async () => {
   try {
     console.time("channels.test");
-    const items = await InviteResponse.list(1, 1000);
-    console.log(items[0]);
+    const items = await FlatResponse.list();
+    console.log(items[422]);
     console.timeEnd("channels.test");
   } catch (error) {
     console.error(error);

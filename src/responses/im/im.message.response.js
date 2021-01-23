@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const cache_1 = require("../../lib/cache");
 const models_1 = require("../../models");
 const response_1 = require("../response");
-const im_person_type_1 = require("./im.person.type");
+const im_person_type_1 = require("../type/im.person.type");
 class IMMessageResponse extends response_1.default {
     constructor(model) {
         super(model.id);

@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const models_1 = require("../../models");
 const im_message_model_1 = require("../../models/im/im.message.model");
 const response_1 = require("../response");
-const im_person_type_1 = require("./im.person.type");
+const im_person_type_1 = require("../type/im.person.type");
 class IMChannelResponse extends response_1.default {
     constructor(model) {
         super(model.id);

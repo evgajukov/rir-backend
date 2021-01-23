@@ -13,8 +13,8 @@ const responses_1 = require("../responses");
 (() => __awaiter(void 0, void 0, void 0, function* () {
     try {
         console.time("channels.test");
-        const items = yield responses_1.InviteResponse.list(1, 1000);
-        console.log(items[0]);
+        const items = yield responses_1.FlatResponse.list();
+        console.log(items[422]);
         console.timeEnd("channels.test");
     }
     catch (error) {

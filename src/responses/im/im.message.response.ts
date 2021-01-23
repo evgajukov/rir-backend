@@ -2,7 +2,7 @@ import Cache from "../../lib/cache";
 import { Flat, IMChannel, IMChannelPerson, IMMessage, Person, Resident } from "../../models";
 import { tIMMessageBody } from "../../models/im/im.message.model";
 import Response from "../response";
-import { tPerson, getPerson } from "./im.person.type";
+import { tPerson, getPerson } from "../type/im.person.type";
 
 export default class IMMessageResponse extends Response {
 

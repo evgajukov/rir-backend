@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const models_1 = require("../../models");
 const response_1 = require("../response");
+const im_person_type_1 = require("../type/im.person.type");
 class FlatResponse extends response_1.default {
     constructor(model) {
         super(model.id);
@@ -21,7 +22,7 @@ class FlatResponse extends response_1.default {
         this.square = model.square;
         this.residents = [];
         model.residents.forEach(resident => {
-            const person = resident.person;
+            const person = im_person_type_1.getPerson(resident.person);
             this.residents.push({
                 personId: person.id,
                 surname: person.surname,
@@ -35,12 +36,7 @@ class FlatResponse extends response_1.default {
     }
     static list() {
         return __awaiter(this, void 0, void 0, function* () {
-            const list = yield models_1.Flat.findAll({
-                include: [
-                    { model: models_1.Resident, include: [{ model: models_1.Person }] }
-                ],
-                order: ["id"]
-            });
+            const list = yield models_1.Flat.findAll({ include: [{ model: models_1.Resident, include: [{ model: models_1.Person }] }], order: ["id"] });
             if (list == null || list.length == 0)
                 return [];
             return list.map(flat => FlatResponse.create(flat));

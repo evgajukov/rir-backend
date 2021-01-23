@@ -1,5 +1,6 @@
 import { Flat, Person, Resident } from "../../models";
 import Response from "../response";
+import { getPerson } from "../type/im.person.type";
 
 interface iResident {
   personId: number;
@@ -26,7 +27,7 @@ export default class FlatResponse extends Response {
     this.square = model.square;
     this.residents = [];
     model.residents.forEach(resident => {
-      const person = resident.person;
+      const person = getPerson(resident.person);
       this.residents.push({
         personId: person.id,
         surname: person.surname,
@@ -41,12 +42,7 @@ export default class FlatResponse extends Response {
   }
 
   static async list() {
-    const list = await Flat.findAll({
-      include: [
-        { model: Resident, include: [{ model: Person }] }
-      ],
-      order: ["id"]
-    });
+    const list = await Flat.findAll({ include: [{ model: Resident, include: [{ model: Person }] }], order: ["id"] });
     if (list == null || list.length == 0) return [];
     return list.map(flat => FlatResponse.create(flat));
   }

@@ -13,8 +13,8 @@ const responses_1 = require("../responses");
 (() => __awaiter(void 0, void 0, void 0, function* () {
     try {
         console.time("channels.test");
-        const items = yield responses_1.FlatResponse.list();
-        console.log(items[422]);
+        const items = yield responses_1.PostResponse.list("pinned");
+        console.log(items.length);
         console.timeEnd("channels.test");
     }
     catch (error) {

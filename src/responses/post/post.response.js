@@ -31,9 +31,14 @@ class PostResponse extends response_1.default {
             return PostResponse.create(post);
         });
     }
-    static list() {
+    static list(filter = "unpinned") {
         return __awaiter(this, void 0, void 0, function* () {
-            const posts = yield models_1.Post.findAll({ order: [["id", "desc"]] });
+            let where = {};
+            if (filter == "unpinned")
+                where = { pin: false };
+            else if (filter == "pinned")
+                where = { pin: true };
+            const posts = yield models_1.Post.findAll({ where, order: [["id", "desc"]] });
             if (posts == null || posts.length == 0)
                 return [];
             return posts.map(post => PostResponse.create(post));
@@ -41,7 +46,10 @@ class PostResponse extends response_1.default {
     }
     static seed(action, params, socket) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield PostResponse.list();
+            if (action == "LIST")
+                return yield PostResponse.list();
+            if (action == "PINNED")
+                return yield PostResponse.list("pinned");
         });
     }
 }

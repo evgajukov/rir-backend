@@ -50,6 +50,10 @@ const channels = {
         action: "LIST",
         response: post_response_1.default
     },
+    pinnedPosts: {
+        action: "PINNED",
+        response: post_response_1.default
+    },
     instructions: {
         action: "LIST",
         response: instruction_response_1.default

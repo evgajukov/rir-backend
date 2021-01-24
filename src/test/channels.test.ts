@@ -1,10 +1,10 @@
-import { FlatResponse } from "../responses";
+import { PostResponse } from "../responses";
 
 (async () => {
   try {
     console.time("channels.test");
-    const items = await FlatResponse.list();
-    console.log(items[422]);
+    const items = await PostResponse.list("pinned");
+    console.log(items.length);
     console.timeEnd("channels.test");
   } catch (error) {
     console.error(error);

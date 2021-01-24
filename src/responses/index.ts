@@ -37,6 +37,10 @@ const channels = {
     action: "LIST", // posts
     response: PostResponse
   },
+  pinnedPosts: {
+    action: "PINNED", // pinnedPosts
+    response: PostResponse
+  },
   instructions: {
     action: "LIST", // instructions
     response: InstructionResponse

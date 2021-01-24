@@ -1,4 +1,4 @@
-import { Column, DataType, Model, Table } from "sequelize-typescript";
+import { Column, DataType, Default, Index, Model, Table } from "sequelize-typescript";
 
 @Table({
   tableName: "posts",
@@ -23,4 +23,11 @@ export default class Post extends Model<Post> {
     comment: "Ссылка на объект, о которой новость"
   })
   url: string
+
+  @Index
+  @Default(false)
+  @Column({
+    comment: "Признак закрепленной новости"
+  })
+  pin: boolean
 }

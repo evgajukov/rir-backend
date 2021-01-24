@@ -34,6 +34,14 @@ __decorate([
     }),
     __metadata("design:type", String)
 ], Post.prototype, "url", void 0);
+__decorate([
+    sequelize_typescript_1.Index,
+    sequelize_typescript_1.Default(false),
+    sequelize_typescript_1.Column({
+        comment: "Признак закрепленной новости"
+    }),
+    __metadata("design:type", Boolean)
+], Post.prototype, "pin", void 0);
 Post = __decorate([
     sequelize_typescript_1.Table({
         tableName: "posts",

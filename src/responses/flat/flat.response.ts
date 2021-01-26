@@ -43,13 +43,28 @@ export default class FlatResponse extends Response {
     return new FlatResponse(model);
   }
 
-  static async list() {
-    const list = await Flat.findAll({ include: [{ model: Resident, include: [{ model: Person, include: [{ model: User }] }] }], order: ["id"] });
+  static async list(userId: number) {
+    const person = await Person.findOne({
+      where: { userId },
+      include: [
+        {
+          model: Resident,
+          include: [{ model: Flat }]
+        }
+      ]
+    });
+    const flat = person.residents[0].flat;
+    const list = await Flat.findAll({
+      where: { houseId: flat.houseId },
+      include: [{ model: Resident, include: [{ model: Person, include: [{ model: User }] }] }],
+      order: ["id"]
+    });
     if (list == null || list.length == 0) return [];
     return list.map(flat => FlatResponse.create(flat));
   }
 
   static async seed(action, params, socket) {
-    return await FlatResponse.list();
+    if (socket.authToken == null) return [];
+    return await FlatResponse.list(socket.authToken.id);
   }
 }

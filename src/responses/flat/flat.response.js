@@ -35,9 +35,23 @@ class FlatResponse extends response_1.default {
     static create(model) {
         return new FlatResponse(model);
     }
-    static list() {
+    static list(userId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const list = yield models_1.Flat.findAll({ include: [{ model: models_1.Resident, include: [{ model: models_1.Person, include: [{ model: models_1.User }] }] }], order: ["id"] });
+            const person = yield models_1.Person.findOne({
+                where: { userId },
+                include: [
+                    {
+                        model: models_1.Resident,
+                        include: [{ model: models_1.Flat }]
+                    }
+                ]
+            });
+            const flat = person.residents[0].flat;
+            const list = yield models_1.Flat.findAll({
+                where: { houseId: flat.houseId },
+                include: [{ model: models_1.Resident, include: [{ model: models_1.Person, include: [{ model: models_1.User }] }] }],
+                order: ["id"]
+            });
             if (list == null || list.length == 0)
                 return [];
             return list.map(flat => FlatResponse.create(flat));
@@ -45,7 +59,9 @@ class FlatResponse extends response_1.default {
     }
     static seed(action, params, socket) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield FlatResponse.list();
+            if (socket.authToken == null)
+                return [];
+            return yield FlatResponse.list(socket.authToken.id);
         });
     }
 }

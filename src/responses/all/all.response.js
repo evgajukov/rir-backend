@@ -26,7 +26,7 @@ class AllResponse extends response_1.default {
             if (channelName == null || channelName == "posts")
                 posts = yield __1.PostResponse.list();
             if (channelName == null || channelName == "flats")
-                flats = yield __1.FlatResponse.list();
+                flats = yield __1.FlatResponse.list(userId);
             if (channelName == null || channelName == "invites")
                 invites = yield __1.InviteResponse.list(userId);
             let result = AllResponse.create();

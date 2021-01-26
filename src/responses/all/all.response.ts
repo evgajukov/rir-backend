@@ -21,7 +21,7 @@ export default class AllResponse extends Response {
     let invites: InviteResponse[] = [];
 
     if (channelName == null || channelName == "posts") posts = await PostResponse.list();
-    if (channelName == null || channelName == "flats") flats = await FlatResponse.list();
+    if (channelName == null || channelName == "flats") flats = await FlatResponse.list(userId);
     if (channelName == null || channelName == "invites") invites = await InviteResponse.list(userId);
 
     let result = AllResponse.create();

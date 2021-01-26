@@ -1,5 +1,6 @@
 import { AllowNull, Column, DataType, HasMany, Model, Table, Unique } from "sequelize-typescript";
 import { Flat } from "..";
+import { tDadataInfo } from "../../lib/dadata";
 
 @Table({
   tableName: "houses",
@@ -18,7 +19,7 @@ export default class House extends Model<House> {
     type: DataType.JSON,
     comment: "Структурированный формат адреса от сервиса DADATA"
   })
-  dadata: any;
+  dadata: tDadataInfo[];
 
   @Column({
     type: DataType.DOUBLE,

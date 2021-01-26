@@ -26,7 +26,7 @@ __decorate([
         type: sequelize_typescript_1.DataType.JSON,
         comment: "Структурированный формат адреса от сервиса DADATA"
     }),
-    __metadata("design:type", Object)
+    __metadata("design:type", Array)
 ], House.prototype, "dadata", void 0);
 __decorate([
     sequelize_typescript_1.Column({

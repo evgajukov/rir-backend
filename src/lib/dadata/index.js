@@ -9,44 +9,24 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const request = require("request");
+const axios_1 = require("axios");
 class Dadata {
-    address(value) {
+    static address(value) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.post(Dadata.METHOD_ADDRESS, [value]);
-        });
-    }
-    post(method, data) {
-        return new Promise((resolve, reject) => {
-            const options = {
-                url: Dadata.API_URL + method,
-                method: "POST",
-                json: data,
+            const config = {
                 headers: {
-                    Authorization: `Token ${Dadata.API_KEY}`,
+                    "Content-Type": "application/json",
+                    "Authorization": "Token " + Dadata.API_KEY,
                     "X-Secret": Dadata.API_SECRET
                 }
             };
-            request(options, (error, response, body) => {
-                if (error) {
-                    reject(new Error(error));
-                    return;
-                }
-                if (!response) {
-                    reject(new Error(`Object response is null`));
-                    return;
-                }
-                if (response.statusCode < 200 || response.statusCode > 299) {
-                    reject(new Error(`Failed to load url, status code: ${response.statusCode}`));
-                    return;
-                }
-                resolve(body);
-            });
+            const result = yield axios_1.default.post(Dadata.API_URL + Dadata.METHOD_ADDRESS, JSON.stringify([value]), config);
+            return result.data;
         });
     }
 }
 exports.default = Dadata;
-Dadata.API_URL = "https://dadata.ru/api/v2/clean";
+Dadata.API_URL = "https://cleaner.dadata.ru/api/v1/clean";
 Dadata.API_KEY = "bea5b313ae276907f1d76cc1c2ac93a9902e11af";
 Dadata.API_SECRET = "5a720bfcd74c746cd1c4cd2dff08a62b5c1d40f0";
 Dadata.METHOD_ADDRESS = "/address";

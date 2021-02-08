@@ -1,5 +1,6 @@
 import { tDadataInfo } from "../../lib/dadata";
 import { Flat, House, Person, Resident } from "../../models";
+import { tHouseExtra } from "../../models/flat/house.model";
 import Response from "../response";
 
 export default class HouseResponse extends Response {
@@ -10,7 +11,7 @@ export default class HouseResponse extends Response {
     lat: number,
     lon: number,
   }
-  extra: any;
+  extra: tHouseExtra;
 
   constructor(model: House) {
     super(model.id);

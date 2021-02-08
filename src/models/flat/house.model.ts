@@ -2,6 +2,16 @@ import { AllowNull, Column, DataType, HasMany, Model, Table, Unique } from "sequ
 import { Flat } from "..";
 import { tDadataInfo } from "../../lib/dadata";
 
+export type tHouseExtra = {
+  square: {
+    total: number, // общая площадь
+    flats: number,  // площадь квартир
+    parking: number, // площадь подземной автостоянки
+    nonresidential: number, // площадь нежилых помещений
+    pantries: number, // площадь кладовых помещений
+  }
+};
+
 @Table({
   tableName: "houses",
   comment: "Дома, подключенные к сервису"
@@ -37,7 +47,7 @@ export default class House extends Model<House> {
     type: DataType.JSON,
     comment: "Любые дополнительные данные"
   })
-  extra: any;
+  extra: tHouseExtra;
 
   @HasMany(() => Flat)
   flats: Flat[];

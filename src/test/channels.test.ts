@@ -1,10 +1,10 @@
-import { PostResponse } from "../responses";
+import { HouseResponse } from "../responses";
 
 (async () => {
   try {
     console.time("channels.test");
-    const items = await PostResponse.list("pinned");
-    console.log(items.length);
+    const result = await HouseResponse.info(1);
+    console.log(result);
     console.timeEnd("channels.test");
   } catch (error) {
     console.error(error);

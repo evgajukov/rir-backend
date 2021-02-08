@@ -16,8 +16,10 @@ class HouseResponse extends response_1.default {
         super(model.id);
         this.address = model.address;
         this.dadata = model.dadata;
-        this.coord.lat = model.lat;
-        this.coord.lon = model.lon;
+        this.coord = {
+            lat: model.lat,
+            lon: model.lon
+        };
         this.extra = model.extra;
     }
     static create(model) {

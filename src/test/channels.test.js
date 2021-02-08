@@ -13,8 +13,8 @@ const responses_1 = require("../responses");
 (() => __awaiter(void 0, void 0, void 0, function* () {
     try {
         console.time("channels.test");
-        const items = yield responses_1.PostResponse.list("pinned");
-        console.log(items.length);
+        const result = yield responses_1.HouseResponse.info(1);
+        console.log(result);
         console.timeEnd("channels.test");
     }
     catch (error) {

@@ -43,6 +43,13 @@ __decorate([
     __metadata("design:type", Number)
 ], House.prototype, "lon", void 0);
 __decorate([
+    sequelize_typescript_1.Column({
+        type: sequelize_typescript_1.DataType.JSON,
+        comment: "Любые дополнительные данные"
+    }),
+    __metadata("design:type", Object)
+], House.prototype, "extra", void 0);
+__decorate([
     sequelize_typescript_1.HasMany(() => __1.Flat),
     __metadata("design:type", Array)
 ], House.prototype, "flats", void 0);

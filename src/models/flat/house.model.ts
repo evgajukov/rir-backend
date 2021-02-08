@@ -33,6 +33,12 @@ export default class House extends Model<House> {
   })
   lon: number;
 
+  @Column({
+    type: DataType.JSON,
+    comment: "Любые дополнительные данные"
+  })
+  extra: any;
+
   @HasMany(() => Flat)
   flats: Flat[];
 }

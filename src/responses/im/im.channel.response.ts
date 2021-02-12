@@ -1,7 +1,7 @@
 import { Flat, IMChannel, IMChannelPerson, Person, Resident, User } from "../../models";
 import IMMessage, { tIMMessageBody } from "../../models/im/im.message.model";
 import Response from "../response";
-import { getPerson, tPerson } from "../type/im.person.type";
+import { getPerson, tPerson } from "../type/person.type";
 
 export default class IMChannelResponse extends Response {
 

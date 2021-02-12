@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.HouseResponse = exports.IMChannelResponse = exports.IMMessageResponse = exports.VoteResponse = exports.DocumentResponse = exports.InviteResponse = exports.InstructionResponse = exports.PostResponse = exports.UserResponse = exports.FlatResponse = exports.PingResponse = exports.EventResponse = exports.channels = void 0;
+exports.RecommendationResponse = exports.HouseResponse = exports.IMChannelResponse = exports.IMMessageResponse = exports.VoteResponse = exports.DocumentResponse = exports.InviteResponse = exports.InstructionResponse = exports.PostResponse = exports.UserResponse = exports.FlatResponse = exports.PingResponse = exports.EventResponse = exports.channels = void 0;
 const event_response_1 = require("./event/event.response");
 exports.EventResponse = event_response_1.default;
 const all_response_1 = require("./all/all.response");
@@ -27,6 +27,8 @@ const im_channel_response_1 = require("./im/im.channel.response");
 exports.IMChannelResponse = im_channel_response_1.default;
 const house_response_1 = require("./house/house.response");
 exports.HouseResponse = house_response_1.default;
+const recommendation_response_1 = require("./recommendation/recommendation.response");
+exports.RecommendationResponse = recommendation_response_1.default;
 const channels = {
     events: {
         action: "LIST",
@@ -88,5 +90,9 @@ const channels = {
         action: "LIST",
         response: im_channel_response_1.default
     },
+    recommendations: {
+        action: "LIST",
+        response: recommendation_response_1.default
+    }
 };
 exports.channels = channels;

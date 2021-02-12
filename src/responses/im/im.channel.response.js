@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const models_1 = require("../../models");
 const im_message_model_1 = require("../../models/im/im.message.model");
 const response_1 = require("../response");
-const im_person_type_1 = require("../type/im.person.type");
+const person_type_1 = require("../type/person.type");
 class IMChannelResponse extends response_1.default {
     constructor(model) {
         super(model.id);
@@ -34,7 +34,7 @@ class IMChannelResponse extends response_1.default {
                 body: lastMessage.body
             };
             if (lastMessage.personId != null)
-                this.lastMessage.person = im_person_type_1.getPerson(lastMessage.person);
+                this.lastMessage.person = person_type_1.getPerson(lastMessage.person);
             this.count = notDeletedMessages.length;
         }
     }
@@ -57,7 +57,7 @@ class IMChannelResponse extends response_1.default {
                         }
                     ]
                 });
-                response.persons = channelsPersons.map(channelPerson => im_person_type_1.getPerson(channelPerson.person));
+                response.persons = channelsPersons.map(channelPerson => person_type_1.getPerson(channelPerson.person));
             }
             return response;
         });

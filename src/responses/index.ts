@@ -12,6 +12,7 @@ import VoteResponse from "./vote/vote.response";
 import IMMessageResponse from "./im/im.message.response";
 import IMChannelResponse from "./im/im.channel.response";
 import HouseResponse from "./house/house.response";
+import RecommendationResponse from "./recommendation/recommendation.response";
 
 const channels = {
   events: {
@@ -74,11 +75,15 @@ const channels = {
     action: "LIST",  // imChannels.userId
     response: IMChannelResponse
   },
+  recommendations: {
+    action: "LIST", // recommendations
+    response: RecommendationResponse
+  }
 }
 
 export {
   channels,
   EventResponse, PingResponse,
   FlatResponse, UserResponse, PostResponse, InstructionResponse, InviteResponse, DocumentResponse, VoteResponse,
-  IMMessageResponse, IMChannelResponse, HouseResponse,
+  IMMessageResponse, IMChannelResponse, HouseResponse, RecommendationResponse,
 };

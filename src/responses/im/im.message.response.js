@@ -12,14 +12,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const cache_1 = require("../../lib/cache");
 const models_1 = require("../../models");
 const response_1 = require("../response");
-const im_person_type_1 = require("../type/im.person.type");
+const person_type_1 = require("../type/person.type");
 class IMMessageResponse extends response_1.default {
     constructor(model) {
         super(model.id);
         this.createdAt = model.createdAt.getTime();
         this.updatedAt = model.updatedAt.getTime();
         if (model.personId != null)
-            this.person = im_person_type_1.getPerson(model.person);
+            this.person = person_type_1.getPerson(model.person);
         this.channel = {
             id: model.channel.id,
             title: model.channel.title

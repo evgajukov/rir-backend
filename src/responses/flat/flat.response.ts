@@ -1,6 +1,6 @@
 import { Flat, Person, Resident, User } from "../../models";
 import Response from "../response";
-import { getPerson } from "../type/im.person.type";
+import { getPerson } from "../type/person.type";
 
 interface iResident {
   personId: number;

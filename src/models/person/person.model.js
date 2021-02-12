@@ -93,6 +93,10 @@ __decorate([
     sequelize_typescript_1.HasMany(() => __1.IMMessageShow),
     __metadata("design:type", Array)
 ], Person.prototype, "shownMessages", void 0);
+__decorate([
+    sequelize_typescript_1.HasMany(() => __1.Recommendation),
+    __metadata("design:type", Array)
+], Person.prototype, "recommendations", void 0);
 Person = __decorate([
     sequelize_typescript_1.Table({
         tableName: "persons",

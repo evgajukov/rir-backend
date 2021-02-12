@@ -29,6 +29,9 @@ import IMChannel from "./im/im.channel.model";
 import IMChannelPerson from "./im/im.channel.person.model";
 import IMMessageShow from "./im/im.message.show.model";
 
+import RecommendationCategory from "./recommendation/recommendation.category.model";
+import Recommendation from "./recommendation/recommendation.model";
+
 import NotificationToken from "./notification/notification.token.model";
 import Version from "./version/version.model";
 
@@ -42,5 +45,6 @@ export {
   FAQCategory, FAQItem,
   Vote, VoteQuestion, VoteAnswer, VotePerson,
   IMMessage, IMChannel, IMChannelPerson, IMMessageShow,
+  RecommendationCategory, Recommendation,
   NotificationToken, Version,
 };

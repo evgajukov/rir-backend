@@ -10,7 +10,7 @@ var Sequelize = require('sequelize');
  **/
 
 var info = {
-  "revision": 6,
+  "revision": 7,
   "name": "create-table-houses",
   "created": "2021-02-08T10:01:00.000Z",
   "comment": "Добавление дополнительных данных для дома"

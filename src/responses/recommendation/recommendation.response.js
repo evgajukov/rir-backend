@@ -27,25 +27,17 @@ class RecommendationResponse extends response_1.default {
     static create(model) {
         return new RecommendationResponse(model);
     }
+    static get(recommendationId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const item = yield models_1.Recommendation.findByPk(recommendationId, { include: RecommendationResponse.include() });
+            if (item == null)
+                return null;
+            return RecommendationResponse.create(item);
+        });
+    }
     static list() {
         return __awaiter(this, void 0, void 0, function* () {
-            const list = yield models_1.Recommendation.findAll({
-                include: [
-                    {
-                        model: models_1.RecommendationCategory
-                    },
-                    {
-                        model: models_1.Person,
-                        include: [
-                            {
-                                model: models_1.Resident,
-                                separate: true,
-                                include: [{ model: models_1.Flat }]
-                            }
-                        ]
-                    }
-                ]
-            });
+            const list = yield models_1.Recommendation.findAll({ include: RecommendationResponse.include() });
             if (list == null || list.length == 0)
                 return [];
             return list.map(item => RecommendationResponse.create(item));
@@ -55,6 +47,23 @@ class RecommendationResponse extends response_1.default {
         return __awaiter(this, void 0, void 0, function* () {
             return yield RecommendationResponse.list();
         });
+    }
+    static include() {
+        return [
+            {
+                model: models_1.RecommendationCategory
+            },
+            {
+                model: models_1.Person,
+                include: [
+                    {
+                        model: models_1.Resident,
+                        separate: true,
+                        include: [{ model: models_1.Flat }]
+                    }
+                ]
+            }
+        ];
     }
 }
 exports.default = RecommendationResponse;

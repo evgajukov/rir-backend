@@ -29,29 +29,37 @@ export default class RecommendationResponse extends Response {
     return new RecommendationResponse(model);
   }
 
+  static async get(recommendationId: number) {
+    const item = await Recommendation.findByPk(recommendationId, { include: RecommendationResponse.include() })
+    if (item == null) return null;
+    return RecommendationResponse.create(item);
+  }
+
   static async list() {
-    const list = await Recommendation.findAll({
-      include: [
-        {
-          model: RecommendationCategory
-        },
-        {
-          model: Person,
-          include: [
-            {
-              model: Resident,
-              separate: true,
-              include: [{ model: Flat }]
-            }
-          ]
-        }
-      ]
-    });
+    const list = await Recommendation.findAll({ include: RecommendationResponse.include() });
     if (list == null || list.length == 0) return [];
     return list.map(item => RecommendationResponse.create(item));
   }
 
   static async seed(action, params, socket) {
     return await RecommendationResponse.list();
+  }
+
+  private static include() {
+    return [
+      {
+        model: RecommendationCategory
+      },
+      {
+        model: Person,
+        include: [
+          {
+            model: Resident,
+            separate: true,
+            include: [{ model: Flat }]
+          }
+        ]
+      }
+    ];
   }
 }

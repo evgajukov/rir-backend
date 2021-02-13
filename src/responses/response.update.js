@@ -33,6 +33,9 @@ class ResponseUpdate {
                     case "VOTE.ANSWER.SAVE":
                         yield this.updateVote(eventData);
                         break;
+                    case "RECOMMENDATION.SAVE":
+                        yield this.updateRecommendation(eventData);
+                        break;
                     case "IM.SAVE":
                     case "IM.SHOWN":
                     case "IM.MSG.DEL":
@@ -72,6 +75,13 @@ class ResponseUpdate {
             const voteId = eventData.data.voteId;
             const vote = yield _1.VoteResponse.get(voteId);
             this.publish(`vote.${voteId}`, vote, eventData.data.event);
+        });
+    }
+    updateRecommendation(eventData) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const recommendationId = eventData.data.recommendationId;
+            const recommendation = yield _1.RecommendationResponse.get(recommendationId);
+            this.publish("recommendations", recommendation, eventData.data.event);
         });
     }
     updateIMMessage(eventData) {

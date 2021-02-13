@@ -1,4 +1,4 @@
-import { IMChannelResponse, IMMessageResponse, InviteResponse, PostResponse, UserResponse, VoteResponse } from ".";
+import { IMChannelResponse, IMMessageResponse, InviteResponse, PostResponse, RecommendationResponse, UserResponse, VoteResponse } from ".";
 import * as _ from "lodash";
 
 export type tPublishEvent = "create" | "update" | "destroy" | "ready";
@@ -29,6 +29,9 @@ export default class ResponseUpdate {
         case "VOTE.SAVE":
         case "VOTE.ANSWER.SAVE":
           await this.updateVote(eventData);
+          break;
+        case "RECOMMENDATION.SAVE":
+          await this.updateRecommendation(eventData);
           break;
         case "IM.SAVE":
         case "IM.SHOWN":
@@ -64,6 +67,12 @@ export default class ResponseUpdate {
     const voteId = eventData.data.voteId;
     const vote = await VoteResponse.get(voteId);
     this.publish(`vote.${voteId}`, vote, eventData.data.event);
+  }
+
+  private async updateRecommendation(eventData) {
+    const recommendationId = eventData.data.recommendationId;
+    const recommendation = await RecommendationResponse.get(recommendationId);
+    this.publish("recommendations", recommendation, eventData.data.event);
   }
 
   private async updateIMMessage(eventData) {

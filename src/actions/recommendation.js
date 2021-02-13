@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.save = void 0;
+exports.categories = exports.save = void 0;
 const models_1 = require("../models");
 const response_update_1 = require("../responses/response.update");
 const errors_1 = require("./errors");
@@ -53,3 +53,19 @@ function save({ categoryId, title, body, extra }, respond) {
     });
 }
 exports.save = save;
+function categories(params, respond) {
+    return __awaiter(this, void 0, void 0, function* () {
+        console.log(">>>>> actions/recommendation.categories");
+        try {
+            const categories = yield models_1.RecommendationCategory.findAll();
+            respond(null, categories.map(item => {
+                return { id: item.id, name: item.name };
+            }));
+        }
+        catch (error) {
+            console.error(error);
+            respond(errors_1.default.methods.check(errors_1.default, error.message));
+        }
+    });
+}
+exports.categories = categories;

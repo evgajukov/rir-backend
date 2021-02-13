@@ -1,4 +1,4 @@
-import { Person, Recommendation, User } from "../models";
+import { Person, Recommendation, RecommendationCategory, User } from "../models";
 import ResponseUpdate from "../responses/response.update";
 import errors from "./errors";
 
@@ -33,6 +33,19 @@ export async function save({ categoryId, title, body, extra }, respond) {
     });
 
     respond(null, { status: "OK" });
+  } catch (error) {
+    console.error(error);
+    respond(errors.methods.check(errors, error.message));
+  }
+}
+
+export async function categories(params, respond) {
+  console.log(">>>>> actions/recommendation.categories");
+  try {
+    const categories = await RecommendationCategory.findAll();
+    respond(null, categories.map(item => {
+      return { id: item.id, name: item.name };
+    }));
   } catch (error) {
     console.error(error);
     respond(errors.methods.check(errors, error.message));

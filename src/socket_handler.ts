@@ -3,6 +3,7 @@ import db from "./db";
 import * as user from "./actions/user";
 import * as flat from "./actions/flat";
 import * as vote from "./actions/vote";
+import * as recommendation from "./actions/recommendation";
 import * as notification from "./actions/notification";
 import * as im from "./actions/im";
 import * as version from "./actions/version";
@@ -23,6 +24,7 @@ export default function handleSocket(socket) {
   bindActions(socket, "user", user);
   bindActions(socket, "flat", flat);
   bindActions(socket, "vote", vote);
+  bindActions(socket, "recommendation", recommendation);
   bindActions(socket, "notification", notification);
   bindActions(socket, "im", im);
   bindActions(socket, "version", version);

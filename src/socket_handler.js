@@ -13,6 +13,7 @@ const db_1 = require("./db");
 const user = require("./actions/user");
 const flat = require("./actions/flat");
 const vote = require("./actions/vote");
+const recommendation = require("./actions/recommendation");
 const notification = require("./actions/notification");
 const im = require("./actions/im");
 const version = require("./actions/version");
@@ -28,6 +29,7 @@ function handleSocket(socket) {
     bindActions(socket, "user", user);
     bindActions(socket, "flat", flat);
     bindActions(socket, "vote", vote);
+    bindActions(socket, "recommendation", recommendation);
     bindActions(socket, "notification", notification);
     bindActions(socket, "im", im);
     bindActions(socket, "version", version);

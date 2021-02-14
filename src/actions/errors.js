@@ -65,6 +65,12 @@ exports.default = {
             message: "Попытка создания приватного канала с самим собой",
         }
     },
+    recommendation: {
+        "001": {
+            code: "RECOMMENDATION.001",
+            message: "Рекомендация не найдена"
+        }
+    },
     params: {
         "001": {
             code: "PARAMS.001",

@@ -13,7 +13,7 @@ exports.categories = exports.save = void 0;
 const models_1 = require("../models");
 const response_update_1 = require("../responses/response.update");
 const errors_1 = require("./errors");
-function save({ categoryId, title, body, extra }, respond) {
+function save({ id, categoryId, title, body, extra }, respond) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log(">>>>> actions/recommendation.save");
         try {
@@ -27,14 +27,28 @@ function save({ categoryId, title, body, extra }, respond) {
             if (user.deleted)
                 throw new Error(errors_1.default.user["003"].code);
             const person = yield models_1.Person.findOne({ where: { userId: this.authToken.id } });
-            // создаем рекомендацию
-            const recommendation = yield models_1.Recommendation.create({
-                categoryId,
-                personId: person.id,
-                title: title,
-                body: body,
-                extra: extra
-            });
+            let recommendation;
+            if (id != null) {
+                // редактирование рекомендации
+                recommendation = yield models_1.Recommendation.findOne({ where: { id, personId: person.id } });
+                if (recommendation == null)
+                    throw new Error(errors_1.default.recommendation["001"].code);
+                recommendation.categoryId = categoryId;
+                recommendation.title = title;
+                recommendation.body = body;
+                recommendation.extra = extra;
+                yield recommendation.save();
+            }
+            else {
+                // сохранение новой рекомендации
+                recommendation = yield models_1.Recommendation.create({
+                    categoryId,
+                    personId: person.id,
+                    title: title,
+                    body: body,
+                    extra: extra
+                });
+            }
             // обновляем канал "recommendations"
             const responseUpdate = new response_update_1.default(this.exchange);
             responseUpdate.update({

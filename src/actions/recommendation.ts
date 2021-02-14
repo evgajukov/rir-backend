@@ -2,7 +2,7 @@ import { Person, Recommendation, RecommendationCategory, User } from "../models"
 import ResponseUpdate from "../responses/response.update";
 import errors from "./errors";
 
-export async function save({ categoryId, title, body, extra }, respond) {
+export async function save({ id, categoryId, title, body, extra }, respond) {
   console.log(">>>>> actions/recommendation.save");
   try {
     if (!this.authToken) throw new Error(errors.user["004"].code);
@@ -13,14 +13,26 @@ export async function save({ categoryId, title, body, extra }, respond) {
 
     const person = await Person.findOne({ where: { userId: this.authToken.id } });
 
-    // создаем рекомендацию
-    const recommendation = await Recommendation.create({
-      categoryId,
-      personId: person.id,
-      title: title,
-      body: body,
-      extra: extra
-    });
+    let recommendation: Recommendation;
+    if (id != null) {
+      // редактирование рекомендации
+      recommendation = await Recommendation.findOne({ where: { id, personId: person.id } });
+      if (recommendation == null) throw new Error(errors.recommendation["001"].code);
+      recommendation.categoryId = categoryId;
+      recommendation.title = title;
+      recommendation.body = body;
+      recommendation.extra = extra;
+      await recommendation.save();
+    } else {
+      // сохранение новой рекомендации
+      recommendation = await Recommendation.create({
+        categoryId,
+        personId: person.id,
+        title: title,
+        body: body,
+        extra: extra
+      });
+    }
 
     // обновляем канал "recommendations"
     const responseUpdate = new ResponseUpdate(this.exchange);

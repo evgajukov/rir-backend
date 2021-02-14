@@ -20,6 +20,15 @@ __decorate([
     __metadata("design:type", String)
 ], RecommendationCategory.prototype, "name", void 0);
 __decorate([
+    sequelize_typescript_1.Column,
+    __metadata("design:type", String)
+], RecommendationCategory.prototype, "img", void 0);
+__decorate([
+    sequelize_typescript_1.Default(0),
+    sequelize_typescript_1.Column,
+    __metadata("design:type", Number)
+], RecommendationCategory.prototype, "sort", void 0);
+__decorate([
     sequelize_typescript_1.HasMany(() => __1.Recommendation),
     __metadata("design:type", Array)
 ], RecommendationCategory.prototype, "recommendations", void 0);

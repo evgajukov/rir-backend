@@ -27,6 +27,10 @@ function save({ id, categoryId, title, body, extra }, respond) {
             if (user.deleted)
                 throw new Error(errors_1.default.user["003"].code);
             const person = yield models_1.Person.findOne({ where: { userId: this.authToken.id } });
+            if (extra != null) {
+                if (extra.phone != null)
+                    extra.phone = "7" + extra.phone;
+            }
             let recommendation;
             if (id != null) {
                 // редактирование рекомендации
@@ -71,7 +75,7 @@ function categories(params, respond) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log(">>>>> actions/recommendation.categories");
         try {
-            const categories = yield models_1.RecommendationCategory.findAll();
+            const categories = yield models_1.RecommendationCategory.findAll({ order: [["sort", "asc"]] });
             respond(null, categories.map(item => {
                 return { id: item.id, name: item.name };
             }));

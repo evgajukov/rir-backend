@@ -13,6 +13,10 @@ export async function save({ id, categoryId, title, body, extra }, respond) {
 
     const person = await Person.findOne({ where: { userId: this.authToken.id } });
 
+    if (extra != null) {
+      if (extra.phone != null) extra.phone = "7" + extra.phone;
+    }
+
     let recommendation: Recommendation;
     if (id != null) {
       // редактирование рекомендации
@@ -54,7 +58,7 @@ export async function save({ id, categoryId, title, body, extra }, respond) {
 export async function categories(params, respond) {
   console.log(">>>>> actions/recommendation.categories");
   try {
-    const categories = await RecommendationCategory.findAll();
+    const categories = await RecommendationCategory.findAll({ order: [["sort", "asc"]] });
     respond(null, categories.map(item => {
       return { id: item.id, name: item.name };
     }));

@@ -20,7 +20,9 @@ class RecommendationResponse extends response_1.default {
         this.extra = model.extra;
         this.category = {
             id: model.category.id,
-            name: model.category.name
+            name: model.category.name,
+            img: model.category.img,
+            sort: model.category.sort
         };
         this.person = person_type_1.getPerson(model.person);
     }

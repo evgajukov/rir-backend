@@ -9,7 +9,9 @@ export default class RecommendationResponse extends Response {
   extra: any;
   category: {
     id: number,
-    name: string
+    name: string,
+    img: string,
+    sort: number
   };
   person: tPerson;
 
@@ -20,7 +22,9 @@ export default class RecommendationResponse extends Response {
     this.extra = model.extra;
     this.category = {
       id: model.category.id,
-      name: model.category.name
+      name: model.category.name,
+      img: model.category.img,
+      sort: model.category.sort
     };
     this.person = getPerson(model.person);
   }

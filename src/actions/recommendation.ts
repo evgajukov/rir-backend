@@ -13,10 +13,6 @@ export async function save({ id, categoryId, title, body, extra }, respond) {
 
     const person = await Person.findOne({ where: { userId: this.authToken.id } });
 
-    if (extra != null) {
-      if (extra.phone != null) extra.phone = "7" + extra.phone;
-    }
-
     let recommendation: Recommendation;
     if (id != null) {
       // редактирование рекомендации

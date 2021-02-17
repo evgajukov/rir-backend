@@ -46,7 +46,7 @@ var options = {
   // If using nodemon, set this to true, and make sure that environment is 'dev'.
   killMasterOnSignal: false,
   environment: environment,
-  authKey: process.env.SOCKETCLUSTER_AUTHKEY || "9a9d51a6477f8e4b2a5da575f10d58031c325585e3a517e931c760ee05fdf245",
+  authKey: process.env.SOCKETCLUSTER_AUTHKEY || "91234567890f8e4b2a5da098765432131c325585e3a517123456789005fdf245",
   authDefaultExpiry: process.env.SCC_AUTH_EXPIRY || 31536000, // default 1 year
 };
 

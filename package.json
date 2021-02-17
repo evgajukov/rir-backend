@@ -14,6 +14,7 @@
     "@types/redis": "^2.8.28",
     "@types/validator": "^10.11.2",
     "axios": "^0.21.1",
+    "babel-plugin-inline-dotenv": "^1.6.0",
     "body-parser": "^1.19.0",
     "chalk": "^4.1.0",
     "connect": "3.6.6",
@@ -57,10 +58,10 @@
   ],
   "readmeFilename": "README.md",
   "scripts": {
-    "start": "babel-node server.js",
-    "dev": "tsc && babel-node server.js",
-    "init": "tsc && babel-node ./src/init/dom24x7.init.js",
-    "test": "tsc && babel-node ./src/test/channels.test.js",
-    "migration": "tsc && babel-node ./src/makeMigration.js"
+    "start": "babel-node --plugins inline-dotenv server.js",
+    "dev": "tsc && babel-node --plugins inline-dotenv server.js",
+    "init": "tsc && babel-node --plugins inline-dotenv ./src/init/dom24x7.init.js",
+    "test": "tsc && babel-node --plugins inline-dotenv ./src/test/channels.test.js",
+    "migration": "tsc && babel-node --plugins inline-dotenv ./src/makeMigration.js"
   }
 }

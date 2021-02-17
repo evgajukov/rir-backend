@@ -58,10 +58,10 @@
   ],
   "readmeFilename": "README.md",
   "scripts": {
-    "start": "babel-node --plugins inline-dotenv server.js",
-    "dev": "tsc && babel-node --plugins inline-dotenv server.js",
-    "init": "tsc && babel-node --plugins inline-dotenv ./src/init/dom24x7.init.js",
-    "test": "tsc && babel-node --plugins inline-dotenv ./src/test/channels.test.js",
-    "migration": "tsc && babel-node --plugins inline-dotenv ./src/makeMigration.js"
+    "start": "babel-node server.js",
+    "dev": "tsc && babel-node server.js",
+    "init": "tsc && babel-node ./src/init/dom24x7.init.js",
+    "test": "tsc && babel-node ./src/test/channels.test.js",
+    "migration": "tsc && babel-node ./src/makeMigration.js"
   }
 }

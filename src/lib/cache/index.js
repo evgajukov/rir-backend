@@ -15,11 +15,13 @@ const util_1 = require("util");
 class Cache {
     constructor() {
         this.client = null;
+        this.caching = config_1.default.redis.caching != null ? config_1.default.redis.caching : false;
         const options = {
             host: config_1.default.redis.host,
             password: config_1.default.redis.password
         };
-        this.client = redis.createClient(options);
+        if (this.caching)
+            this.client = redis.createClient(options);
     }
     static getInstance() {
         if (Cache.instance == null)
@@ -28,15 +30,21 @@ class Cache {
     }
     get(key) {
         return __awaiter(this, void 0, void 0, function* () {
+            if (!this.caching)
+                return null;
             const getAsync = util_1.promisify(this.client.get).bind(this.client);
             return yield getAsync(key);
         });
     }
     set(key, value) {
+        if (!this.caching)
+            return;
         this.client.set(key, value);
     }
     clear(pattern = "*") {
         return __awaiter(this, void 0, void 0, function* () {
+            if (!this.caching)
+                return;
             try {
                 const keysAsync = util_1.promisify(this.client.keys).bind(this.client);
                 const keys = yield keysAsync(pattern);

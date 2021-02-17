@@ -12,6 +12,7 @@ const config = {
     env,
     db: db,
     redis: {
+        caching: false,
         host: "136.144.29.95",
         login: "admin",
         password: "AENgcz02491"

@@ -13,9 +13,6 @@ const responses = require("./responses");
 const publish_hooks_1 = require("./lib/publish_hooks");
 const socket_handler_1 = require("./socket_handler");
 const models_1 = require("./models");
-const queue_1 = require("./queue");
-const config_1 = require("./config");
-const response_update_1 = require("./responses/response.update");
 function run(worker) {
     return __awaiter(this, void 0, void 0, function* () {
         const scServer = worker.scServer;
@@ -37,14 +34,6 @@ function run(worker) {
             else if (user.deleted)
                 return next(new Error("DELETED"));
             return next(null);
-        }));
-        const queue = new queue_1.default(config_1.default.kue_web.prefix);
-        queue.process("EVENT", (job) => __awaiter(this, void 0, void 0, function* () {
-            console.log(`HANDLER JOB (ID: ${job.id}) TYPE "EVENT": ${JSON.stringify(job.data)}`);
-            // обновляем данные в каналах
-            const responseUpdate = new response_update_1.default(scServer.exchange);
-            yield responseUpdate.update(job.data);
-            yield job.done();
         }));
     });
 }

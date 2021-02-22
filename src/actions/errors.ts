@@ -67,6 +67,18 @@ export default {
     "001": {
       code: "RECOMMENDATION.001",
       message: "Рекомендация не найдена"
+    },
+    "002": {
+      code: "RECOMMENDATION.002",
+      message: "Не указана категория"
+    },
+    "003": {
+      code: "RECOMMENDATION.003",
+      message: "Не указан заголовок"
+    },
+    "004": {
+      code: "RECOMMENDATION.004",
+      message: "Не указано описание"
     }
   },
   params: {

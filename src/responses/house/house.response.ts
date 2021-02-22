@@ -38,7 +38,7 @@ export default class HouseResponse extends Response {
         }
       ]
     });
-    const houseId = person != null ? person.residents[0].flat.houseId : 1;
+    const houseId = (person != null && person.residents.length != 0) ? person.residents[0].flat.houseId : 1;
     const house = await House.findByPk(houseId);
     if (house == null) return null;
     return HouseResponse.create(house);

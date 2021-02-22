@@ -27,6 +27,20 @@ function save({ id, categoryId, title, body, extra }, respond) {
             if (user.deleted)
                 throw new Error(errors_1.default.user["003"].code);
             const person = yield models_1.Person.findOne({ where: { userId: this.authToken.id } });
+            // === валидация данных ===
+            // категории
+            if (categoryId == null)
+                throw new Error(errors_1.default.recommendation["002"].code);
+            const category = yield models_1.RecommendationCategory.findByPk(categoryId);
+            if (category == null)
+                throw new Error(errors_1.default.recommendation["002"].code);
+            // заголовок
+            if (title == null || title.trim().length == 0)
+                throw new Error(errors_1.default.recommendation["003"].code);
+            // описание
+            if (body == null || body.trim().length == 0)
+                throw new Error(errors_1.default.recommendation["004"].code);
+            // === валидация данных ===
             let recommendation;
             if (id != null) {
                 // редактирование рекомендации
@@ -44,8 +58,8 @@ function save({ id, categoryId, title, body, extra }, respond) {
                 recommendation = yield models_1.Recommendation.create({
                     categoryId,
                     personId: person.id,
-                    title: title,
-                    body: body,
+                    title: title.trim(),
+                    body: body.trim(),
                     extra: extra
                 });
             }

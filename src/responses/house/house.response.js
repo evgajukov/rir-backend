@@ -36,7 +36,7 @@ class HouseResponse extends response_1.default {
                     }
                 ]
             });
-            const houseId = person != null ? person.residents[0].flat.houseId : 1;
+            const houseId = (person != null && person.residents.length != 0) ? person.residents[0].flat.houseId : 1;
             const house = yield models_1.House.findByPk(houseId);
             if (house == null)
                 return null;

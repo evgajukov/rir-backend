@@ -13,6 +13,17 @@ export async function save({ id, categoryId, title, body, extra }, respond) {
 
     const person = await Person.findOne({ where: { userId: this.authToken.id } });
 
+    // === валидация данных ===
+    // категории
+    if (categoryId == null) throw new Error(errors.recommendation["002"].code);
+    const category = await RecommendationCategory.findByPk(categoryId);
+    if (category == null) throw new Error(errors.recommendation["002"].code);
+    // заголовок
+    if (title == null || title.trim().length == 0) throw new Error(errors.recommendation["003"].code);
+    // описание
+    if (body == null || body.trim().length == 0) throw new Error(errors.recommendation["004"].code);
+    // === валидация данных ===
+
     let recommendation: Recommendation;
     if (id != null) {
       // редактирование рекомендации
@@ -28,8 +39,8 @@ export async function save({ id, categoryId, title, body, extra }, respond) {
       recommendation = await Recommendation.create({
         categoryId,
         personId: person.id,
-        title: title,
-        body: body,
+        title: title.trim(),
+        body: body.trim(),
         extra: extra
       });
     }

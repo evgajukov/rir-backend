@@ -46,7 +46,7 @@ class FlatResponse extends response_1.default {
                     }
                 ]
             });
-            const houseId = person != null ? person.residents[0].flat.houseId : 1;
+            const houseId = (person != null && person.residents.length != 0) ? person.residents[0].flat.houseId : 1;
             const list = yield models_1.Flat.findAll({
                 where: { houseId },
                 include: [{ model: models_1.Resident, include: [{ model: models_1.Person, include: [{ model: models_1.User }] }] }],

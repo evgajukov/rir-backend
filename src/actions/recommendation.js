@@ -67,7 +67,8 @@ function save({ id, categoryId, title, body, extra, files }, respond) {
             // если необходимо привязываем файлы к рекомендации
             if (files != null && files.length != 0) {
                 for (let item of files) {
-                    saveFile(item.file, person);
+                    const uri = saveFile(item.file, person);
+                    console.log(uri);
                 }
             }
             // обновляем канал "recommendations"
@@ -108,11 +109,13 @@ function saveFile(file, person) {
     try {
         const data = Buffer.from(file.base64, "base64");
         const year = new Date().getFullYear();
-        const month = new Date().getMonth();
-        const pathURI = `/upload/${person.id}/${year}/${month}/${file.name}`;
-        const pathFileName = `${__dirname}/../../..${pathURI}`;
-        fs.writeFileSync(pathFileName, data);
-        return pathURI;
+        const month = new Date().getMonth() + 1;
+        const pathUriFolder = `/upload/${person.id}/${year}/${month}`;
+        const pathFileFolder = `${__dirname}/../../..${pathUriFolder}`;
+        if (!fs.existsSync(pathFileFolder))
+            fs.mkdirSync(pathFileFolder);
+        fs.writeFileSync(`${pathFileFolder}/${file.name}`, data);
+        return `${pathUriFolder}/${file.name}`;
     }
     catch (error) {
         console.error(error);

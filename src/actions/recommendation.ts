@@ -59,7 +59,7 @@ export async function save({ id, categoryId, title, body, extra, files }, respon
     // если необходимо привязываем файлы к рекомендации
     if (files != null && files.length != 0) {
       for (let item of files) {
-        saveFile(item.file);
+        saveFile(item.file, person);
       }
     }
 
@@ -93,11 +93,15 @@ export async function categories(params, respond) {
   }
 }
 
-function saveFile(file: tFile) {
+function saveFile(file: tFile, person: Person) {
   try {
     const data = Buffer.from(file.base64, "base64");
-    const pathFileName = `${__dirname}/../../../upload/${file.name}`;
+    const year = new Date().getFullYear();
+    const month = new Date().getMonth();
+    const pathURI = `/upload/${person.id}/${year}/${month}/${file.name}`;
+    const pathFileName = `${__dirname}/../../..${pathURI}`;
     fs.writeFileSync(pathFileName, data);
+    return pathURI;
   } catch (error) {
     console.error(error);
   }

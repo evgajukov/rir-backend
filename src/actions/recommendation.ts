@@ -1,8 +1,19 @@
 import { Person, Recommendation, RecommendationCategory, User } from "../models";
 import ResponseUpdate from "../responses/response.update";
 import errors from "./errors";
+import * as fs from "fs";
 
-export async function save({ id, categoryId, title, body, extra }, respond) {
+type tFile = {
+  base64: string,
+  description: string,
+  format: string,
+  name: string,
+  showDetailState: boolean,
+  size: number,
+  tags: string[]
+};
+
+export async function save({ id, categoryId, title, body, extra, files }, respond) {
   console.log(">>>>> actions/recommendation.save");
   try {
     if (!this.authToken) throw new Error(errors.user["004"].code);
@@ -45,6 +56,13 @@ export async function save({ id, categoryId, title, body, extra }, respond) {
       });
     }
 
+    // если необходимо привязываем файлы к рекомендации
+    if (files != null && files.length != 0) {
+      for (let item of files) {
+        saveFile(item.file);
+      }
+    }
+
     // обновляем канал "recommendations"
     const responseUpdate = new ResponseUpdate(this.exchange);
     responseUpdate.update({
@@ -55,7 +73,7 @@ export async function save({ id, categoryId, title, body, extra }, respond) {
       data: JSON.stringify({ recommendationId: recommendation.id, event: "create" })
     });
 
-    respond(null, { status: "OK" });
+    respond(null, { status: "OK", recommendation: { id: recommendation.id } });
   } catch (error) {
     console.error(error);
     respond(errors.methods.check(errors, error.message));
@@ -72,5 +90,15 @@ export async function categories(params, respond) {
   } catch (error) {
     console.error(error);
     respond(errors.methods.check(errors, error.message));
+  }
+}
+
+function saveFile(file: tFile) {
+  try {
+    const data = Buffer.from(file.base64, "base64");
+    const pathFileName = `${__dirname}/../../../upload/${file.name}`;
+    fs.writeFileSync(pathFileName, data);
+  } catch (error) {
+    console.error(error);
   }
 }

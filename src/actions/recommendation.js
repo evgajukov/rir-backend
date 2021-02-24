@@ -13,7 +13,8 @@ exports.categories = exports.save = void 0;
 const models_1 = require("../models");
 const response_update_1 = require("../responses/response.update");
 const errors_1 = require("./errors");
-function save({ id, categoryId, title, body, extra }, respond) {
+const fs = require("fs");
+function save({ id, categoryId, title, body, extra, files }, respond) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log(">>>>> actions/recommendation.save");
         try {
@@ -63,6 +64,12 @@ function save({ id, categoryId, title, body, extra }, respond) {
                     extra: extra
                 });
             }
+            // если необходимо привязываем файлы к рекомендации
+            if (files != null && files.length != 0) {
+                for (let item of files) {
+                    saveFile(item.file);
+                }
+            }
             // обновляем канал "recommendations"
             const responseUpdate = new response_update_1.default(this.exchange);
             responseUpdate.update({
@@ -72,7 +79,7 @@ function save({ id, categoryId, title, body, extra }, respond) {
                 status: "SUCCESS",
                 data: JSON.stringify({ recommendationId: recommendation.id, event: "create" })
             });
-            respond(null, { status: "OK" });
+            respond(null, { status: "OK", recommendation: { id: recommendation.id } });
         }
         catch (error) {
             console.error(error);
@@ -97,3 +104,13 @@ function categories(params, respond) {
     });
 }
 exports.categories = categories;
+function saveFile(file) {
+    try {
+        const data = Buffer.from(file.base64, "base64");
+        const pathFileName = `${__dirname}/../../../upload/${file.name}`;
+        fs.writeFileSync(pathFileName, data);
+    }
+    catch (error) {
+        console.error(error);
+    }
+}

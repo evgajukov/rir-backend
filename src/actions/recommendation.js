@@ -113,7 +113,7 @@ function saveFile(file, person) {
         const pathUriFolder = `/upload/${person.id}/${year}/${month}`;
         const pathFileFolder = `${__dirname}/../../..${pathUriFolder}`;
         if (!fs.existsSync(pathFileFolder))
-            fs.mkdirSync(pathFileFolder);
+            fs.mkdirSync(pathFileFolder, { recursive: true });
         fs.writeFileSync(`${pathFileFolder}/${file.name}`, data);
         return `${pathUriFolder}/${file.name}`;
     }

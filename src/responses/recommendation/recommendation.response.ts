@@ -1,4 +1,5 @@
 import { Flat, Person, Recommendation, RecommendationCategory, Resident } from "../../models";
+import { tRecommendationExtra } from "../../models/recommendation/recommendation.model";
 import Response from "../response";
 import { getPerson, tPerson } from "../type/person.type";
 
@@ -6,7 +7,7 @@ export default class RecommendationResponse extends Response {
 
   title: string;
   body: string;
-  extra: any;
+  extra: tRecommendationExtra;
   category: {
     id: number,
     name: string,

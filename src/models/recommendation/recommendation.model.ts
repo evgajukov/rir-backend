@@ -1,6 +1,16 @@
 import { BelongsTo, Column, DataType, ForeignKey, Model, Table } from "sequelize-typescript";
 import { Person, RecommendationCategory } from "..";
 
+export type tRecommendationExtra = {
+  phone: string,
+  site: string,
+  email: string,
+  address: string,
+  instagram: string,
+  telegram: string,
+  files: string[]
+};
+
 @Table({
   tableName: "recommendations",
   comment: "Рекомендации пользователей"
@@ -32,5 +42,5 @@ export default class Recommendation extends Model<Recommendation> {
   @Column({
     type: DataType.JSON
   })
-  extra: any;
+  extra: tRecommendationExtra;
 }

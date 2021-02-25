@@ -57,10 +57,11 @@ export async function save({ id, categoryId, title, body, extra, files }, respon
     }
 
     // если необходимо привязываем файлы к рекомендации
+    recommendation.extra.files = [];
     if (files != null && files.length != 0) {
       for (let item of files) {
         const uri = saveFile(item.file, person);
-        console.log(uri);
+        if (uri != null) recommendation.extra.files.push(uri);
       }
     }
 

@@ -42,6 +42,15 @@ function save({ id, categoryId, title, body, extra, files }, respond) {
             if (body == null || body.trim().length == 0)
                 throw new Error(errors_1.default.recommendation["004"].code);
             // === валидация данных ===
+            // если необходимо привязываем файлы к рекомендации
+            extra.files = [];
+            if (files != null && files.length != 0) {
+                for (let item of files) {
+                    const uri = saveFile(item.file, person);
+                    if (uri != null)
+                        extra.files.push(uri);
+                }
+            }
             let recommendation;
             if (id != null) {
                 // редактирование рекомендации
@@ -64,17 +73,6 @@ function save({ id, categoryId, title, body, extra, files }, respond) {
                     extra: extra
                 });
             }
-            // если необходимо привязываем файлы к рекомендации
-            recommendation.extra.files = [];
-            if (files != null && files.length != 0) {
-                for (let item of files) {
-                    const uri = saveFile(item.file, person);
-                    if (uri != null)
-                        recommendation.extra.files.push(uri);
-                }
-            }
-            console.log(recommendation.extra);
-            yield recommendation.save({ fields: ["extra"] });
             // обновляем канал "recommendations"
             const responseUpdate = new response_update_1.default(this.exchange);
             responseUpdate.update({

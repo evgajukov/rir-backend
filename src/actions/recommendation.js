@@ -73,7 +73,8 @@ function save({ id, categoryId, title, body, extra, files }, respond) {
                         recommendation.extra.files.push(uri);
                 }
             }
-            yield recommendation.save();
+            console.log(recommendation.extra);
+            yield recommendation.save({ fields: ["extra"] });
             // обновляем канал "recommendations"
             const responseUpdate = new response_update_1.default(this.exchange);
             responseUpdate.update({

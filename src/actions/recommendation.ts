@@ -64,7 +64,8 @@ export async function save({ id, categoryId, title, body, extra, files }, respon
         if (uri != null) recommendation.extra.files.push(uri);
       }
     }
-    await recommendation.save();
+    console.log(recommendation.extra);
+    await recommendation.save({ fields: ["extra"] });
 
     // обновляем канал "recommendations"
     const responseUpdate = new ResponseUpdate(this.exchange);

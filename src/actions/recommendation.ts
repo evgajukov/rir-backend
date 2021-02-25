@@ -40,7 +40,7 @@ export async function save({ id, categoryId, title, body, extra, files }, respon
     if (files != null && files.length != 0) {
       for (let item of files) {
         const uri = saveFile(item.file, person);
-        if (uri != null) extra.files.push(uri);
+        if (uri != null) extra.files.push(`https://dom24x7-static.ru.yapahost.ru${uri}`);
       }
     }
 

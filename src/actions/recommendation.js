@@ -48,7 +48,7 @@ function save({ id, categoryId, title, body, extra, files }, respond) {
                 for (let item of files) {
                     const uri = saveFile(item.file, person);
                     if (uri != null)
-                        extra.files.push(uri);
+                        extra.files.push(`https://dom24x7-static.ru.yapahost.ru${uri}`);
                 }
             }
             let recommendation;

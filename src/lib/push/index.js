@@ -16,7 +16,7 @@ class Push {
         return __awaiter(this, void 0, void 0, function* () {
             const config = {
                 headers: {
-                    Authorization: `key=AAAAkuwL2rQ:APA91bEk6grefA6S4XsyRcx__soFI1KEzwTtJ3kvWRjzs6MDCGSzCZkFiX-4CD4FYyjbYnvzK27llVjXzdo1tHvEdjSH5KNJ-54A73IrIHHM4YscvdlYqMRG2wb05X6CIIz733wgW4o9`,
+                    Authorization: `key=${process.env.PUSH_KEY}`,
                     "Content-Type": "application/json"
                 }
             };
@@ -26,7 +26,7 @@ class Push {
                 const list = tokens.map(item => item.token);
                 const pushData = {
                     notification: {
-                        title: Push.TITLE,
+                        title: process.env.PUSH_TITLE,
                         body: data.body,
                         icon: Push.ICON,
                         click_action: Push.APP_URL + (data.uri != null ? data.uri : ""),
@@ -40,7 +40,7 @@ class Push {
                 // отправляем конкретному пользователю
                 const pushData = {
                     notification: {
-                        title: Push.TITLE,
+                        title: process.env.PUSH_TITLE,
                         body: data.body,
                         icon: Push.ICON,
                         click_action: Push.APP_URL + (data.uri != null ? data.uri : ""),
@@ -55,6 +55,5 @@ class Push {
 }
 exports.default = Push;
 Push.URL = "https://fcm.googleapis.com/fcm/send";
-Push.TITLE = "Dom24x7";
 Push.ICON = "/img/logo.png";
 Push.APP_URL = "https://yarea40.dom24x7.ru/#";

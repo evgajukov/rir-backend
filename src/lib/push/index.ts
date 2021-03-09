@@ -11,14 +11,13 @@ export type tPushData = {
 export default class Push {
 
   private static URL = "https://fcm.googleapis.com/fcm/send";
-  private static TITLE = "Dom24x7";
   private static ICON = "/img/logo.png";
   private static APP_URL = "https://yarea40.dom24x7.ru/#";
 
   public static async send(data: tPushData) {
     const config: AxiosRequestConfig = {
       headers: {
-        Authorization: `key=AAAAkuwL2rQ:APA91bEk6grefA6S4XsyRcx__soFI1KEzwTtJ3kvWRjzs6MDCGSzCZkFiX-4CD4FYyjbYnvzK27llVjXzdo1tHvEdjSH5KNJ-54A73IrIHHM4YscvdlYqMRG2wb05X6CIIz733wgW4o9`,
+        Authorization: `key=${process.env.PUSH_KEY}`,
         "Content-Type": "application/json"
       }
     };
@@ -28,7 +27,7 @@ export default class Push {
       const list = tokens.map(item => item.token);
       const pushData = {
         notification: {
-          title: Push.TITLE,
+          title: process.env.PUSH_TITLE,
           body: data.body,
           icon: Push.ICON,
           click_action: Push.APP_URL + (data.uri != null ? data.uri : ""),
@@ -41,7 +40,7 @@ export default class Push {
       // отправляем конкретному пользователю
       const pushData = {
         notification: {
-          title: Push.TITLE,
+          title: process.env.PUSH_TITLE,
           body: data.body,
           icon: Push.ICON,
           click_action: Push.APP_URL + (data.uri != null ? data.uri : ""),

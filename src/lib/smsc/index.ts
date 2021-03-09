@@ -6,11 +6,8 @@ export default class SMSC {
     api: {
       send: "https://smsc.ru/sys/send.php"
     },
-    login: "evgajukov",
-    password: "Tck89mta7s3z",
     charset: "utf-8",
     translit: 0,
-    sender: "Dom24x7"
   };
 
   static async send(phones: Array<string>, message: string) {
@@ -18,10 +15,10 @@ export default class SMSC {
     console.log(`Отправка смс на номера: ${phonesString}`);
     console.log(`Сообщение: ${message}`);
     const data = {
-      login: SMSC.options.login,
-      psw: SMSC.options.password,
+      login: process.env.SMSC_LOGIN,
+      psw: process.env.SMSC_PASSWORD,
       charset: SMSC.options.charset,
-      sender: SMSC.options.sender,
+      sender: process.env.SMSC_SENDER,
       phones: phonesString,
       mes: message
     };

@@ -89,16 +89,14 @@ export type tDadataInfo = {
 export default class Dadata {
 
   private static API_URL = "https://cleaner.dadata.ru/api/v1/clean";
-  private static API_KEY = "bea5b313ae276907f1d76cc1c2ac93a9902e11af";
-  private static API_SECRET = "5a720bfcd74c746cd1c4cd2dff08a62b5c1d40f0";
   private static METHOD_ADDRESS = "/address";
 
   static async address(value: string): Promise<tDadataInfo[]> {
     const config: AxiosRequestConfig = {
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Token " + Dadata.API_KEY,
-        "X-Secret": Dadata.API_SECRET
+        "Authorization": "Token " + process.env.API_KEY,
+        "X-Secret": process.env.API_SECRET
       }
     };
     const result = await axios.post(

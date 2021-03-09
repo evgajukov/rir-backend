@@ -16,8 +16,8 @@ class Dadata {
             const config = {
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": "Token " + Dadata.API_KEY,
-                    "X-Secret": Dadata.API_SECRET
+                    "Authorization": "Token " + process.env.API_KEY,
+                    "X-Secret": process.env.API_SECRET
                 }
             };
             const result = yield axios_1.default.post(Dadata.API_URL + Dadata.METHOD_ADDRESS, JSON.stringify([value]), config);
@@ -27,6 +27,4 @@ class Dadata {
 }
 exports.default = Dadata;
 Dadata.API_URL = "https://cleaner.dadata.ru/api/v1/clean";
-Dadata.API_KEY = "bea5b313ae276907f1d76cc1c2ac93a9902e11af";
-Dadata.API_SECRET = "5a720bfcd74c746cd1c4cd2dff08a62b5c1d40f0";
 Dadata.METHOD_ADDRESS = "/address";

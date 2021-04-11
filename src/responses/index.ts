@@ -11,7 +11,7 @@ import FAQResponse from "./faq/faq.response";
 import VoteResponse from "./vote/vote.response";
 import IMMessageResponse from "./im/im.message.response";
 import IMChannelResponse from "./im/im.channel.response";
-import HouseResponse from "./house/house.response";
+import CompanyResponse from "./company/company.response";
 import RecommendationResponse from "./recommendation/recommendation.response";
 
 const channels = {
@@ -27,9 +27,9 @@ const channels = {
     action: "INIT", // all.channelName
     response: AllResponse
   },
-  house: {
-    action: "INFO", // house
-    response: HouseResponse
+  company: {
+    action: "INFO", // company
+    response: CompanyResponse
   },
   flats: {
     action: "LIST", // flats
@@ -85,5 +85,5 @@ export {
   channels,
   EventResponse, PingResponse,
   FlatResponse, UserResponse, PostResponse, InstructionResponse, InviteResponse, DocumentResponse, VoteResponse,
-  IMMessageResponse, IMChannelResponse, HouseResponse, RecommendationResponse,
+  IMMessageResponse, IMChannelResponse, CompanyResponse, RecommendationResponse,
 };

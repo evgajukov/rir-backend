@@ -11,52 +11,60 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_typescript_1 = require("sequelize-typescript");
 const __1 = require("..");
-let House = class House extends sequelize_typescript_1.Model {
+let Flat = class Flat extends sequelize_typescript_1.Model {
 };
 __decorate([
-    sequelize_typescript_1.AllowNull(false),
+    sequelize_typescript_1.Index,
+    sequelize_typescript_1.ForeignKey(() => __1.Company),
+    sequelize_typescript_1.Column,
+    __metadata("design:type", Number)
+], Flat.prototype, "companyId", void 0);
+__decorate([
+    sequelize_typescript_1.BelongsTo(() => __1.Company),
+    __metadata("design:type", __1.Company)
+], Flat.prototype, "company", void 0);
+__decorate([
     sequelize_typescript_1.Unique,
     sequelize_typescript_1.Column({
-        comment: "Адрес здания в свободной форме"
+        comment: "Номер квартиры"
     }),
-    __metadata("design:type", String)
-], House.prototype, "address", void 0);
+    __metadata("design:type", Number)
+], Flat.prototype, "number", void 0);
+__decorate([
+    sequelize_typescript_1.Index,
+    sequelize_typescript_1.Column({
+        comment: "Секция / подъезд"
+    }),
+    __metadata("design:type", Number)
+], Flat.prototype, "section", void 0);
+__decorate([
+    sequelize_typescript_1.Index,
+    sequelize_typescript_1.Column({
+        comment: "Этаж"
+    }),
+    __metadata("design:type", Number)
+], Flat.prototype, "floor", void 0);
 __decorate([
     sequelize_typescript_1.Column({
-        type: sequelize_typescript_1.DataType.JSON,
-        comment: "Структурированный формат адреса от сервиса DADATA"
+        comment: "Количество комнат"
     }),
-    __metadata("design:type", Array)
-], House.prototype, "dadata", void 0);
+    __metadata("design:type", Number)
+], Flat.prototype, "rooms", void 0);
 __decorate([
     sequelize_typescript_1.Column({
         type: sequelize_typescript_1.DataType.DOUBLE,
-        comment: "Широта"
+        comment: "Площадь квартиры"
     }),
     __metadata("design:type", Number)
-], House.prototype, "lat", void 0);
+], Flat.prototype, "square", void 0);
 __decorate([
-    sequelize_typescript_1.Column({
-        type: sequelize_typescript_1.DataType.DOUBLE,
-        comment: "Долгота"
-    }),
-    __metadata("design:type", Number)
-], House.prototype, "lon", void 0);
-__decorate([
-    sequelize_typescript_1.Column({
-        type: sequelize_typescript_1.DataType.JSON,
-        comment: "Любые дополнительные данные"
-    }),
-    __metadata("design:type", Object)
-], House.prototype, "extra", void 0);
-__decorate([
-    sequelize_typescript_1.HasMany(() => __1.Flat),
+    sequelize_typescript_1.HasMany(() => __1.Resident),
     __metadata("design:type", Array)
-], House.prototype, "flats", void 0);
-House = __decorate([
+], Flat.prototype, "residents", void 0);
+Flat = __decorate([
     sequelize_typescript_1.Table({
-        tableName: "houses",
-        comment: "Дома, подключенные к сервису"
+        tableName: "flats",
+        comment: "Список доступных в доме квартир"
     })
-], House);
-exports.default = House;
+], Flat);
+exports.default = Flat;

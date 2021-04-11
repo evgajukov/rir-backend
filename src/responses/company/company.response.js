@@ -11,19 +11,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const models_1 = require("../../models");
 const response_1 = require("../response");
-class HouseResponse extends response_1.default {
+class CompanyResponse extends response_1.default {
     constructor(model) {
         super(model.id);
-        this.address = model.address;
-        this.dadata = model.dadata;
-        this.coord = {
-            lat: model.lat,
-            lon: model.lon
-        };
+        this.title = model.title;
         this.extra = model.extra;
     }
     static create(model) {
-        return new HouseResponse(model);
+        return new CompanyResponse(model);
     }
     static info(userId) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -36,19 +31,19 @@ class HouseResponse extends response_1.default {
                     }
                 ]
             });
-            const houseId = (person != null && person.residents.length != 0) ? person.residents[0].flat.houseId : 1;
-            const house = yield models_1.House.findByPk(houseId);
-            if (house == null)
+            const companyId = (person != null && person.residents.length != 0) ? person.residents[0].flat.companyId : 1;
+            const company = yield models_1.Company.findByPk(companyId);
+            if (company == null)
                 return null;
-            return HouseResponse.create(house);
+            return CompanyResponse.create(company);
         });
     }
     static seed(action, params, socket) {
         return __awaiter(this, void 0, void 0, function* () {
             if (socket.authToken == null)
                 return null;
-            return yield HouseResponse.info(socket.authToken.id);
+            return yield CompanyResponse.info(socket.authToken.id);
         });
     }
 }
-exports.default = HouseResponse;
+exports.default = CompanyResponse;

@@ -18,10 +18,10 @@ export async function save({ title, questions, anonymous, multi, type }, respond
     const flat = resident.flat;
 
     // создаем голосование
-    const house = type == "house";
-    const section = type != "house" ? flat.section : null;
+    const company = type == "company";
+    const section = type != "company" ? flat.section : null;
     const floor = type == "floor" ? flat.floor : null;
-    const vote = await Vote.create({ title, multi, anonymous, house, section, floor, userId: this.authToken.id });
+    const vote = await Vote.create({ title, multi, anonymous, company, section, floor, userId: this.authToken.id });
 
     // добавляем вопросы к голосованию
     for (let question of questions) {
@@ -33,7 +33,7 @@ export async function save({ title, questions, anonymous, multi, type }, respond
 
     // генерируем список пользователей, которым доступно голосование
     let residents: Resident[] = [];
-    if (type == "house") {
+    if (type == "company") {
       // весь дом
       residents = await Resident.findAll({ include: [{ model: Person }] });
     } else if (type == "section") {

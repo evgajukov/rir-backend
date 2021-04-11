@@ -32,10 +32,10 @@ function save({ title, questions, anonymous, multi, type }, respond) {
             const resident = yield models_1.Resident.findOne({ where: { personId: person.id }, include: [{ model: models_1.Flat }] });
             const flat = resident.flat;
             // создаем голосование
-            const house = type == "house";
-            const section = type != "house" ? flat.section : null;
+            const company = type == "company";
+            const section = type != "company" ? flat.section : null;
             const floor = type == "floor" ? flat.floor : null;
-            const vote = yield models_1.Vote.create({ title, multi, anonymous, house, section, floor, userId: this.authToken.id });
+            const vote = yield models_1.Vote.create({ title, multi, anonymous, company, section, floor, userId: this.authToken.id });
             // добавляем вопросы к голосованию
             for (let question of questions) {
                 const body = question.body;
@@ -45,7 +45,7 @@ function save({ title, questions, anonymous, multi, type }, respond) {
             }
             // генерируем список пользователей, которым доступно голосование
             let residents = [];
-            if (type == "house") {
+            if (type == "company") {
                 // весь дом
                 residents = yield models_1.Resident.findAll({ include: [{ model: models_1.Person }] });
             }

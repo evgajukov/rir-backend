@@ -21,10 +21,10 @@ __decorate([
     sequelize_typescript_1.Index,
     sequelize_typescript_1.Default(false),
     sequelize_typescript_1.Column({
-        comment: "Признак, что канал для всего дома"
+        comment: "Признак, что канал для всей компании"
     }),
     __metadata("design:type", Boolean)
-], IMChannel.prototype, "house", void 0);
+], IMChannel.prototype, "company", void 0);
 __decorate([
     sequelize_typescript_1.Index,
     sequelize_typescript_1.Column({

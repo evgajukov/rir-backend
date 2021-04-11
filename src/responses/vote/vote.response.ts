@@ -31,7 +31,7 @@ export default class VoteResponse extends Response {
   multi: boolean;
   anonymous: boolean;
   closed: boolean;
-  house: boolean;
+  company: boolean;
   section: number;
   floor: number;
   questions: tQuestion[];
@@ -45,7 +45,7 @@ export default class VoteResponse extends Response {
     this.multi = model.multi;
     this.anonymous = model.anonymous;
     this.closed = model.closed;
-    this.house = model.house;
+    this.company = model.company;
     this.section = model.section;
     this.floor = model.floor;
     this.persons = model.persons.length;

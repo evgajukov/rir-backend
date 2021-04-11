@@ -5,24 +5,24 @@ var Sequelize = require('sequelize');
 /**
  * Actions summary:
  *
- * addColumn extra to houses
+ * addColumn extra to companies
  *
  **/
 
 var info = {
   "revision": 7,
-  "name": "create-table-houses",
+  "name": "create-table-companies",
   "created": "2021-02-08T10:01:00.000Z",
   "comment": "Добавление дополнительных данных для дома"
 };
 
 var migrationCommands = [
 
-  // addColumn extra to houses
+  // addColumn extra to companies
   {
     fn: "addColumn",
     params: [
-      "houses",
+      "companies",
       "extra",
       {
         "comment": "Любые дополнительные данные",
@@ -34,7 +34,7 @@ var migrationCommands = [
 
 var rollbackCommands = [{
   fn: "removeColumn",
-  params: ["houses", "extra"]
+  params: ["companies", "extra"]
 }];
 
 module.exports = {

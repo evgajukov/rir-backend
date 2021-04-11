@@ -12,7 +12,7 @@ var Sequelize = require('sequelize');
 
 var info = {
   "revision": 9,
-  "name": "create-table-houses",
+  "name": "create-table-companies",
   "created": "2021-02-14T13:56:00.000Z",
   "comment": "Добавление картинки и сортировки для категорий рекомендаций"
 };

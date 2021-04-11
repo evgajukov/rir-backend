@@ -13,9 +13,9 @@ export default class IMChannel extends Model<IMChannel> {
   @Index
   @Default(false)
   @Column({
-    comment: "Признак, что канал для всего дома"
+    comment: "Признак, что канал для всей компании"
   })
-  house: boolean;
+  company: boolean;
 
   @Index
   @Column({

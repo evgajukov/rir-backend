@@ -9,24 +9,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const dadata_1 = require("../lib/dadata");
 const models_1 = require("../models");
 (() => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log("Запуск процесса загрузки данных по дому");
-        const address = "Московская обл, г Мытищи, ул Мира, д 35";
-        let house = yield models_1.House.findOne({ where: { address } });
-        if (house == null) {
-            house = yield models_1.House.create({ address });
+        console.log("Запуск процесса загрузки данных по компании");
+        const title = "ЦПИРУГ";
+        let company = yield models_1.Company.findOne({ where: { title } });
+        if (company == null) {
+            company = yield models_1.Company.create({ title });
         }
-        house.dadata = yield dadata_1.default.address(address);
-        house.lat = 55.917465;
-        house.lon = 37.722909;
-        yield house.save();
-        const flats = yield models_1.Flat.findAll({ where: { houseId: null } });
+        yield company.save();
+        const flats = yield models_1.Flat.findAll({ where: { companyId: null } });
         for (let flat of flats) {
             console.log(`>>> привязываем квартиру №${flat.number} к дому`);
-            flat.houseId = house.id;
+            flat.companyId = company.id;
             yield flat.save();
         }
         console.log("Завершение процесса");

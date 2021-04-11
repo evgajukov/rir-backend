@@ -1,24 +1,20 @@
-import Dadata from "../lib/dadata";
-import { Flat, House } from "../models";
+import { Flat, Company } from "../models";
 
 (async () => {
   try {
-    console.log("Запуск процесса загрузки данных по дому");
-    const address = "Московская обл, г Мытищи, ул Мира, д 35";
-    let house = await House.findOne({ where: { address } });
-    if (house == null) {
-      house = await House.create({ address });
+    console.log("Запуск процесса загрузки данных по компании");
+    const title = "ЦПИРУГ";
+    let company = await Company.findOne({ where: { title } });
+    if (company == null) {
+      company = await Company.create({ title });
     }
 
-    house.dadata = await Dadata.address(address);
-    house.lat = 55.917465;
-    house.lon = 37.722909;
-    await house.save();
+    await company.save();
 
-    const flats = await Flat.findAll({ where: { houseId: null } });
+    const flats = await Flat.findAll({ where: { companyId: null } });
     for (let flat of flats) {
       console.log(`>>> привязываем квартиру №${flat.number} к дому`);
-      flat.houseId = house.id;
+      flat.companyId = company.id;
       await flat.save();
     }
     console.log("Завершение процесса");

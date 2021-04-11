@@ -1,5 +1,5 @@
 import { BelongsTo, Column, DataType, ForeignKey, HasMany, Index, Model, Table, Unique } from "sequelize-typescript";
-import { House, Resident } from "..";
+import { Company, Resident } from "..";
 
 @Table({
   tableName: "flats",
@@ -8,12 +8,12 @@ import { House, Resident } from "..";
 export default class Flat extends Model<Flat> {
 
   @Index
-  @ForeignKey(() => House)
+  @ForeignKey(() => Company)
   @Column
-  houseId: number;
+  companyId: number;
 
-  @BelongsTo(() => House)
-  house: House;
+  @BelongsTo(() => Company)
+  company: Company;
   
   @Unique
   @Column({

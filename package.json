@@ -1,6 +1,6 @@
 {
-  "name": "dom24x7-backend",
-  "description": "Backend for Dom24x7 project",
+  "name": "smartoffice-backend",
+  "description": "Backend for SmartOffice project",
   "version": "1.0.0",
   "contributors": [
     {
@@ -38,13 +38,13 @@
     "sequelize-cli": "^5.5.0",
     "sequelize-typescript": "^1.1.0",
     "serve-static": "1.13.2",
-    "socketcluster": "^14.3.5",
+    "socketcluster": "^16.0.1",
     "socketcluster-client": "^14.3.1",
     "xml2js": "^0.4.19",
     "xmlbuilder": "^13.0.2"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
+    "babel-cli": "^6.18.0",
     "babel-preset-env": "^1.7.0",
     "jest": "^24.8.0",
     "sequelize-typescript-migration": "0.0.1-beta.3"

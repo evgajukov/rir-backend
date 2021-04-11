@@ -8,9 +8,9 @@ import Role from "./security/role/role.model";
 import Person from "./person/person.model";
 import Invite from "./invite/invite.model";
 
-import House from "./flat/house.model";
-import Flat from "./flat/flat.model";
-import Resident from "./flat/resident.model";
+import Company from "./company/company.model";
+import Flat from "./company/flat.model";
+import Resident from "./company/resident.model";
 
 import Post from "./post/post.model";
 
@@ -40,7 +40,7 @@ import sequelize from "../db";
 export {
   sequelize, Event, EventLog,
   Session, User, Role,
-  Person, House, Flat, Resident, Invite,
+  Person, Company, Flat, Resident, Invite,
   Post, Instruction, Document,
   FAQCategory, FAQItem,
   Vote, VoteQuestion, VoteAnswer, VotePerson,

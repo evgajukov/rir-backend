@@ -5,25 +5,25 @@ var Sequelize = require('sequelize');
 /**
  * Actions summary:
  *
- * createTable "houses", deps: []
- * addColumn houseId to flats
+ * createTable "companies", deps: []
+ * addColumn companyId to flats
  *
  **/
 
 var info = {
   "revision": 6,
-  "name": "create-table-houses",
+  "name": "create-table-companies",
   "created": "2021-01-25T18:20:00.000Z",
-  "comment": "Добавление таблицы для хранения данных по самому дому с связка с ним квартир"
+  "comment": "Добавление таблицы для хранения данных по самой компании с связка с ним квартир"
 };
 
 var migrationCommands = [
 
-  // createTable houses
+  // createTable companies
   {
     fn: "createTable",
     params: [
-      "houses",
+      "companies",
       {
         "id": {
           "autoIncrement": true,
@@ -39,42 +39,28 @@ var migrationCommands = [
           "allowNull": false,
           "type": Sequelize.DATE
         },
-        "address": {
-          "comment": "Адрес здания в свободной форме",
+        "title": {
           "allowNull": false,
-          "unique": true,
           "type": Sequelize.STRING
-        },
-        "dadata": {
-          "comment": "Структурированный формат адреса от сервиса DADATA",
-          "type": Sequelize.JSON
-        },
-        "lat": {
-          "comment": "Широта",
-          "type": Sequelize.DOUBLE
-        },
-        "lon": {
-          "comment": "Долгота",
-          "type": Sequelize.DOUBLE
         }
       },
       {
-        "comment": "Дома, подключенные к сервису"
+        "comment": "Компании, подключенные к сервису"
       }
     ]
   },
 
-  // addColumn houseId to flats
+  // addColumn companyId to flats
   {
     fn: "addColumn",
     params: [
       "flats",
-      "houseId",
+      "companyId",
       {
         "onDelete": "NO ACTION",
         "onUpdate": "CASCADE",
         "references": {
-          "model": "houses",
+          "model": "companies",
           "key": "id"
         },
         "allowNull": true,
@@ -86,11 +72,11 @@ var migrationCommands = [
 
 var rollbackCommands = [{
   fn: "removeColumn",
-  params: ["flats", "houseId"]
+  params: ["flats", "companyId"]
 },
 {
   fn: "dropTable",
-  params: ["houses"]
+  params: ["companies"]
 }];
 
 module.exports = {

@@ -53,9 +53,9 @@ export default class FlatResponse extends Response {
         }
       ]
     });
-    const houseId = (person != null && person.residents.length != 0) ? person.residents[0].flat.houseId : 1;
+    const companyId = (person != null && person.residents.length != 0) ? person.residents[0].flat.companyId : 1;
     const list = await Flat.findAll({
-      where: { houseId },
+      where: { companyId },
       include: [{ model: Resident, include: [{ model: Person, include: [{ model: User }] }] }],
       order: ["id"]
     });

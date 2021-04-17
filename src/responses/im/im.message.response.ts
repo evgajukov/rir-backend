@@ -1,5 +1,5 @@
 import Cache from "../../lib/cache";
-import { Flat, IMChannel, IMChannelPerson, IMMessage, Person, Resident, User } from "../../models";
+import { Department, IMChannel, IMChannelPerson, IMMessage, Person, Resident, User } from "../../models";
 import { tIMMessageBody } from "../../models/im/im.message.model";
 import Response from "../response";
 import { tPerson, getPerson } from "../type/person.type";
@@ -82,7 +82,7 @@ export default class IMMessageResponse extends Response {
         include: [
           {
             model: Resident,
-            include: [{ model: Flat }]
+            include: [{ model: Department }]
           }
         ]
       }

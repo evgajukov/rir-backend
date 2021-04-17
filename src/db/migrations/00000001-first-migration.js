@@ -6,7 +6,7 @@ var Sequelize = require('sequelize');
  * Actions summary:
  *
  * createTable "roles", deps: []
- * createTable "flats", deps: []
+ * createTable "departments", deps: []
  * createTable "posts", deps: []
  * createTable "instructions", deps: []
  * createTable "documents", deps: []
@@ -18,7 +18,7 @@ var Sequelize = require('sequelize');
  * createTable "events_log", deps: [events]
  * createTable "sessions", deps: [users]
  * createTable "persons", deps: [users]
- * createTable "residents", deps: [persons, flats]
+ * createTable "residents", deps: [persons, departments]
  * createTable "invites", deps: [users]
  * createTable "faq", deps: [faqCategories]
  * createTable "votes", deps: [users]
@@ -29,9 +29,9 @@ var Sequelize = require('sequelize');
  * createTable "imChannelPersons", deps: [imChannels, persons]
  * createTable "imMessageShowPersons", deps: [persons, imMessages]
  * createTable "notificationTokens", deps: [users]
- * addIndex "flats_floor" to table "flats"
- * addIndex "flats_section" to table "flats"
- * addIndex "residents_flat_id" to table "residents"
+ * addIndex "departments_floor" to table "departments"
+ * addIndex "departments_section" to table "departments"
+ * addIndex "residents_department_id" to table "residents"
  * addIndex "residents_person_id" to table "residents"
  * addIndex "invites_used" to table "invites"
  * addIndex "invites_user_id" to table "invites"
@@ -91,11 +91,11 @@ var migrationCommands = [
     ]
   },
 
-  // createTable flats
+  // createTable departments
   {
     fn: "createTable",
     params: [
-      "flats",
+      "departments",
       {
         "id": {
           "autoIncrement": true,
@@ -645,11 +645,11 @@ var migrationCommands = [
           "allowNull": true,
           "type": Sequelize.INTEGER
         },
-        "flatId": {
+        "departmentId": {
           "onDelete": "CASCADE",
           "onUpdate": "CASCADE",
           "references": {
-            "model": "flats",
+            "model": "departments",
             "key": "id"
           },
           "allowNull": true,
@@ -1171,44 +1171,44 @@ var migrationCommands = [
     ]
   },
 
-  // addIndex flats floor
+  // addIndex departments floor
   {
     fn: "addIndex",
     params: [
-      "flats",
+      "departments",
       [{
         "name": "floor"
       }],
       {
-        "indexName": "flats_floor"
+        "indexName": "departments_floor"
       }
     ]
   },
 
-  // addIndex flats section
+  // addIndex departments section
   {
     fn: "addIndex",
     params: [
-      "flats",
+      "departments",
       [{
         "name": "section"
       }],
       {
-        "indexName": "flats_section"
+        "indexName": "departments_section"
       }
     ]
   },
 
-  // addIndex residents flatId
+  // addIndex residents departmentId
   {
     fn: "addIndex",
     params: [
       "residents",
       [{
-        "name": "flatId"
+        "name": "departmentId"
       }],
       {
-        "indexName": "residents_flat_id"
+        "indexName": "residents_department_id"
       }
     ]
   },
@@ -1480,7 +1480,7 @@ var rollbackCommands = [{
 },
 {
   fn: "dropTable",
-  params: ["flats"]
+  params: ["departments"]
 },
 {
   fn: "dropTable",

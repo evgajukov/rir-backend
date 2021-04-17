@@ -1,13 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RecommendationResponse = exports.CompanyResponse = exports.IMChannelResponse = exports.IMMessageResponse = exports.VoteResponse = exports.DocumentResponse = exports.InviteResponse = exports.InstructionResponse = exports.PostResponse = exports.UserResponse = exports.FlatResponse = exports.PingResponse = exports.EventResponse = exports.channels = void 0;
+exports.RecommendationResponse = exports.CompanyResponse = exports.IMChannelResponse = exports.IMMessageResponse = exports.VoteResponse = exports.DocumentResponse = exports.InviteResponse = exports.InstructionResponse = exports.PostResponse = exports.UserResponse = exports.DepartmentResponse = exports.PingResponse = exports.EventResponse = exports.channels = void 0;
 const event_response_1 = require("./event/event.response");
 exports.EventResponse = event_response_1.default;
 const all_response_1 = require("./all/all.response");
 const ping_response_1 = require("./ping/ping.response");
 exports.PingResponse = ping_response_1.default;
-const flat_response_1 = require("./flat/flat.response");
-exports.FlatResponse = flat_response_1.default;
+const department_response_1 = require("./department/department.response");
+exports.DepartmentResponse = department_response_1.default;
 const user_response_1 = require("./user/user.response");
 exports.UserResponse = user_response_1.default;
 const post_response_1 = require("./post/post.response");
@@ -46,9 +46,9 @@ const channels = {
         action: "INFO",
         response: company_response_1.default
     },
-    flats: {
+    departments: {
         action: "LIST",
-        response: flat_response_1.default
+        response: department_response_1.default
     },
     user: {
         action: "INFO",

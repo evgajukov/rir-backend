@@ -17,12 +17,12 @@ function getPerson(model) {
         }
     }
     if (model.residents != null && model.residents.length > 0) {
-        const flat = model.residents[0].flat;
-        person.flat = {
-            id: flat.id,
-            number: flat.number,
-            section: flat.section,
-            floor: flat.floor
+        const department = model.residents[0].department;
+        person.department = {
+            id: department.id,
+            number: department.number,
+            section: department.section,
+            floor: department.floor
         };
     }
     person.deleted = false;

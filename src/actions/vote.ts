@@ -1,6 +1,6 @@
 import Cache from "../lib/cache";
 import Push from "../lib/push";
-import { Flat, NotificationToken, Person, Resident, User, Vote, VoteAnswer, VotePerson, VoteQuestion } from "../models";
+import { Department, NotificationToken, Person, Resident, User, Vote, VoteAnswer, VotePerson, VoteQuestion } from "../models";
 import ResponseUpdate from "../responses/response.update";
 import errors from "./errors";
 
@@ -14,13 +14,13 @@ export async function save({ title, questions, anonymous, multi, type }, respond
     if (user.deleted) throw new Error(errors.user["003"].code);
     
     const person = await Person.findOne({ where: { userId: this.authToken.id } });
-    const resident = await Resident.findOne({ where: { personId: person.id }, include: [{ model: Flat }] });
-    const flat = resident.flat;
+    const resident = await Resident.findOne({ where: { personId: person.id }, include: [{ model: Department }] });
+    const department = resident.department;
 
     // создаем голосование
     const company = type == "company";
-    const section = type != "company" ? flat.section : null;
-    const floor = type == "floor" ? flat.floor : null;
+    const section = type != "company" ? department.section : null;
+    const floor = type == "floor" ? department.floor : null;
     const vote = await Vote.create({ title, multi, anonymous, company, section, floor, userId: this.authToken.id });
 
     // добавляем вопросы к голосованию
@@ -38,12 +38,12 @@ export async function save({ title, questions, anonymous, multi, type }, respond
       residents = await Resident.findAll({ include: [{ model: Person }] });
     } else if (type == "section") {
       // весь подъезд
-      const flats = await Flat.findAll({ where: { section } });
-      residents = await Resident.findAll({ where: { flatId: flats.map(flat => flat.id) } });
+      const departments = await Department.findAll({ where: { section } });
+      residents = await Resident.findAll({ where: { departmentId: departments.map(department => department.id) } });
     } else if (type == "floor") {
       // весь этаж в подъезде
-      const flats = await Flat.findAll({ where: { section, floor } });
-      residents = await Resident.findAll({ where: { flatId: flats.map(flat => flat.id) } });
+      const departments = await Department.findAll({ where: { section, floor } });
+      residents = await Resident.findAll({ where: { departmentId: departments.map(department => department.id) } });
     }
     for (let resident of residents) {
       VotePerson.create({ voteId: vote.id, personId: resident.personId });

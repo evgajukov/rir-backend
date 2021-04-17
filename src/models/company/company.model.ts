@@ -1,5 +1,5 @@
 import { AllowNull, Column, DataType, HasMany, Model, Table } from "sequelize-typescript";
-import { Flat } from "..";
+import { Department } from "..";
 
 @Table({
   tableName: "companies",
@@ -16,6 +16,6 @@ export default class Company extends Model<Company> {
   })
   extra: any;
 
-  @HasMany(() => Flat)
-  flats: Flat[];
+  @HasMany(() => Department)
+  departments: Department[];
 }

@@ -1,4 +1,4 @@
-import { User, Person, Resident, Flat, Invite, Post, Role, Vote, VotePerson, IMChannel, IMChannelPerson, IMMessage } from "../models";
+import { User, Person, Resident, Department, Invite, Post, Role, Vote, VotePerson, IMChannel, IMChannelPerson, IMMessage } from "../models";
 import * as numeral from "numeral";
 import SMSC from "../lib/smsc";
 import errors from "./errors";
@@ -95,7 +95,7 @@ export async function invite(params, respond) {
   }
 }
 
-export async function saveProfile({ surname, name, midname, telegram, flat, access }, respond) {
+export async function saveProfile({ surname, name, midname, telegram, department, access }, respond) {
   console.log(">>>>> actions/user.saveProfile");
   try {
     if (!this.authToken) throw new Error(errors.user["004"].code);
@@ -104,8 +104,8 @@ export async function saveProfile({ surname, name, midname, telegram, flat, acce
     if (user.banned) throw new Error(errors.user["002"].code);
     if (user.deleted) throw new Error(errors.user["003"].code);
     
-    const flatDb = await Flat.findByPk(flat);
-    if (flatDb == null) throw new Error(errors.flat["001"].code);
+    const departmentDb = await Department.findByPk(department);
+    if (departmentDb == null) throw new Error(errors.department["001"].code);
 
     let person = await Person.findOne({ where: { userId: this.authToken.id } });
     if (person == null) {
@@ -121,9 +121,9 @@ export async function saveProfile({ surname, name, midname, telegram, flat, acce
       await person.save();
     }
 
-    let resident = await Resident.findOne({ where: { personId: person.id }, include: [{ model: Flat }] });
+    let resident = await Resident.findOne({ where: { personId: person.id }, include: [{ model: Department }] });
     if (resident == null) {
-      await Resident.create({ personId: person.id, flatId: flat });
+      await Resident.create({ personId: person.id, departmentId: department });
 
       // проверяем активные голосования и, при необходимости, добавляем в нужные
       try {
@@ -138,10 +138,10 @@ export async function saveProfile({ surname, name, midname, telegram, flat, acce
               }
             } else {
               // голосование на подъезд, либо этаж
-              if (resident.flat.section == vote.section) {
+              if (resident.department.section == vote.section) {
                 if (vote.floor != null) {
                   // голосование на этаж
-                  if (resident.flat.floor == vote.floor) {
+                  if (resident.department.floor == vote.floor) {
                     const votePerson = await VotePerson.findOne({ where: { voteId: vote.id, personId: person.id } });
                     if (votePerson == null) {
                       VotePerson.create({ voteId: vote.id, personId: person.id });
@@ -167,13 +167,13 @@ export async function saveProfile({ surname, name, midname, telegram, flat, acce
 
       // добавляем пользователя в чаты
       try {
-        const flatDb = await Flat.findByPk(flat);
-        const flatTxt = `кв. ${flatDb.number}, этаж ${flatDb.floor}, подъезд ${flatDb.section}`;
+        const departmentDb = await Department.findByPk(department);
+        const departmentTxt = `кв. ${departmentDb.number}, этаж ${departmentDb.floor}, подъезд ${departmentDb.section}`;
 
         // в общедомовой
         let channel = await IMChannel.findOne({ where: { company: true } });
         IMChannelPerson.create({ channelId: channel.id, personId: person.id });
-        IMMessage.create({ channelId: channel.id, body: { text: `Сосед(ка) из ${flatTxt} вступил(а) в группу` } });
+        IMMessage.create({ channelId: channel.id, body: { text: `Сосед(ка) из ${departmentTxt} вступил(а) в группу` } });
         Cache.getInstance().clear(`imMessages:${channel.id}`);
         // обновляем канал "imChannel"
         responseUpdate.update({
@@ -185,9 +185,9 @@ export async function saveProfile({ surname, name, midname, telegram, flat, acce
         });
 
         // в чат секции
-        channel = await IMChannel.findOne({ where: { section: flatDb.section, floor: null } });
+        channel = await IMChannel.findOne({ where: { section: departmentDb.section, floor: null } });
         IMChannelPerson.create({ channelId: channel.id, personId: person.id });
-        IMMessage.create({ channelId: channel.id, body: { text: `Сосед(ка) из ${flatTxt} вступил(а) в группу` } });
+        IMMessage.create({ channelId: channel.id, body: { text: `Сосед(ка) из ${departmentTxt} вступил(а) в группу` } });
         Cache.getInstance().clear(`imMessages:${channel.id}`);
         // обновляем канал "imChannel"
         responseUpdate.update({
@@ -199,9 +199,9 @@ export async function saveProfile({ surname, name, midname, telegram, flat, acce
         });
 
         // в чат этажа
-        channel = await IMChannel.findOne({ where: { section: flatDb.section, floor: flatDb.floor } });
+        channel = await IMChannel.findOne({ where: { section: departmentDb.section, floor: departmentDb.floor } });
         IMChannelPerson.create({ channelId: channel.id, personId: person.id });
-        IMMessage.create({ channelId: channel.id, body: { text: `Сосед(ка) из ${flatTxt} вступил(а) в группу` } });
+        IMMessage.create({ channelId: channel.id, body: { text: `Сосед(ка) из ${departmentTxt} вступил(а) в группу` } });
         Cache.getInstance().clear(`imMessages:${channel.id}`);
         // обновляем канал "imChannel"
         responseUpdate.update({
@@ -219,8 +219,8 @@ export async function saveProfile({ surname, name, midname, telegram, flat, acce
       const post = await Post.create({
         title: "Новый сосед",
         type: "person",
-        body: `К нам присоединился новый сосед с кв. №${flatDb.number}, этаж ${flatDb.floor}, подъезд ${flatDb.section}`,
-        url: `/flat/${flatDb.number}`,
+        body: `К нам присоединился новый сосед с кв. №${departmentDb.number}, этаж ${departmentDb.floor}, подъезд ${departmentDb.section}`,
+        url: `/department/${departmentDb.number}`,
       });
       // отправляем нотификацию всем соседям
       Push.send({ body: post.body, uri: post.url, all: true });
@@ -234,7 +234,7 @@ export async function saveProfile({ surname, name, midname, telegram, flat, acce
         data: JSON.stringify({ postId: post.id, event: "create" })
       });
 
-      resident = await Resident.findOne({ where: { personId: person.id }, include: [{ model: Flat }] });
+      resident = await Resident.findOne({ where: { personId: person.id }, include: [{ model: Department }] });
 
       // обновляем канал "invites"
       const inviteDb = await Invite.findOne({ where: { newUserId: this.authToken.id } });

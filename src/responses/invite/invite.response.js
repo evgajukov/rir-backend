@@ -27,7 +27,7 @@ class InviteResponse extends response_1.default {
                     item.person = { surname: person.surname, name: person.name, midname: person.midname };
                     const resident = person.residents[0];
                     if (resident != null) {
-                        item.flat = { number: resident.flat.number, floor: resident.flat.floor, section: resident.flat.section };
+                        item.department = { number: resident.department.number, floor: resident.department.floor, section: resident.department.section };
                     }
                 }
             }
@@ -56,7 +56,7 @@ class InviteResponse extends response_1.default {
                                 include: [
                                     {
                                         model: models_1.Resident,
-                                        include: [{ model: models_1.Flat }]
+                                        include: [{ model: models_1.Department }]
                                     }
                                 ]
                             }

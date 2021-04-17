@@ -2,10 +2,10 @@ import { BelongsTo, Column, DataType, ForeignKey, HasMany, Index, Model, Table, 
 import { Company, Resident } from "..";
 
 @Table({
-  tableName: "flats",
-  comment: "Список доступных в доме квартир"
+  tableName: "departments",
+  comment: "Список доступных в компании отделов"
 })
-export default class Flat extends Model<Flat> {
+export default class Department extends Model<Department> {
 
   @Index
   @ForeignKey(() => Company)

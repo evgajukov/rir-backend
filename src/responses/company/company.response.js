@@ -27,11 +27,11 @@ class CompanyResponse extends response_1.default {
                 include: [
                     {
                         model: models_1.Resident,
-                        include: [{ model: models_1.Flat }]
+                        include: [{ model: models_1.Department }]
                     }
                 ]
             });
-            const companyId = (person != null && person.residents.length != 0) ? person.residents[0].flat.companyId : 1;
+            const companyId = (person != null && person.residents.length != 0) ? person.residents[0].department.companyId : 1;
             const company = yield models_1.Company.findByPk(companyId);
             if (company == null)
                 return null;

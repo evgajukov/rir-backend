@@ -25,14 +25,14 @@ __decorate([
 ], Resident.prototype, "person", void 0);
 __decorate([
     sequelize_typescript_1.Index,
-    sequelize_typescript_1.ForeignKey(() => __1.Flat),
+    sequelize_typescript_1.ForeignKey(() => __1.Department),
     sequelize_typescript_1.Column,
     __metadata("design:type", Number)
-], Resident.prototype, "flatId", void 0);
+], Resident.prototype, "departmentId", void 0);
 __decorate([
-    sequelize_typescript_1.BelongsTo(() => __1.Flat),
-    __metadata("design:type", __1.Flat)
-], Resident.prototype, "flat", void 0);
+    sequelize_typescript_1.BelongsTo(() => __1.Department),
+    __metadata("design:type", __1.Department)
+], Resident.prototype, "department", void 0);
 __decorate([
     sequelize_typescript_1.Default(false),
     sequelize_typescript_1.Column,
@@ -41,7 +41,7 @@ __decorate([
 Resident = __decorate([
     sequelize_typescript_1.Table({
         tableName: "residents",
-        comment: "Связка пользователей с квартирави, которые у них в собственности, либо они в них живут"
+        comment: "Связка сотрудников с отделами"
     })
 ], Resident);
 exports.default = Resident;

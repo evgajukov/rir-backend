@@ -1,4 +1,4 @@
-import { Flat, Company, Person, Resident } from "../../models";
+import { Department, Company, Person, Resident } from "../../models";
 import Response from "../response";
 
 export default class CompanyResponse extends Response {
@@ -22,11 +22,11 @@ export default class CompanyResponse extends Response {
       include: [
         {
           model: Resident,
-          include: [{ model: Flat }]
+          include: [{ model: Department }]
         }
       ]
     });
-    const companyId = (person != null && person.residents.length != 0) ? person.residents[0].flat.companyId : 1;
+    const companyId = (person != null && person.residents.length != 0) ? person.residents[0].department.companyId : 1;
     const company = await Company.findByPk(companyId);
     if (company == null) return null;
     return CompanyResponse.create(company);

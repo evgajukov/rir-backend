@@ -6,7 +6,7 @@ var Sequelize = require('sequelize');
  * Actions summary:
  *
  * createTable "companies", deps: []
- * addColumn companyId to flats
+ * addColumn companyId to departments
  *
  **/
 
@@ -50,11 +50,11 @@ var migrationCommands = [
     ]
   },
 
-  // addColumn companyId to flats
+  // addColumn companyId to departments
   {
     fn: "addColumn",
     params: [
-      "flats",
+      "departments",
       "companyId",
       {
         "onDelete": "NO ACTION",
@@ -72,7 +72,7 @@ var migrationCommands = [
 
 var rollbackCommands = [{
   fn: "removeColumn",
-  params: ["flats", "companyId"]
+  params: ["departments", "companyId"]
 },
 {
   fn: "dropTable",

@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const db_1 = require("./db");
 const user = require("./actions/user");
-const flat = require("./actions/flat");
+const department = require("./actions/department");
 const vote = require("./actions/vote");
 const recommendation = require("./actions/recommendation");
 const notification = require("./actions/notification");
@@ -27,7 +27,7 @@ function handleSocket(socket) {
     socket.on("deauthenticate", Session.onLogout.bind(socket));
     socket.on("disconnect", Session.onLogout.bind(socket));
     bindActions(socket, "user", user);
-    bindActions(socket, "flat", flat);
+    bindActions(socket, "department", department);
     bindActions(socket, "vote", vote);
     bindActions(socket, "recommendation", recommendation);
     bindActions(socket, "notification", notification);

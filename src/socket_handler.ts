@@ -1,7 +1,7 @@
 import db from "./db";
 
 import * as user from "./actions/user";
-import * as flat from "./actions/flat";
+import * as department from "./actions/department";
 import * as vote from "./actions/vote";
 import * as recommendation from "./actions/recommendation";
 import * as notification from "./actions/notification";
@@ -22,7 +22,7 @@ export default function handleSocket(socket) {
   socket.on("disconnect", (Session as any).onLogout.bind(socket));
 
   bindActions(socket, "user", user);
-  bindActions(socket, "flat", flat);
+  bindActions(socket, "department", department);
   bindActions(socket, "vote", vote);
   bindActions(socket, "recommendation", recommendation);
   bindActions(socket, "notification", notification);

@@ -1,4 +1,4 @@
-import { Flat, Person, Resident, User } from "../models";
+import { Department, Person, Resident, User } from "../models";
 import { DEFAULT_ACCESS } from "../models/person/person.model";
 import errors from "./errors";
 
@@ -11,8 +11,8 @@ export async function info({ flatNumber }, respond) {
     if (user.banned) throw new Error(errors.user["002"].code);
     if (user.deleted) throw new Error(errors.user["003"].code);
 
-    const flat = await Flat.findOne({ where: { number: flatNumber } });
-    if (flat == null) throw new Error(errors.flat["001"].code);
+    const flat = await Department.findOne({ where: { number: flatNumber } });
+    if (flat == null) throw new Error(errors.department["001"].code);
     const residents = await Resident.findAll({ where: { flatId: flat.id }, include: [{ model: Person, include: [{ model: User }] }] });
     let result = [];
     for (let resident of residents) {

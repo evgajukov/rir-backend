@@ -61,7 +61,7 @@ class RecommendationResponse extends response_1.default {
                     {
                         model: models_1.Resident,
                         separate: true,
-                        include: [{ model: models_1.Flat }]
+                        include: [{ model: models_1.Department }]
                     }
                 ]
             }

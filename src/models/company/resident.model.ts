@@ -1,9 +1,9 @@
 import { BelongsTo, Column, Default, ForeignKey, Index, Model, Table } from "sequelize-typescript";
-import { Flat, Person } from "..";
+import { Department, Person } from "..";
 
 @Table({
   tableName: "residents",
-  comment: "Связка пользователей с квартирави, которые у них в собственности, либо они в них живут"
+  comment: "Связка сотрудников с отделами"
 })
 export default class Resident extends Model<Resident> {
 
@@ -16,12 +16,12 @@ export default class Resident extends Model<Resident> {
   person: Person;
 
   @Index
-  @ForeignKey(() => Flat)
+  @ForeignKey(() => Department)
   @Column
-  flatId: number;
+  departmentId: number;
 
-  @BelongsTo(() => Flat)
-  flat: Flat;
+  @BelongsTo(() => Department)
+  department: Department;
 
   @Default(false)
   @Column

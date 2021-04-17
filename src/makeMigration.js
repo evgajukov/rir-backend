@@ -23,7 +23,7 @@ const models_1 = require("./models");
         password: config_1.default.db.password,
         models: [models_1.Event, models_1.EventLog,
             models_1.Session, models_1.User, models_1.Role,
-            models_1.Person, models_1.Flat, models_1.Resident, models_1.Invite,
+            models_1.Person, models_1.Department, models_1.Resident, models_1.Invite,
             models_1.Post, models_1.Instruction, models_1.Document,
             models_1.FAQCategory, models_1.FAQItem,
             models_1.Vote, models_1.VoteQuestion, models_1.VoteAnswer, models_1.VotePerson,

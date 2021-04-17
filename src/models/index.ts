@@ -9,7 +9,7 @@ import Person from "./person/person.model";
 import Invite from "./invite/invite.model";
 
 import Company from "./company/company.model";
-import Flat from "./company/flat.model";
+import Department from "./company/department.model";
 import Resident from "./company/resident.model";
 
 import Post from "./post/post.model";
@@ -40,7 +40,7 @@ import sequelize from "../db";
 export {
   sequelize, Event, EventLog,
   Session, User, Role,
-  Person, Company, Flat, Resident, Invite,
+  Person, Company, Department, Resident, Invite,
   Post, Instruction, Document,
   FAQCategory, FAQItem,
   Vote, VoteQuestion, VoteAnswer, VotePerson,

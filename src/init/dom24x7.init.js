@@ -19,11 +19,11 @@ const models_1 = require("../models");
             company = yield models_1.Company.create({ title });
         }
         yield company.save();
-        const flats = yield models_1.Flat.findAll({ where: { companyId: null } });
-        for (let flat of flats) {
-            console.log(`>>> привязываем квартиру №${flat.number} к дому`);
-            flat.companyId = company.id;
-            yield flat.save();
+        const departments = yield models_1.Department.findAll({ where: { companyId: null } });
+        for (let department of departments) {
+            console.log(`>>> привязываем квартиру №${department.number} к дому`);
+            department.companyId = company.id;
+            yield department.save();
         }
         console.log("Завершение процесса");
     }

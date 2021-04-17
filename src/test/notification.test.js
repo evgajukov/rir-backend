@@ -13,7 +13,7 @@ const push_1 = require("../lib/push");
 (() => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield push_1.default.send({
         body: "К нам присоединился новый сосед с кв. №358, этаж 11, подъезд 3",
-        uri: "/flat/358",
+        uri: "/department/358",
         all: true
     });
     if (result != null)

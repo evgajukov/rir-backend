@@ -41,14 +41,14 @@ class VoteResponse extends response_1.default {
                 };
             }
             // дальше только для неанонимного голосования
-            let flat = null;
+            let department = null;
             if (answer.person.residents.length > 0) {
-                const flatInfo = answer.person.residents[0].flat;
-                flat = {
-                    id: flatInfo.id,
-                    number: flatInfo.number,
-                    section: flatInfo.section,
-                    floor: flatInfo.floor
+                const departmentInfo = answer.person.residents[0].department;
+                department = {
+                    id: departmentInfo.id,
+                    number: departmentInfo.number,
+                    section: departmentInfo.section,
+                    floor: departmentInfo.floor
                 };
             }
             let person = {
@@ -56,7 +56,7 @@ class VoteResponse extends response_1.default {
                 surname: null,
                 name: null,
                 midname: null,
-                flat
+                department
             };
             const access = answer.person.access;
             if (access.name.level == "all") {
@@ -146,7 +146,7 @@ class VoteResponse extends response_1.default {
                             {
                                 model: models_1.Resident,
                                 separate: true,
-                                include: [{ model: models_1.Flat }]
+                                include: [{ model: models_1.Department }]
                             }
                         ]
                     }

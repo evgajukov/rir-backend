@@ -1,5 +1,5 @@
 import Cache from "../../lib/cache";
-import { Flat, Person, Resident, User, Vote, VoteAnswer, VotePerson, VoteQuestion } from "../../models";
+import { Department, Person, Resident, User, Vote, VoteAnswer, VotePerson, VoteQuestion } from "../../models";
 import Response from "../response";
 
 type tQuestion = {
@@ -11,7 +11,7 @@ type tPerson = {
   surname?: string,
   name?: string,
   midname?: string,
-  flat?: {
+  department?: {
     id: number,
     number: number,
     section: number,
@@ -66,14 +66,14 @@ export default class VoteResponse extends Response {
         }
       }
       // дальше только для неанонимного голосования
-      let flat = null;
+      let department = null;
       if (answer.person.residents.length > 0) {
-        const flatInfo = answer.person.residents[0].flat;
-        flat = {
-          id: flatInfo.id,
-          number: flatInfo.number,
-          section: flatInfo.section,
-          floor: flatInfo.floor
+        const departmentInfo = answer.person.residents[0].department;
+        department = {
+          id: departmentInfo.id,
+          number: departmentInfo.number,
+          section: departmentInfo.section,
+          floor: departmentInfo.floor
         };
       }
       let person = {
@@ -81,7 +81,7 @@ export default class VoteResponse extends Response {
         surname: null,
         name: null,
         midname: null,
-        flat
+        department
       };
       const access = answer.person.access;
       if (access.name.level == "all") {
@@ -166,7 +166,7 @@ export default class VoteResponse extends Response {
               {
                 model: Resident,
                 separate: true,
-                include: [{ model: Flat }]
+                include: [{ model: Department }]
               }
             ]
           }

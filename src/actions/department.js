@@ -26,9 +26,9 @@ function info({ flatNumber }, respond) {
                 throw new Error(errors_1.default.user["002"].code);
             if (user.deleted)
                 throw new Error(errors_1.default.user["003"].code);
-            const flat = yield models_1.Flat.findOne({ where: { number: flatNumber } });
+            const flat = yield models_1.Department.findOne({ where: { number: flatNumber } });
             if (flat == null)
-                throw new Error(errors_1.default.flat["001"].code);
+                throw new Error(errors_1.default.department["001"].code);
             const residents = yield models_1.Resident.findAll({ where: { flatId: flat.id }, include: [{ model: models_1.Person, include: [{ model: models_1.User }] }] });
             let result = [];
             for (let resident of residents) {

@@ -1,4 +1,4 @@
-import { Flat, Company } from "../models";
+import { Department, Company } from "../models";
 
 (async () => {
   try {
@@ -11,11 +11,11 @@ import { Flat, Company } from "../models";
 
     await company.save();
 
-    const flats = await Flat.findAll({ where: { companyId: null } });
-    for (let flat of flats) {
-      console.log(`>>> привязываем квартиру №${flat.number} к дому`);
-      flat.companyId = company.id;
-      await flat.save();
+    const departments = await Department.findAll({ where: { companyId: null } });
+    for (let department of departments) {
+      console.log(`>>> привязываем квартиру №${department.number} к дому`);
+      department.companyId = company.id;
+      await department.save();
     }
     console.log("Завершение процесса");
   } catch (error) {

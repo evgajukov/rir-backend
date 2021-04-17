@@ -33,10 +33,10 @@ export default {
       message: "Пользователь с таким номером телефона уже зарегистрирован"
     }
   },
-  flat: {
+  department: {
     "001": {
-      code: "FLAT.001",
-      message: "Квартира с таким номером не найдена"
+      code: "DEPARTMENT.001",
+      message: "Отдел не найден"
     },
   },
   vote: {

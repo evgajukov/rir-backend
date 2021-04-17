@@ -1,10 +1,10 @@
-import { FlatResponse, InviteResponse, PostResponse } from "..";
+import { DepartmentResponse, InviteResponse, PostResponse } from "..";
 import Response from "../response";
 
 export default class AllResponse extends Response {
 
   posts: PostResponse[];
-  flats: FlatResponse[];
+  departments: DepartmentResponse[];
   invites: InviteResponse[];
 
   constructor() {
@@ -17,16 +17,16 @@ export default class AllResponse extends Response {
 
   static async init(userId: number, channelName?: string) {
     let posts: PostResponse[] = [];
-    let flats: FlatResponse[] = [];
+    let departments: DepartmentResponse[] = [];
     let invites: InviteResponse[] = [];
 
     if (channelName == null || channelName == "posts") posts = await PostResponse.list();
-    if (channelName == null || channelName == "flats") flats = await FlatResponse.list(userId);
+    if (channelName == null || channelName == "departments") departments = await DepartmentResponse.list(userId);
     if (channelName == null || channelName == "invites") invites = await InviteResponse.list(userId);
 
     let result = AllResponse.create();
     result.posts = posts;
-    result.flats = flats;
+    result.departments = departments;
     result.invites = invites;
     return result;
   }

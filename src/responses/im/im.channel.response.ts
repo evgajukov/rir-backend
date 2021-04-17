@@ -1,4 +1,4 @@
-import { Flat, IMChannel, IMChannelPerson, Person, Resident, User } from "../../models";
+import { Department, IMChannel, IMChannelPerson, Person, Resident, User } from "../../models";
 import IMMessage, { tIMMessageBody } from "../../models/im/im.message.model";
 import Response from "../response";
 import { getPerson, tPerson } from "../type/person.type";
@@ -53,7 +53,7 @@ export default class IMChannelResponse extends Response {
             include: [
               {
                 model: Resident,
-                include: [{ model: Flat }]
+                include: [{ model: Department }]
               }
             ]
           }
@@ -110,7 +110,7 @@ export default class IMChannelResponse extends Response {
             include: [
               {
                 model: Resident,
-                include: [{ model: Flat }]
+                include: [{ model: Department }]
               }
             ]
           }

@@ -29,12 +29,12 @@ function save({ title, questions, anonymous, multi, type }, respond) {
             if (user.deleted)
                 throw new Error(errors_1.default.user["003"].code);
             const person = yield models_1.Person.findOne({ where: { userId: this.authToken.id } });
-            const resident = yield models_1.Resident.findOne({ where: { personId: person.id }, include: [{ model: models_1.Flat }] });
-            const flat = resident.flat;
+            const resident = yield models_1.Resident.findOne({ where: { personId: person.id }, include: [{ model: models_1.Department }] });
+            const department = resident.department;
             // создаем голосование
             const company = type == "company";
-            const section = type != "company" ? flat.section : null;
-            const floor = type == "floor" ? flat.floor : null;
+            const section = type != "company" ? department.section : null;
+            const floor = type == "floor" ? department.floor : null;
             const vote = yield models_1.Vote.create({ title, multi, anonymous, company, section, floor, userId: this.authToken.id });
             // добавляем вопросы к голосованию
             for (let question of questions) {
@@ -51,13 +51,13 @@ function save({ title, questions, anonymous, multi, type }, respond) {
             }
             else if (type == "section") {
                 // весь подъезд
-                const flats = yield models_1.Flat.findAll({ where: { section } });
-                residents = yield models_1.Resident.findAll({ where: { flatId: flats.map(flat => flat.id) } });
+                const departments = yield models_1.Department.findAll({ where: { section } });
+                residents = yield models_1.Resident.findAll({ where: { departmentId: departments.map(department => department.id) } });
             }
             else if (type == "floor") {
                 // весь этаж в подъезде
-                const flats = yield models_1.Flat.findAll({ where: { section, floor } });
-                residents = yield models_1.Resident.findAll({ where: { flatId: flats.map(flat => flat.id) } });
+                const departments = yield models_1.Department.findAll({ where: { section, floor } });
+                residents = yield models_1.Resident.findAll({ where: { departmentId: departments.map(department => department.id) } });
             }
             for (let resident of residents) {
                 models_1.VotePerson.create({ voteId: vote.id, personId: resident.personId });

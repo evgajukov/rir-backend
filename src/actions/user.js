@@ -123,7 +123,7 @@ function invite(params, respond) {
     });
 }
 exports.invite = invite;
-function saveProfile({ surname, name, midname, telegram, flat, access }, respond) {
+function saveProfile({ surname, name, midname, telegram, department, access }, respond) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log(">>>>> actions/user.saveProfile");
         try {
@@ -136,9 +136,9 @@ function saveProfile({ surname, name, midname, telegram, flat, access }, respond
                 throw new Error(errors_1.default.user["002"].code);
             if (user.deleted)
                 throw new Error(errors_1.default.user["003"].code);
-            const flatDb = yield models_1.Flat.findByPk(flat);
-            if (flatDb == null)
-                throw new Error(errors_1.default.flat["001"].code);
+            const departmentDb = yield models_1.Department.findByPk(department);
+            if (departmentDb == null)
+                throw new Error(errors_1.default.department["001"].code);
             let person = yield models_1.Person.findOne({ where: { userId: this.authToken.id } });
             if (person == null) {
                 // только что зарегистрировались и еще нет профиля
@@ -153,9 +153,9 @@ function saveProfile({ surname, name, midname, telegram, flat, access }, respond
                 person.access = access;
                 yield person.save();
             }
-            let resident = yield models_1.Resident.findOne({ where: { personId: person.id }, include: [{ model: models_1.Flat }] });
+            let resident = yield models_1.Resident.findOne({ where: { personId: person.id }, include: [{ model: models_1.Department }] });
             if (resident == null) {
-                yield models_1.Resident.create({ personId: person.id, flatId: flat });
+                yield models_1.Resident.create({ personId: person.id, departmentId: department });
                 // проверяем активные голосования и, при необходимости, добавляем в нужные
                 try {
                     const votes = yield models_1.Vote.findAll({ where: { closed: false } });
@@ -170,10 +170,10 @@ function saveProfile({ surname, name, midname, telegram, flat, access }, respond
                             }
                             else {
                                 // голосование на подъезд, либо этаж
-                                if (resident.flat.section == vote.section) {
+                                if (resident.department.section == vote.section) {
                                     if (vote.floor != null) {
                                         // голосование на этаж
-                                        if (resident.flat.floor == vote.floor) {
+                                        if (resident.department.floor == vote.floor) {
                                             const votePerson = yield models_1.VotePerson.findOne({ where: { voteId: vote.id, personId: person.id } });
                                             if (votePerson == null) {
                                                 models_1.VotePerson.create({ voteId: vote.id, personId: person.id });
@@ -199,12 +199,12 @@ function saveProfile({ surname, name, midname, telegram, flat, access }, respond
                 const responseUpdate = new response_update_1.default(this.exchange);
                 // добавляем пользователя в чаты
                 try {
-                    const flatDb = yield models_1.Flat.findByPk(flat);
-                    const flatTxt = `кв. ${flatDb.number}, этаж ${flatDb.floor}, подъезд ${flatDb.section}`;
+                    const departmentDb = yield models_1.Department.findByPk(department);
+                    const departmentTxt = `кв. ${departmentDb.number}, этаж ${departmentDb.floor}, подъезд ${departmentDb.section}`;
                     // в общедомовой
                     let channel = yield models_1.IMChannel.findOne({ where: { company: true } });
                     models_1.IMChannelPerson.create({ channelId: channel.id, personId: person.id });
-                    models_1.IMMessage.create({ channelId: channel.id, body: { text: `Сосед(ка) из ${flatTxt} вступил(а) в группу` } });
+                    models_1.IMMessage.create({ channelId: channel.id, body: { text: `Сосед(ка) из ${departmentTxt} вступил(а) в группу` } });
                     cache_1.default.getInstance().clear(`imMessages:${channel.id}`);
                     // обновляем канал "imChannel"
                     responseUpdate.update({
@@ -215,9 +215,9 @@ function saveProfile({ surname, name, midname, telegram, flat, access }, respond
                         data: JSON.stringify({ channelId: channel.id, event: "update" })
                     });
                     // в чат секции
-                    channel = yield models_1.IMChannel.findOne({ where: { section: flatDb.section, floor: null } });
+                    channel = yield models_1.IMChannel.findOne({ where: { section: departmentDb.section, floor: null } });
                     models_1.IMChannelPerson.create({ channelId: channel.id, personId: person.id });
-                    models_1.IMMessage.create({ channelId: channel.id, body: { text: `Сосед(ка) из ${flatTxt} вступил(а) в группу` } });
+                    models_1.IMMessage.create({ channelId: channel.id, body: { text: `Сосед(ка) из ${departmentTxt} вступил(а) в группу` } });
                     cache_1.default.getInstance().clear(`imMessages:${channel.id}`);
                     // обновляем канал "imChannel"
                     responseUpdate.update({
@@ -228,9 +228,9 @@ function saveProfile({ surname, name, midname, telegram, flat, access }, respond
                         data: JSON.stringify({ channelId: channel.id, event: "update" })
                     });
                     // в чат этажа
-                    channel = yield models_1.IMChannel.findOne({ where: { section: flatDb.section, floor: flatDb.floor } });
+                    channel = yield models_1.IMChannel.findOne({ where: { section: departmentDb.section, floor: departmentDb.floor } });
                     models_1.IMChannelPerson.create({ channelId: channel.id, personId: person.id });
-                    models_1.IMMessage.create({ channelId: channel.id, body: { text: `Сосед(ка) из ${flatTxt} вступил(а) в группу` } });
+                    models_1.IMMessage.create({ channelId: channel.id, body: { text: `Сосед(ка) из ${departmentTxt} вступил(а) в группу` } });
                     cache_1.default.getInstance().clear(`imMessages:${channel.id}`);
                     // обновляем канал "imChannel"
                     responseUpdate.update({
@@ -248,8 +248,8 @@ function saveProfile({ surname, name, midname, telegram, flat, access }, respond
                 const post = yield models_1.Post.create({
                     title: "Новый сосед",
                     type: "person",
-                    body: `К нам присоединился новый сосед с кв. №${flatDb.number}, этаж ${flatDb.floor}, подъезд ${flatDb.section}`,
-                    url: `/flat/${flatDb.number}`,
+                    body: `К нам присоединился новый сосед с кв. №${departmentDb.number}, этаж ${departmentDb.floor}, подъезд ${departmentDb.section}`,
+                    url: `/department/${departmentDb.number}`,
                 });
                 // отправляем нотификацию всем соседям
                 push_1.default.send({ body: post.body, uri: post.url, all: true });
@@ -261,7 +261,7 @@ function saveProfile({ surname, name, midname, telegram, flat, access }, respond
                     status: "SUCCESS",
                     data: JSON.stringify({ postId: post.id, event: "create" })
                 });
-                resident = yield models_1.Resident.findOne({ where: { personId: person.id }, include: [{ model: models_1.Flat }] });
+                resident = yield models_1.Resident.findOne({ where: { personId: person.id }, include: [{ model: models_1.Department }] });
                 // обновляем канал "invites"
                 const inviteDb = yield models_1.Invite.findOne({ where: { newUserId: this.authToken.id } });
                 responseUpdate.update({

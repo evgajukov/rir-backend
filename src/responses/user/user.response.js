@@ -26,7 +26,7 @@ class UserResponse extends response_1.default {
             const role = yield models_1.Role.findByPk(model.roleId);
             let resident = null;
             if (person != null)
-                resident = yield models_1.Resident.findOne({ where: { personId: person.id }, include: [{ model: models_1.Flat }] });
+                resident = yield models_1.Resident.findOne({ where: { personId: person.id }, include: [{ model: models_1.Department }] });
             if (person != null && person.access == null) {
                 // устанавливаем права по-умолчанию
                 person.access = person_model_1.DEFAULT_ACCESS;

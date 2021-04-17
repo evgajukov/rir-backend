@@ -1,4 +1,4 @@
-import { Flat, Invite, Person, Resident, User } from "../../models";
+import { Department, Invite, Person, Resident, User } from "../../models";
 import Response from "../response";
 
 export default class InviteResponse extends Response {
@@ -11,7 +11,7 @@ export default class InviteResponse extends Response {
     name: string;
     midname: string;
   };
-  flat: {
+  department: {
     number: number;
     floor: number;
     section: number;
@@ -32,7 +32,7 @@ export default class InviteResponse extends Response {
         item.person = { surname: person.surname, name: person.name, midname: person.midname };
         const resident = person.residents[0];
         if (resident != null) {
-          item.flat = { number: resident.flat.number, floor: resident.flat.floor, section: resident.flat.section };
+          item.department = { number: resident.department.number, floor: resident.department.floor, section: resident.department.section };
         }
       }
     }
@@ -59,7 +59,7 @@ export default class InviteResponse extends Response {
               include: [
                 {
                   model: Resident,
-                  include: [{ model: Flat }]
+                  include: [{ model: Department }]
                 }
               ]
             }

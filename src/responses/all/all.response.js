@@ -21,17 +21,17 @@ class AllResponse extends response_1.default {
     static init(userId, channelName) {
         return __awaiter(this, void 0, void 0, function* () {
             let posts = [];
-            let flats = [];
+            let departments = [];
             let invites = [];
             if (channelName == null || channelName == "posts")
                 posts = yield __1.PostResponse.list();
-            if (channelName == null || channelName == "flats")
-                flats = yield __1.FlatResponse.list(userId);
+            if (channelName == null || channelName == "departments")
+                departments = yield __1.DepartmentResponse.list(userId);
             if (channelName == null || channelName == "invites")
                 invites = yield __1.InviteResponse.list(userId);
             let result = AllResponse.create();
             result.posts = posts;
-            result.flats = flats;
+            result.departments = departments;
             result.invites = invites;
             return result;
         });

@@ -1,7 +1,7 @@
 import EventResponse from "./event/event.response";
 import AllResponse from "./all/all.response";
 import PingResponse from "./ping/ping.response";
-import FlatResponse from "./flat/flat.response";
+import DepartmentResponse from "./department/department.response";
 import UserResponse from "./user/user.response";
 import PostResponse from "./post/post.response";
 import InstructionResponse from "./instruction/instruction.response";
@@ -31,9 +31,9 @@ const channels = {
     action: "INFO", // company
     response: CompanyResponse
   },
-  flats: {
-    action: "LIST", // flats
-    response: FlatResponse
+  departments: {
+    action: "LIST", // departments
+    response: DepartmentResponse
   },
   user: {
     action: "INFO", // user.userId
@@ -84,6 +84,6 @@ const channels = {
 export {
   channels,
   EventResponse, PingResponse,
-  FlatResponse, UserResponse, PostResponse, InstructionResponse, InviteResponse, DocumentResponse, VoteResponse,
+  DepartmentResponse, UserResponse, PostResponse, InstructionResponse, InviteResponse, DocumentResponse, VoteResponse,
   IMMessageResponse, IMChannelResponse, CompanyResponse, RecommendationResponse,
 };

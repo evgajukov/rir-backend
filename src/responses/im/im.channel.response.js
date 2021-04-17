@@ -51,7 +51,7 @@ class IMChannelResponse extends response_1.default {
                             include: [
                                 {
                                     model: models_1.Resident,
-                                    include: [{ model: models_1.Flat }]
+                                    include: [{ model: models_1.Department }]
                                 }
                             ]
                         }
@@ -117,7 +117,7 @@ class IMChannelResponse extends response_1.default {
                         include: [
                             {
                                 model: models_1.Resident,
-                                include: [{ model: models_1.Flat }]
+                                include: [{ model: models_1.Department }]
                             }
                         ]
                     }

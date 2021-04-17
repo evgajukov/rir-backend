@@ -1,5 +1,5 @@
 import Response from "../response";
-import { Flat, Person, Resident, Role, User } from "../../models";
+import { Department, Person, Resident, Role, User } from "../../models";
 import { DEFAULT_ACCESS } from "../../models/person/person.model";
 import Cache from "../../lib/cache";
 
@@ -23,7 +23,7 @@ export default class UserResponse extends Response {
     const role = await Role.findByPk(model.roleId);
 
     let resident = null;
-    if (person != null) resident = await Resident.findOne({ where: { personId: person.id }, include: [{ model: Flat }] });
+    if (person != null) resident = await Resident.findOne({ where: { personId: person.id }, include: [{ model: Department }] });
 
     if (person != null && person.access == null) {
       // устанавливаем права по-умолчанию

@@ -5,7 +5,7 @@ import config from "./config";
 import {
   Event, EventLog,
   Session, User, Role,
-  Person, Flat, Resident, Invite,
+  Person, Department, Resident, Invite,
   Post, Instruction, Document,
   FAQCategory, FAQItem,
   Vote, VoteQuestion, VoteAnswer, VotePerson,
@@ -22,7 +22,7 @@ import {
     password: config.db.password,
     models: [Event, EventLog,
       Session, User, Role,
-      Person, Flat, Resident, Invite,
+      Person, Department, Resident, Invite,
       Post, Instruction, Document,
       FAQCategory, FAQItem,
       Vote, VoteQuestion, VoteAnswer, VotePerson,

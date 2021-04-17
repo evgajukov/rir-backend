@@ -1,4 +1,4 @@
-import { Flat, Person, Recommendation, RecommendationCategory, Resident } from "../../models";
+import { Department, Person, Recommendation, RecommendationCategory, Resident } from "../../models";
 import { tRecommendationExtra } from "../../models/recommendation/recommendation.model";
 import Response from "../response";
 import { getPerson, tPerson } from "../type/person.type";
@@ -61,7 +61,7 @@ export default class RecommendationResponse extends Response {
           {
             model: Resident,
             separate: true,
-            include: [{ model: Flat }]
+            include: [{ model: Department }]
           }
         ]
       }

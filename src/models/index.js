@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Version = exports.NotificationToken = exports.Recommendation = exports.RecommendationCategory = exports.IMMessageShow = exports.IMChannelPerson = exports.IMChannel = exports.IMMessage = exports.VotePerson = exports.VoteAnswer = exports.VoteQuestion = exports.Vote = exports.FAQItem = exports.FAQCategory = exports.Document = exports.Instruction = exports.Post = exports.Invite = exports.Resident = exports.Flat = exports.Company = exports.Person = exports.Role = exports.User = exports.Session = exports.EventLog = exports.Event = exports.sequelize = void 0;
+exports.Version = exports.NotificationToken = exports.Recommendation = exports.RecommendationCategory = exports.IMMessageShow = exports.IMChannelPerson = exports.IMChannel = exports.IMMessage = exports.VotePerson = exports.VoteAnswer = exports.VoteQuestion = exports.Vote = exports.FAQItem = exports.FAQCategory = exports.Document = exports.Instruction = exports.Post = exports.Invite = exports.Resident = exports.Department = exports.Company = exports.Person = exports.Role = exports.User = exports.Session = exports.EventLog = exports.Event = exports.sequelize = void 0;
 const event_model_1 = require("./event/event.model");
 exports.Event = event_model_1.default;
 const logger_model_1 = require("./event/logger.model");
@@ -17,8 +17,8 @@ const invite_model_1 = require("./invite/invite.model");
 exports.Invite = invite_model_1.default;
 const company_model_1 = require("./company/company.model");
 exports.Company = company_model_1.default;
-const flat_model_1 = require("./company/flat.model");
-exports.Flat = flat_model_1.default;
+const department_model_1 = require("./company/department.model");
+exports.Department = department_model_1.default;
 const resident_model_1 = require("./company/resident.model");
 exports.Resident = resident_model_1.default;
 const post_model_1 = require("./post/post.model");

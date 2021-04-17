@@ -25,9 +25,9 @@ __decorate([
     __metadata("design:type", Object)
 ], Company.prototype, "extra", void 0);
 __decorate([
-    sequelize_typescript_1.HasMany(() => __1.Flat),
+    sequelize_typescript_1.HasMany(() => __1.Department),
     __metadata("design:type", Array)
-], Company.prototype, "flats", void 0);
+], Company.prototype, "departments", void 0);
 Company = __decorate([
     sequelize_typescript_1.Table({
         tableName: "companies",

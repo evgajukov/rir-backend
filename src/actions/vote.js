@@ -33,9 +33,8 @@ function save({ title, questions, anonymous, multi, type }, respond) {
             const department = resident.department;
             // создаем голосование
             const company = type == "company";
-            const section = type != "company" ? department.section : null;
-            const floor = type == "floor" ? department.floor : null;
-            const vote = yield models_1.Vote.create({ title, multi, anonymous, company, section, floor, userId: this.authToken.id });
+            const departmentId = type == "department" ? department.id : null;
+            const vote = yield models_1.Vote.create({ title, multi, anonymous, company, departmentId, userId: this.authToken.id });
             // добавляем вопросы к голосованию
             for (let question of questions) {
                 const body = question.body;
@@ -46,18 +45,15 @@ function save({ title, questions, anonymous, multi, type }, respond) {
             // генерируем список пользователей, которым доступно голосование
             let residents = [];
             if (type == "company") {
-                // весь дом
+                // вся компания
                 residents = yield models_1.Resident.findAll({ include: [{ model: models_1.Person }] });
             }
-            else if (type == "section") {
-                // весь подъезд
-                const departments = yield models_1.Department.findAll({ where: { section } });
-                residents = yield models_1.Resident.findAll({ where: { departmentId: departments.map(department => department.id) } });
-            }
-            else if (type == "floor") {
-                // весь этаж в подъезде
-                const departments = yield models_1.Department.findAll({ where: { section, floor } });
-                residents = yield models_1.Resident.findAll({ where: { departmentId: departments.map(department => department.id) } });
+            else if (type == "department") {
+                // весь депортамент c подотделами
+                const departments = yield models_1.Department.findAll({ where: { parentId: department.id } });
+                let departmentsIds = departments.map(department => department.id);
+                departmentsIds.push(department.id);
+                residents = yield models_1.Resident.findAll({ where: { departmentId: departmentsIds } });
             }
             for (let resident of residents) {
                 models_1.VotePerson.create({ voteId: vote.id, personId: resident.personId });

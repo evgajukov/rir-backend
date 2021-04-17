@@ -8,9 +8,7 @@ export type tPerson = {
   deleted?: boolean,
   department?: {
     id: number,
-    number: number,
-    section: number,
-    floor: number
+    title: string
   }
 };
 
@@ -34,9 +32,7 @@ export function getPerson(model: Person): tPerson {
     const department = model.residents[0].department;
     person.department = {
       id: department.id,
-      number: department.number,
-      section: department.section,
-      floor: department.floor
+      title: department.title
     };
   }
 

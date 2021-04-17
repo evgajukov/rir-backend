@@ -1,5 +1,5 @@
-import { BelongsTo, Column, Default, ForeignKey, HasMany, Model, Table } from "sequelize-typescript";
-import { User, VoteAnswer, VotePerson, VoteQuestion } from "..";
+import { BelongsTo, Column, Default, ForeignKey, HasMany, Index, Model, Table } from "sequelize-typescript";
+import { Department, User, VoteAnswer, VotePerson, VoteQuestion } from "..";
 
 @Table({
   tableName: "votes",
@@ -34,15 +34,15 @@ export default class Vote extends Model<Vote> {
   })
   company: boolean;
 
+  @Index
+  @ForeignKey(() => Department)
   @Column({
-    comment: "Если указана секция, то голосование на конкретную секция, либо этаж конкретной секции, если еще и этаж указан"
+    comment: "Если указана, то голосование на конкретный департамент"
   })
-  section: number;
+  departmentId: number;
 
-  @Column({
-    comment: "Указывается совместно с параметром секции. Если указан, то голосование по конкретному этажу в секции"
-  })
-  floor: number;
+  @BelongsTo(() => Department)
+  department: Department;
 
   @ForeignKey(() => User)
   @Column

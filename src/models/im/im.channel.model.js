@@ -27,18 +27,16 @@ __decorate([
 ], IMChannel.prototype, "company", void 0);
 __decorate([
     sequelize_typescript_1.Index,
+    sequelize_typescript_1.ForeignKey(() => __1.Department),
     sequelize_typescript_1.Column({
-        comment: "Если указана секция, то канал на конкретную секция, либо этаж конкретной секции, если еще и этаж указан"
+        comment: "Если указана, то канал на конкретный департамент"
     }),
     __metadata("design:type", Number)
-], IMChannel.prototype, "section", void 0);
+], IMChannel.prototype, "departmentId", void 0);
 __decorate([
-    sequelize_typescript_1.Index,
-    sequelize_typescript_1.Column({
-        comment: "Указывается совместно с параметром секции. Если указан, то канал по конкретному этажу в секции"
-    }),
-    __metadata("design:type", Number)
-], IMChannel.prototype, "floor", void 0);
+    sequelize_typescript_1.BelongsTo(() => __1.Department),
+    __metadata("design:type", __1.Department)
+], IMChannel.prototype, "department", void 0);
 __decorate([
     sequelize_typescript_1.Default(false),
     sequelize_typescript_1.Column({

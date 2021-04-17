@@ -131,28 +131,17 @@ export async function saveProfile({ surname, name, midname, telegram, department
         if (votes != null) {
           for (let vote of votes) {
             if (vote.company) {
-              // голосование на весь дом
+              // голосование на всю компанию
               const votePerson = await VotePerson.findOne({ where: { voteId: vote.id, personId: person.id } });
               if (votePerson == null) {
                 VotePerson.create({ voteId: vote.id, personId: person.id });
               }
             } else {
-              // голосование на подъезд, либо этаж
-              if (resident.department.section == vote.section) {
-                if (vote.floor != null) {
-                  // голосование на этаж
-                  if (resident.department.floor == vote.floor) {
-                    const votePerson = await VotePerson.findOne({ where: { voteId: vote.id, personId: person.id } });
-                    if (votePerson == null) {
-                      VotePerson.create({ voteId: vote.id, personId: person.id });
-                    }
-                  }
-                } else {
-                  // голосование на подъезд
-                  const votePerson = await VotePerson.findOne({ where: { voteId: vote.id, personId: person.id } });
-                  if (votePerson == null) {
-                    VotePerson.create({ voteId: vote.id, personId: person.id });
-                  }
+              // голосование на департамент
+              if (resident.department.id == vote.departmentId) {
+                const votePerson = await VotePerson.findOne({ where: { voteId: vote.id, personId: person.id } });
+                if (votePerson == null) {
+                  VotePerson.create({ voteId: vote.id, personId: person.id });
                 }
               }
             }
@@ -168,12 +157,11 @@ export async function saveProfile({ surname, name, midname, telegram, department
       // добавляем пользователя в чаты
       try {
         const departmentDb = await Department.findByPk(department);
-        const departmentTxt = `кв. ${departmentDb.number}, этаж ${departmentDb.floor}, подъезд ${departmentDb.section}`;
-
+        
         // в общедомовой
         let channel = await IMChannel.findOne({ where: { company: true } });
         IMChannelPerson.create({ channelId: channel.id, personId: person.id });
-        IMMessage.create({ channelId: channel.id, body: { text: `Сосед(ка) из ${departmentTxt} вступил(а) в группу` } });
+        IMMessage.create({ channelId: channel.id, body: { text: `Коллега из ${departmentDb.title} вступил в группу` } });
         Cache.getInstance().clear(`imMessages:${channel.id}`);
         // обновляем канал "imChannel"
         responseUpdate.update({
@@ -184,24 +172,10 @@ export async function saveProfile({ surname, name, midname, telegram, department
           data: JSON.stringify({ channelId: channel.id, event: "update" })
         });
 
-        // в чат секции
-        channel = await IMChannel.findOne({ where: { section: departmentDb.section, floor: null } });
+        // в чат департамента
+        channel = await IMChannel.findOne({ where: { departmentId: departmentDb.id } });
         IMChannelPerson.create({ channelId: channel.id, personId: person.id });
-        IMMessage.create({ channelId: channel.id, body: { text: `Сосед(ка) из ${departmentTxt} вступил(а) в группу` } });
-        Cache.getInstance().clear(`imMessages:${channel.id}`);
-        // обновляем канал "imChannel"
-        responseUpdate.update({
-          userId: this.authToken.id,
-          createAt: new Date(),
-          type: "IM.CHANNEL.UPDATE",
-          status: "SUCCESS",
-          data: JSON.stringify({ channelId: channel.id, event: "update" })
-        });
-
-        // в чат этажа
-        channel = await IMChannel.findOne({ where: { section: departmentDb.section, floor: departmentDb.floor } });
-        IMChannelPerson.create({ channelId: channel.id, personId: person.id });
-        IMMessage.create({ channelId: channel.id, body: { text: `Сосед(ка) из ${departmentTxt} вступил(а) в группу` } });
+        IMMessage.create({ channelId: channel.id, body: { text: `Коллеги из ${departmentDb.title} вступил в группу` } });
         Cache.getInstance().clear(`imMessages:${channel.id}`);
         // обновляем канал "imChannel"
         responseUpdate.update({
@@ -217,10 +191,10 @@ export async function saveProfile({ surname, name, midname, telegram, department
       
       // генерируем новость, что у нас новый сосед
       const post = await Post.create({
-        title: "Новый сосед",
+        title: "Новый сотрудник",
         type: "person",
-        body: `К нам присоединился новый сосед с кв. №${departmentDb.number}, этаж ${departmentDb.floor}, подъезд ${departmentDb.section}`,
-        url: `/department/${departmentDb.number}`,
+        body: `К нам присоединился новый сотрудник из ${departmentDb.title}`,
+        url: `/department/${departmentDb.id}`,
       });
       // отправляем нотификацию всем соседям
       Push.send({ body: post.body, uri: post.url, all: true });

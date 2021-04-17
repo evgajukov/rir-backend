@@ -103,26 +103,18 @@ var migrationCommands = [
           "allowNull": false,
           "type": Sequelize.INTEGER
         },
-        "number": {
-          "comment": "Номер квартиры",
-          "unique": true,
-          "type": Sequelize.INTEGER
+        "title": {
+          "type": Sequelize.STRING
         },
-        "section": {
-          "comment": "Секция / подъезд",
+        "parentId": {
+          "onDelete": "NO ACTION",
+          "onUpdate": "CASCADE",
+          "references": {
+            "model": "departments",
+            "key": "id"
+          },
+          "allowNull": true,
           "type": Sequelize.INTEGER
-        },
-        "floor": {
-          "comment": "Этаж",
-          "type": Sequelize.INTEGER
-        },
-        "rooms": {
-          "comment": "Количество комнат",
-          "type": Sequelize.INTEGER
-        },
-        "square": {
-          "comment": "Площадь квартиры",
-          "type": Sequelize.DOUBLE
         },
         "createdAt": {
           "allowNull": false,
@@ -134,7 +126,7 @@ var migrationCommands = [
         }
       },
       {
-        "comment": "Список доступных в доме квартир"
+        "comment": "Список отделов"
       }
     ]
   },
@@ -310,12 +302,15 @@ var migrationCommands = [
           "defaultValue": false,
           "type": Sequelize.BOOLEAN
         },
-        "section": {
-          "comment": "Если указана секция, то канал на конкретную секция, либо этаж конкретной секции, если еще и этаж указан",
-          "type": Sequelize.INTEGER
-        },
-        "floor": {
-          "comment": "Указывается совместно с параметром секции. Если указан, то канал по конкретному этажу в секции",
+        "departmentId": {
+          "comment": "Если указана, то канал на конкретный департамент",
+          "onDelete": "NO ACTION",
+          "onUpdate": "CASCADE",
+          "references": {
+            "model": "departments",
+            "key": "id"
+          },
+          "allowNull": true,
           "type": Sequelize.INTEGER
         },
         "createdAt": {
@@ -805,12 +800,15 @@ var migrationCommands = [
           "defaultValue": false,
           "type": Sequelize.BOOLEAN
         },
-        "section": {
-          "comment": "Если указана секция, то голосование на конкретную секция, либо этаж конкретной секции, если еще и этаж указан",
-          "type": Sequelize.INTEGER
-        },
-        "floor": {
-          "comment": "Указывается совместно с параметром секции. Если указан, то голосование по конкретному этажу в секции",
+        "departmentId": {
+          "comment": "Если указана, то голосование на конкретный департамент",
+          "onDelete": "NO ACTION",
+          "onUpdate": "CASCADE",
+          "references": {
+            "model": "departments",
+            "key": "id"
+          },
+          "allowNull": true,
           "type": Sequelize.INTEGER
         },
         "userId": {

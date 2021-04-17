@@ -46,17 +46,17 @@ __decorate([
     __metadata("design:type", Boolean)
 ], Vote.prototype, "company", void 0);
 __decorate([
+    sequelize_typescript_1.Index,
+    sequelize_typescript_1.ForeignKey(() => __1.Department),
     sequelize_typescript_1.Column({
-        comment: "Если указана секция, то голосование на конкретную секция, либо этаж конкретной секции, если еще и этаж указан"
+        comment: "Если указана, то голосование на конкретный департамент"
     }),
     __metadata("design:type", Number)
-], Vote.prototype, "section", void 0);
+], Vote.prototype, "departmentId", void 0);
 __decorate([
-    sequelize_typescript_1.Column({
-        comment: "Указывается совместно с параметром секции. Если указан, то голосование по конкретному этажу в секции"
-    }),
-    __metadata("design:type", Number)
-], Vote.prototype, "floor", void 0);
+    sequelize_typescript_1.BelongsTo(() => __1.Department),
+    __metadata("design:type", __1.Department)
+], Vote.prototype, "department", void 0);
 __decorate([
     sequelize_typescript_1.ForeignKey(() => __1.User),
     sequelize_typescript_1.Column,

@@ -12,20 +12,22 @@ interface iResident {
 
 export default class DepartmentResponse extends Response {
 
-  number: number;
-  floor: number;
-  section: number;
-  rooms: number;
-  square: number;
+  title: string;
+  parent: {
+    id: number,
+    title: string
+  };
   residents: iResident[];
 
   constructor(model: Department) {
     super(model.id);
-    this.number = model.number;
-    this.floor = model.floor;
-    this.section = model.section;
-    this.rooms = model.rooms;
-    this.square = model.square;
+    this.title = model.title;
+    if (model.parent != null) {
+      this.parent = {
+        id: model.parent.id,
+        title: model.parent.title
+      };
+    }
     this.residents = [];
     model.residents.forEach(resident => {
       const person = getPerson(resident.person);

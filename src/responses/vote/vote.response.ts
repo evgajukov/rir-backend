@@ -13,9 +13,7 @@ type tPerson = {
   midname?: string,
   department?: {
     id: number,
-    number: number,
-    section: number,
-    floor: number
+    title: string
   }
 };
 type tAnswer = {
@@ -32,8 +30,10 @@ export default class VoteResponse extends Response {
   anonymous: boolean;
   closed: boolean;
   company: boolean;
-  section: number;
-  floor: number;
+  department: {
+    id: number,
+    title: string
+  };
   questions: tQuestion[];
   answers: tAnswer[];
   persons: number;
@@ -46,8 +46,12 @@ export default class VoteResponse extends Response {
     this.anonymous = model.anonymous;
     this.closed = model.closed;
     this.company = model.company;
-    this.section = model.section;
-    this.floor = model.floor;
+    if (model.departmentId != null) {
+      this.department = {
+        id: model.department.id,
+        title: model.department.title
+      };
+    }
     this.persons = model.persons.length;
     this.questions = model.questions.map(question => {
       return {
@@ -71,9 +75,7 @@ export default class VoteResponse extends Response {
         const departmentInfo = answer.person.residents[0].department;
         department = {
           id: departmentInfo.id,
-          number: departmentInfo.number,
-          section: departmentInfo.section,
-          floor: departmentInfo.floor
+          title: departmentInfo.title
         };
       }
       let person = {
@@ -148,6 +150,10 @@ export default class VoteResponse extends Response {
 
   private static include() {
     return [
+      {
+        model: Department,
+        separate: true
+      },
       {
         model: VotePerson,
         separate: true,

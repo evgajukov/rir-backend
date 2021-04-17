@@ -13,7 +13,7 @@ import { Department, Company } from "../models";
 
     const departments = await Department.findAll({ where: { companyId: null } });
     for (let department of departments) {
-      console.log(`>>> привязываем квартиру №${department.number} к дому`);
+      console.log(`>>> привязываем департамент ${department.title} к компании`);
       department.companyId = company.id;
       await department.save();
     }

@@ -1,5 +1,5 @@
-import { Column, Default, HasMany, Index, Model, Table } from "sequelize-typescript";
-import { IMChannelPerson, IMMessage } from "..";
+import { BelongsTo, Column, Default, ForeignKey, HasMany, Index, Model, Table } from "sequelize-typescript";
+import { Department, IMChannelPerson, IMMessage } from "..";
 
 @Table({
   tableName: "imChannels",
@@ -18,16 +18,14 @@ export default class IMChannel extends Model<IMChannel> {
   company: boolean;
 
   @Index
+  @ForeignKey(() => Department)
   @Column({
-    comment: "Если указана секция, то канал на конкретную секция, либо этаж конкретной секции, если еще и этаж указан"
+    comment: "Если указана, то канал на конкретный департамент"
   })
-  section: number;
+  departmentId: number;
 
-  @Index
-  @Column({
-    comment: "Указывается совместно с параметром секции. Если указан, то канал по конкретному этажу в секции"
-  })
-  floor: number;
+  @BelongsTo(() => Department)
+  department: Department;
 
   @Default(false)
   @Column({

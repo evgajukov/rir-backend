@@ -15,11 +15,13 @@ const person_type_1 = require("../type/person.type");
 class DepartmentResponse extends response_1.default {
     constructor(model) {
         super(model.id);
-        this.number = model.number;
-        this.floor = model.floor;
-        this.section = model.section;
-        this.rooms = model.rooms;
-        this.square = model.square;
+        this.title = model.title;
+        if (model.parent != null) {
+            this.parent = {
+                id: model.parent.id,
+                title: model.parent.title
+            };
+        }
         this.residents = [];
         model.residents.forEach(resident => {
             const person = person_type_1.getPerson(resident.person);

@@ -19,9 +19,8 @@ export async function save({ title, questions, anonymous, multi, type }, respond
 
     // создаем голосование
     const company = type == "company";
-    const section = type != "company" ? department.section : null;
-    const floor = type == "floor" ? department.floor : null;
-    const vote = await Vote.create({ title, multi, anonymous, company, section, floor, userId: this.authToken.id });
+    const departmentId = type == "department" ? department.id : null;
+    const vote = await Vote.create({ title, multi, anonymous, company, departmentId, userId: this.authToken.id });
 
     // добавляем вопросы к голосованию
     for (let question of questions) {
@@ -34,16 +33,14 @@ export async function save({ title, questions, anonymous, multi, type }, respond
     // генерируем список пользователей, которым доступно голосование
     let residents: Resident[] = [];
     if (type == "company") {
-      // весь дом
+      // вся компания
       residents = await Resident.findAll({ include: [{ model: Person }] });
-    } else if (type == "section") {
-      // весь подъезд
-      const departments = await Department.findAll({ where: { section } });
-      residents = await Resident.findAll({ where: { departmentId: departments.map(department => department.id) } });
-    } else if (type == "floor") {
-      // весь этаж в подъезде
-      const departments = await Department.findAll({ where: { section, floor } });
-      residents = await Resident.findAll({ where: { departmentId: departments.map(department => department.id) } });
+    } else if (type == "department") {
+      // весь депортамент c подотделами
+      const departments = await Department.findAll({ where: { parentId: department.id } });
+      let departmentsIds = departments.map(department => department.id);
+      departmentsIds.push(department.id);
+      residents = await Resident.findAll({ where: { departmentId: departmentsIds } });
     }
     for (let resident of residents) {
       VotePerson.create({ voteId: vote.id, personId: resident.personId });

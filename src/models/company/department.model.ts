@@ -1,5 +1,5 @@
-import { BelongsTo, Column, DataType, ForeignKey, HasMany, Index, Model, Table, Unique } from "sequelize-typescript";
-import { Company, Resident } from "..";
+import { BelongsTo, Column, ForeignKey, HasMany, Index, Model, Table } from "sequelize-typescript";
+import { Company, Resident, Vote } from "..";
 
 @Table({
   tableName: "departments",
@@ -14,36 +14,22 @@ export default class Department extends Model<Department> {
 
   @BelongsTo(() => Company)
   company: Company;
-  
-  @Unique
-  @Column({
-    comment: "Номер квартиры"
-  })
-  number: number;
 
-  @Index
-  @Column({
-    comment: "Секция / подъезд"
-  })
-  section: number;
+  @Column
+  title: string;
 
-  @Index
+  @ForeignKey(() => Department)
   @Column({
-    comment: "Этаж"
+    comment: "Вышестоящий департамент"
   })
-  floor: number;
+  parentId: number;
 
-  @Column({
-    comment: "Количество комнат"
-  })
-  rooms: number;
-
-  @Column({
-    type: DataType.DOUBLE,
-    comment: "Площадь квартиры"
-  })
-  square: number;
+  @BelongsTo(() => Department)
+  parent: Department;
 
   @HasMany(() => Resident)
   residents: Resident[];
+
+  @HasMany(() => Vote)
+  votes: Vote[];
 }

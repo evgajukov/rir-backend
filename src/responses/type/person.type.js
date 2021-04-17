@@ -20,9 +20,7 @@ function getPerson(model) {
         const department = model.residents[0].department;
         person.department = {
             id: department.id,
-            number: department.number,
-            section: department.section,
-            floor: department.floor
+            title: department.title
         };
     }
     person.deleted = false;

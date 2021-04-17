@@ -12,9 +12,8 @@ export default class InviteResponse extends Response {
     midname: string;
   };
   department: {
-    number: number;
-    floor: number;
-    section: number;
+    id: number;
+    title: string;
   };
 
   constructor(model: Invite) {
@@ -32,7 +31,7 @@ export default class InviteResponse extends Response {
         item.person = { surname: person.surname, name: person.name, midname: person.midname };
         const resident = person.residents[0];
         if (resident != null) {
-          item.department = { number: resident.department.number, floor: resident.department.floor, section: resident.department.section };
+          item.department = { id: resident.department.id, title: resident.department.title };
         }
       }
     }

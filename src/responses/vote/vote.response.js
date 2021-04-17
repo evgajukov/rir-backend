@@ -21,8 +21,12 @@ class VoteResponse extends response_1.default {
         this.anonymous = model.anonymous;
         this.closed = model.closed;
         this.company = model.company;
-        this.section = model.section;
-        this.floor = model.floor;
+        if (model.departmentId != null) {
+            this.department = {
+                id: model.department.id,
+                title: model.department.title
+            };
+        }
         this.persons = model.persons.length;
         this.questions = model.questions.map(question => {
             return {
@@ -46,9 +50,7 @@ class VoteResponse extends response_1.default {
                 const departmentInfo = answer.person.residents[0].department;
                 department = {
                     id: departmentInfo.id,
-                    number: departmentInfo.number,
-                    section: departmentInfo.section,
-                    floor: departmentInfo.floor
+                    title: departmentInfo.title
                 };
             }
             let person = {
@@ -128,6 +130,10 @@ class VoteResponse extends response_1.default {
     }
     static include() {
         return [
+            {
+                model: models_1.Department,
+                separate: true
+            },
             {
                 model: models_1.VotePerson,
                 separate: true,
